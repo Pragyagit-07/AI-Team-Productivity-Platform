@@ -1,20 +1,28 @@
-// controllers/orgUserController.js
+
 const OrgUser = require('../models/OrgUser');
 const Organization = require('../models/Organization');
 const Branch = require('../models/Branch');
+
+// Helper: remove password before sending response
+const removePassword = (user) => {
+  if (!user) return user;
+  const plain = user.toJSON();
+  delete plain.password;
+  return plain;
+};
 
 // CREATE ORG USER
 exports.createOrgUser = async (req, res) => {
   try {
     const orgUser = await OrgUser.create(req.body);
-    res.status(201).json(orgUser);
+    res.status(201).json(removePassword(orgUser));
   } catch (err) {
     console.error("Create OrgUser Error:", err);
     res.status(500).json({ msg: err.message });
   }
 };
 
-// GET ALL ORG USERS (with Organization & Branch info)
+// GET ALL ORG USERS
 exports.getOrgUsers = async (req, res) => {
   try {
     const users = await OrgUser.findAll({
@@ -23,14 +31,14 @@ exports.getOrgUsers = async (req, res) => {
         { model: Branch, attributes: ["id", "name"] }
       ]
     });
-    res.json(users);
+    res.json(users.map(removePassword));
   } catch (err) {
     console.error("Get OrgUsers Error:", err);
     res.status(500).json({ msg: err.message });
   }
 };
 
-// GET ORG USERS BY BRANCH (with Organization & Branch info)
+// GET ORG USERS BY BRANCH
 exports.getOrgUsersByBranch = async (req, res) => {
   try {
     const users = await OrgUser.findAll({
@@ -41,14 +49,14 @@ exports.getOrgUsersByBranch = async (req, res) => {
       ]
     });
 
-    res.json(users);
+    res.json(users.map(removePassword));
   } catch (err) {
     console.error("Get OrgUsers by Branch Error:", err);
     res.status(500).json({ msg: err.message });
   }
 };
 
-// GET ORG USER BY ID (with Organization & Branch info)
+// GET ORG USER BY ID
 exports.getOrgUserById = async (req, res) => {
   try {
     const user = await OrgUser.findByPk(req.params.id, {
@@ -59,7 +67,8 @@ exports.getOrgUserById = async (req, res) => {
     });
 
     if (!user) return res.status(404).json({ msg: "Not found" });
-    res.json(user);
+
+    res.json(removePassword(user));
   } catch (err) {
     console.error("Get OrgUser by ID Error:", err);
     res.status(500).json({ msg: err.message });
@@ -73,7 +82,7 @@ exports.updateOrgUser = async (req, res) => {
     if (!user) return res.status(404).json({ msg: "Not found" });
 
     await user.update(req.body);
-    res.json(user);
+    res.json(removePassword(user));
   } catch (err) {
     console.error("Update OrgUser Error:", err);
     res.status(500).json({ msg: err.message });

@@ -1,13 +1,16 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { Eye, EyeOff } from "lucide-react";
 
 export default function OrgUserForm() {
   const navigate = useNavigate();
+const [showPassword, setShowPassword] = useState(false);
 
   const [formData, setFormData] = useState({
     name: "",
     email: "",
+    password: "",
     role: "ADMIN",   // default
     organizationId: "",
     branchId: ""
@@ -67,6 +70,15 @@ export default function OrgUserForm() {
       newErrors.email = "Email is required";
     else if (!/^\S+@\S+\.\S+$/.test(formData.email))
       newErrors.email = "Invalid email format";
+    if (!formData.password.trim())
+  newErrors.password = "Password is required";
+else if (
+  !/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/
+  .test(formData.password)
+)
+  newErrors.password =
+    "Password must be 8 chars, include uppercase, lowercase, number & special character";
+
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -196,6 +208,36 @@ export default function OrgUserForm() {
             <p className="text-red-500 text-sm mt-1">{errors.email}</p>
           )}
         </div>
+        {/* Password */}
+<div>
+  <label className="block font-medium mb-1">Password</label>
+
+  <div className="relative">
+    <input
+      type={showPassword ? "text" : "password"}
+      name="password"
+      placeholder="Enter password"
+      value={formData.password}
+      onChange={handleChange}
+      className={`w-full border rounded-md p-2 pr-10 ${
+        errors.password ? "border-red-500" : "border-gray-300"
+      }`}
+    />
+
+    {/* Eye / EyeOff Icon */}
+    <span
+      onClick={() => setShowPassword(!showPassword)}
+      className="absolute right-3 top-2.5 cursor-pointer text-gray-600 hover:text-gray-800"
+    >
+      {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+    </span>
+  </div>
+
+  {errors.password && (
+    <p className="text-red-500 text-sm mt-1">{errors.password}</p>
+  )}
+</div>
+
 
         {/* Role */}
         <div>

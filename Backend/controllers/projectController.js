@@ -1,54 +1,176 @@
 const Project = require('../models/Project');
 const User = require('../models/User');
+ const Task = require('../models/Task');
 
+
+// ---------- GET ALL PROJECTS ----------
 exports.getAllProjects = async (req, res) => {
   try {
-    const projects = await Project.findAll();
+    const projects = await Project.findAll({
+      include: [
+        { model: User, as: 'creator', attributes: ['id', 'name'] },
+        { model: User, as: 'members', attributes: ['id', 'name'], through: { attributes: [] } } // members
+      ]
+    });
+
     res.json(projects);
   } catch (err) {
+    console.error(err);
     res.status(500).json({ msg: 'Server error' });
   }
 };
 
+// ---------- CREATE PROJECT ----------
 exports.createProject = async (req, res) => {
   try {
-    const { name, description, createdBy } = req.body;
-    const project = await Project.create({ name, description, createdBy });
+    const userId = req.user.id; // logged-in user
+    const { name, description, status, startDate, endDate , members} = req.body;
+
+    // Validate status
+    const allowedStatus = ['planned', 'inprogress', 'completed', 'onhold', 'cancelled'];
+    if (status && !allowedStatus.includes(status)) {
+      return res.status(400).json({ msg: 'Invalid status value' });
+    }
+
+    const project = await Project.create({
+      name,
+      description,
+      status: status || 'planned',
+      startDate,
+      endDate,
+      createdBy: userId
+    });
+// Add members (array of userIds)
+    if (members && members.length > 0) {
+      await project.addMembers(members);
+    }
+
+    // Add creator also as member automatically
+    await project.addMembers(userId);
+
     res.json(project);
   } catch (err) {
+    console.error(err);
     res.status(500).json({ msg: 'Server error' });
   }
 };
+
+// ---------- GET ONE PROJECT ----------
 
 exports.getProjectById = async (req, res) => {
   try {
-    const project = await Project.findByPk(req.params.id);
+    const project = await Project.findByPk(req.params.id, {
+      include: [
+        { model: User, as: 'creator', attributes: ['id', 'name'] }, // creator
+        { model: User, as: 'members', attributes: ['id', 'name'], through: { attributes: [] } }, // members
+        {
+          model: Task, as: 'tasks',
+          include: [
+            { model: User, attributes: ['id', 'name'], as: 'assignee' } // assignee
+          ]
+        }
+      ]
+    });
+
     if (!project) return res.status(404).json({ msg: 'Project not found' });
-    res.json(project);
+    const members = project.members.map(u => ({ id: u.id, name: u.name }));
+
+    // Transform response for cleaner keys
+    const response = {
+      id: project.id,
+      name: project.name,
+      description: project.description,
+      status: project.status,
+      startDate: project.startDate,
+      endDate: project.endDate,
+      creator: project.creator,
+      members,
+      tasks: project.tasks // rename Tasks -> tasks
+    };
+
+    res.json(response);
   } catch (err) {
+    console.error(err);
     res.status(500).json({ msg: 'Server error' });
   }
 };
 
 exports.updateProject = async (req, res) => {
   try {
-    const { name, description } = req.body;
+    const { name, description, status, startDate, endDate, members } = req.body;
+
     const project = await Project.findByPk(req.params.id);
     if (!project) return res.status(404).json({ msg: 'Project not found' });
-    await project.update({ name, description });
-    res.json(project);
+
+    if (project.createdBy !== req.user.id) {
+      return res.status(403).json({ msg: 'You are not allowed to update this project' });
+    }
+
+    const allowedStatus = ['planned', 'inprogress', 'completed', 'onhold', 'cancelled'];
+    if (status && !allowedStatus.includes(status)) {
+      return res.status(400).json({ msg: 'Invalid status value' });
+    }
+
+    // Update project fields
+    await project.update({ name, description, status, startDate, endDate });
+
+    // 🔥 THIS WAS MISSING
+    if (members !== undefined) {
+      const memberIds = Array.isArray(members) ? members : [members];
+
+      // creator always stays member
+      const finalMembers = [...new Set([...memberIds, req.user.id])];
+
+      await project.setMembers(finalMembers);
+    }
+
+    const updatedProject = await Project.findByPk(project.id, {
+      include: [
+        { model: User, as: 'creator', attributes: ['id', 'name'] },
+        { model: User, as: 'members', attributes: ['id', 'name'], through: { attributes: [] } }
+      ]
+    });
+
+    res.json(updatedProject);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ msg: 'Server error' });
+  }
+};
+
+
+exports.getProjectMembers = async (req, res) => {
+  try {
+    const project = await Project.findByPk(req.params.projectId, {
+      include: [
+        { model: User,  as: 'members', attributes: ['id', 'name'], through: { attributes: [] } }
+      ]
+    });
+
+    if (!project) return res.status(404).json({ msg: 'Project not found' });
+
+    res.json(project.members);
   } catch (err) {
     res.status(500).json({ msg: 'Server error' });
   }
 };
 
+
+// ---------- DELETE PROJECT ----------
 exports.deleteProject = async (req, res) => {
   try {
     const project = await Project.findByPk(req.params.id);
     if (!project) return res.status(404).json({ msg: 'Project not found' });
+
+    // Only creator can delete
+    if (project.createdBy !== req.user.id) {
+      return res.status(403).json({ msg: 'You are not allowed to delete this project' });
+    }
+
     await project.destroy();
-    res.json({ msg: 'Project deleted' });
+    res.json({ msg: 'Project deleted successfully' });
   } catch (err) {
+    console.error(err);
     res.status(500).json({ msg: 'Server error' });
   }
 };

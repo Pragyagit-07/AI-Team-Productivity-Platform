@@ -1,6 +1,9 @@
 const Organization = require('../models/Organization');
 const Branch = require('../models/Branch');
 const OrgUser = require('../models/OrgUser');
+const bcrypt = require("bcryptjs");
+const crypto = require("crypto");
+
 
 exports.createOrganization = async (req, res) => {
   const t = await Organization.sequelize.transaction();
@@ -19,12 +22,17 @@ exports.createOrganization = async (req, res) => {
     }, { transaction: t });
 
     // 3️⃣ Create Default Admin User
+    const plainPassword = crypto.randomBytes(4).toString("hex");
+
     const orgUser = await OrgUser.create({
       organizationId: org.id,
       branchId: branch.id,
       name: req.body.createdBy || "Admin User",
       // email: req.body.domain,   // using domain as login email
       email: req.body.email || `${org.name.replace(/\s+/g, '').toLowerCase()}@admin.com`,
+        password: plainPassword,
+
+
 
       role: "ADMIN"
     }, { transaction: t });
@@ -35,7 +43,12 @@ exports.createOrganization = async (req, res) => {
       message: "Organization, Branch & Admin User created successfully",
       org,
       branch,
-      orgUser
+      orgUser,
+        adminLogin: {
+    email: orgUser.email,
+    password: plainPassword,   // show once to user
+  }
+
     });
 
   } catch (err) {

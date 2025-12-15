@@ -10,10 +10,7 @@ exports.createBranch = async (req, res) => {
   }
 };
 
-// exports.getBranches = async (req, res) => {
-//   const branches = await Branch.findAll();
-//   res.json(branches);
-// };
+
 exports.getBranches = async (req, res) => {
   try {
     const { organizationId } = req.query;
@@ -33,11 +30,6 @@ exports.getBranches = async (req, res) => {
 };
 
 
-// exports.getBranchById = async (req, res) => {
-//   const branch = await Branch.findByPk(req.params.id);
-//   if (!branch) return res.status(404).json({ msg: 'Not found' });
-//   res.json(branch);
-// };
 
 
 
@@ -69,13 +61,7 @@ exports.updateBranch = async (req, res) => {
   res.json(branch);
 };
 
-// exports.deleteBranch = async (req, res) => {
-//   const branch = await Branch.findByPk(req.params.id);
-//   if (!branch) return res.status(404).json({ msg: 'Not found' });
 
-//   await branch.destroy();
-//   res.json({ msg: 'Branch deleted' });
-// };
 
 
 exports.deleteBranch = async (req, res) => {

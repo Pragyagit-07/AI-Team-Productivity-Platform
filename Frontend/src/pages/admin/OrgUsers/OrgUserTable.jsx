@@ -7,7 +7,9 @@ export default function OrgUserTable() {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-
+  // ⬅️ Pagination States
+  const [currentPage, setCurrentPage] = useState(1);
+  const rowsPerPage = 5;
   // Fetch all Org Users
   const fetchUsers = async () => {
     try {
@@ -37,7 +39,11 @@ export default function OrgUserTable() {
       alert("Failed to delete user");
     }
   };
-
+ // ⬅️ Pagination Logic
+  const totalPages = Math.ceil(users.length / rowsPerPage);
+  const indexOfLastRow = currentPage * rowsPerPage;
+  const indexOfFirstRow = indexOfLastRow - rowsPerPage;
+  const currentRows = users.slice(indexOfFirstRow, indexOfLastRow);
   if (loading) return <p className="text-center py-4">Loading...</p>;
   if (error) return <p className="text-center text-red-500 py-4">{error}</p>;
 
@@ -74,7 +80,9 @@ export default function OrgUserTable() {
                 </td>
               </tr>
             ) : (
-              users.map((user) => (
+              // users.map((user) => (
+                              currentRows.map((user) => (
+
                 <tr key={user.id} className="hover:bg-gray-50">
                   <td className="px-6 py-4">{user.name}</td>
                   <td className="px-6 py-4">{user.email}</td>
@@ -110,6 +118,56 @@ export default function OrgUserTable() {
           </tbody>
         </table>
       </div>
+      {/* Pagination */}
+<div className="flex justify-end mt-4">
+
+  <div className="flex items-center gap-2">
+
+    {/* Prev Button */}
+    <button
+      onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+      disabled={currentPage === 1}
+      className={`px-3 py-1 rounded border ${
+        currentPage === 1
+          ? "bg-gray-200 text-gray-400 cursor-not-allowed"
+          : "bg-white text-gray-700"
+      }`}
+    >
+      Prev
+    </button>
+
+    {/* Page Numbers */}
+    {Array.from({ length: totalPages }, (_, i) => i + 1).map((num) => (
+      <button
+        key={num}
+        onClick={() => setCurrentPage(num)}
+        className={`px-3 py-1 rounded border ${
+          currentPage === num
+            ? "bg-blue-600 text-white"
+            : "bg-white text-gray-700"
+        }`}
+      >
+        {num}
+      </button>
+    ))}
+
+    {/* Next Button */}
+    <button
+      onClick={() =>
+        setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+      }
+      disabled={currentPage === totalPages}
+      className={`px-3 py-1 rounded border ${
+        currentPage === totalPages
+          ? "bg-gray-200 text-gray-400 cursor-not-allowed"
+          : "bg-white text-gray-700"
+      }`}
+    >
+      Next
+    </button>
+
+  </div>
+</div>
     </div>
   );
 }

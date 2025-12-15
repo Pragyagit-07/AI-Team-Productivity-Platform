@@ -9,6 +9,8 @@ export default function MemberDashboard() {
     { name: "Chat", path: "/dashboard/chat" },
     { name: "Activity", path: "/dashboard/activity" },
     { name: "Subscriptions", path: "/dashboard/subscriptions" },
+    { name: "AI Assistant", path: "/dashboard/ai" },
+    {name: "Profile Setting", path: "/dashboard/profile"},
   ];
 
   const handleLogout = () => {

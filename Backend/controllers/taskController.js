@@ -1,42 +1,124 @@
-const Task = require('../models/Task');
 
+
+
+const Task = require("../models/Task");
+const User = require("../models/User");
+const Project = require("../models/Project");
+
+// GET TASKS BY PROJECT
 exports.getTasksByProject = async (req, res) => {
   try {
-    const tasks = await Task.findAll({ where: { projectId: req.params.projectId } });
+    const tasks = await Task.findAll({
+      where: { projectId: req.params.projectId },
+      include: [
+        { model: User, as: "assignee", attributes: ["id", "name"] }
+      ],
+      order: [["createdAt", "DESC"]],
+    });
+
     res.json(tasks);
   } catch (err) {
-    res.status(500).json({ msg: 'Server error' });
+    console.error(err);
+    res.status(500).json({ msg: "Server error" });
   }
 };
 
+// GET ALL TASKS (GLOBAL TASK TAB)
+exports.getAllTasks = async (req, res) => {
+  try {
+    const tasks = await Task.findAll({
+      include: [
+        { model: User, as: "assignee", attributes: ["id", "name"] },
+        { model: Project, attributes: ["id", "name"] },
+      ],
+      order: [["createdAt", "DESC"]],
+    });
+
+    res.json(tasks);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ msg: "Server error" });
+  }
+};
+
+// CREATE TASK
 exports.createTask = async (req, res) => {
   try {
     const { title, description, projectId, assigneeId, status, priority, dueDate } = req.body;
-    const task = await Task.create({ title, description, projectId, assigneeId, status, priority, dueDate });
-    res.json(task);
+
+    const task = await Task.create({
+      title,
+      description,
+      projectId,
+      assigneeId,
+      status,
+      priority,
+      dueDate,
+    });
+
+    res.status(201).json(task);
   } catch (err) {
-    res.status(500).json({ msg: 'Server error' });
+    console.error(err);
+    res.status(500).json({ msg: "Server error" });
   }
 };
 
+// UPDATE TASK
 exports.updateTask = async (req, res) => {
   try {
     const task = await Task.findByPk(req.params.id);
-    if (!task) return res.status(404).json({ msg: 'Task not found' });
+    if (!task) return res.status(404).json({ msg: "Task not found" });
+
     await task.update(req.body);
     res.json(task);
   } catch (err) {
-    res.status(500).json({ msg: 'Server error' });
+    console.error(err);
+    res.status(500).json({ msg: "Server error" });
+  }
+};
+// GET SINGLE TASK (FOR EDIT / VIEW)
+exports.getTaskById = async (req, res) => {
+  try {
+    const task = await Task.findByPk(req.params.id, {
+      include: [
+        { model: User, as: "assignee", attributes: ["id", "name"] },
+        { model: Project,  attributes: ["id", "name", "startDate", "description", "status"],
+                    include: [
+            { model: User, as: "creator", attributes: ["id", "name"] },
+      {
+              model: User,
+              as: "members",
+              attributes: ["id", "name"],
+              through: { attributes: [] }
+            }
+         
+      ]
+    }
+  ],
+    });
+
+    if (!task) {
+      return res.status(404).json({ msg: "Task not found" });
+    }
+
+    res.json(task);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ msg: "Server error" });
   }
 };
 
+
+// DELETE TASK
 exports.deleteTask = async (req, res) => {
   try {
     const task = await Task.findByPk(req.params.id);
-    if (!task) return res.status(404).json({ msg: 'Task not found' });
+    if (!task) return res.status(404).json({ msg: "Task not found" });
+
     await task.destroy();
-    res.json({ msg: 'Task deleted' });
+    res.json({ msg: "Task deleted" });
   } catch (err) {
-    res.status(500).json({ msg: 'Server error' });
+    console.error(err);
+    res.status(500).json({ msg: "Server error" });
   }
 };

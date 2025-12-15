@@ -1,4 +1,4 @@
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route, Navigate, useParams } from "react-router-dom";
 
 // Admin Pages
 import AdminLogin from "./pages/admin/Login";
@@ -32,8 +32,31 @@ import MemberLogin from "./pages/member/Login";
 import MemberRegister from "./pages/member/Register";
 import MemberForgotPassword from "./pages/member/ForgotPassword";
 import MemberDashboard from "./pages/member/Dashboard";
+// Project Page
+import ProjectsList from "./pages/member/Projects/ProjectsList";
+import ProjectForm from "./pages/member/Projects/ProjectForm";
+import ProjectView from "./pages/member/Projects/ProjectView";
+
+// Task Page
+import TaskBoard from "./pages/member/Tasks/TaskBoard";
+import TaskForm from "./pages/member/Tasks/TaskForm";
+import TaskList from "./pages/member/Tasks/TaskList";
+import TaskView from "./pages/member/Tasks/TaskView";
+
+
+
+function TaskBoardWrapper() {
+  const { projectId } = useParams();
+  return <TaskBoard projectId={projectId} />;
+}
+
+function TaskFormWrapper() {
+  const { projectId } = useParams();
+  return <TaskForm projectId={projectId} />;
+}
 
 function App() {
+  
   return (
     <Routes>
       {/* Default */}
@@ -47,14 +70,8 @@ function App() {
       <Route path="/admin/dashboard/*" element={<AdminDashboard />}>
 
         {/* Dashboard Home */}
-        {/* <Route
-          index
-          element={
-            <div className="text-center mt-20 text-xl">
-              Welcome to Admin Dashboard
-            </div>
-          }
-        /> */}
+
+      
 <Route index element={<DashboardHome />} />
         {/* ───────── ORGANIZATION ROUTES ───────── */}
         <Route path="organizations" element={<OrganizationTable />} />
@@ -81,7 +98,31 @@ function App() {
       <Route path="/login" element={<MemberLogin />} />
       <Route path="/register" element={<MemberRegister />} />
       <Route path="/forgot-password" element={<MemberForgotPassword />} />
-      <Route path="/dashboard/*" element={<MemberDashboard />} />
+      
+      <Route path="/dashboard/*" element={<MemberDashboard />}>
+
+        <Route path="projects" element={<ProjectsList />} />
+        <Route path="projects/add" element={<ProjectForm />} />
+        <Route path="projects/edit/:id" element={<ProjectForm />} />
+
+        <Route path="projects/view/:id" element={<ProjectView />} />
+
+        
+<Route path="projects/:projectId/tasks" element={<TaskBoardWrapper />} />
+<Route path="projects/:projectId/tasks/add" element={<TaskFormWrapper />} />
+
+
+  <Route path="tasks" element={<TaskList />} />
+    <Route path="tasks/view/:id" element={<TaskView />} />
+
+    <Route path="tasks/edit/:id" element={<TaskForm />} />
+
+
+
+
+
+</Route>
+
 
       {/* 404 */}
       <Route

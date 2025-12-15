@@ -7,7 +7,9 @@ export default function OrganizationTable() {
   const [organizations, setOrganizations] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-
+// ⬅️ Pagination States
+  const [currentPage, setCurrentPage] = useState(1);
+  const rowsPerPage = 5;
   // Fetch organizations from backend
   const fetchOrganizations = async () => {
     try {
@@ -36,6 +38,13 @@ export default function OrganizationTable() {
       alert("Failed to delete organization");
     }
   };
+
+  // ⬅️ Pagination Logic
+  const totalPages = Math.ceil(organizations.length / rowsPerPage);
+  const indexOfLastRow = currentPage * rowsPerPage;
+  const indexOfFirstRow = indexOfLastRow - rowsPerPage;
+  const currentRows = organizations.slice(indexOfFirstRow, indexOfLastRow);
+
 
   if (loading) return <p className="text-center py-4">Loading...</p>;
   if (error) return <p className="text-center text-red-500 py-4">{error}</p>;
@@ -73,7 +82,9 @@ export default function OrganizationTable() {
                 </td>
               </tr>
             ) : (
-              organizations.map((org) => (
+              // organizations.map((org) => (
+                currentRows.map((org) => (
+
                 <tr key={org.id} className="hover:bg-gray-50">
                   <td className="px-6 py-4">{org.name}</td>
                   <td className="px-6 py-4">{org.domain || "—"}</td>
@@ -112,6 +123,56 @@ export default function OrganizationTable() {
           </tbody>
         </table>
       </div>
+      {/* Pagination */}
+<div className="flex justify-end mt-4">
+
+  <div className="flex items-center gap-2">
+
+    {/* Prev Button */}
+    <button
+      onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+      disabled={currentPage === 1}
+      className={`px-3 py-1 rounded border ${
+        currentPage === 1
+          ? "bg-gray-200 text-gray-400 cursor-not-allowed"
+          : "bg-white text-gray-700"
+      }`}
+    >
+      Prev
+    </button>
+
+    {/* Page Numbers */}
+    {Array.from({ length: totalPages }, (_, i) => i + 1).map((num) => (
+      <button
+        key={num}
+        onClick={() => setCurrentPage(num)}
+        className={`px-3 py-1 rounded border ${
+          currentPage === num
+            ? "bg-blue-600 text-white"
+            : "bg-white text-gray-700"
+        }`}
+      >
+        {num}
+      </button>
+    ))}
+
+    {/* Next Button */}
+    <button
+      onClick={() =>
+        setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+      }
+      disabled={currentPage === totalPages}
+      className={`px-3 py-1 rounded border ${
+        currentPage === totalPages
+          ? "bg-gray-200 text-gray-400 cursor-not-allowed"
+          : "bg-white text-gray-700"
+      }`}
+    >
+      Next
+    </button>
+
+  </div>
+</div>
     </div>
   );
 }
