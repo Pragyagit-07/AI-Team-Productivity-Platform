@@ -1,6 +1,7 @@
 const Project = require('../models/Project');
 const User = require('../models/User');
 const Task = require('../models/Task');
+const ActivityLog = require("../models/ActivityLog");
 
 
 // ---------- GET ALL PROJECTS ----------
@@ -76,7 +77,12 @@ exports.createProject = async (req, res) => {
 
     // Add creator also as member automatically
     await project.addMembers(userId);
-
+await ActivityLog.create({
+  action: "project_created",
+  description: `${req.user.name} created project "${project.name}"`,
+  projectId: project.id,
+  userId: req.user.id
+});
     res.json(project);
   } catch (err) {
     console.error(err);
@@ -142,6 +148,13 @@ exports.updateProject = async (req, res) => {
 
     // Update project fields
     await project.update({ name, description, status, startDate, endDate });
+    await ActivityLog.create({
+  action: "project_updated",
+  description: `${req.user.name} updated project "${project.name}"`,
+  projectId: project.id,
+  userId: req.user.id
+});
+
 
     if (members !== undefined) {
       const memberIds = Array.isArray(members) ? members : [members];
@@ -194,6 +207,12 @@ exports.deleteProject = async (req, res) => {
     if (project.createdBy !== req.user.id) {
       return res.status(403).json({ msg: 'You are not allowed to delete this project' });
     }
+await ActivityLog.create({
+  action: "project_deleted",
+  description: `${req.user.name} deleted project "${project.name}"`,
+  projectId: project.id,
+  userId: req.user.id
+});
 
     await project.destroy();
     res.json({ msg: 'Project deleted successfully' });

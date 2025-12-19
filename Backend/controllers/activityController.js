@@ -1,5 +1,6 @@
 const ActivityLog = require('../models/ActivityLog');
 const User = require('../models/User');
+const Task = require("../models/Task");
 
 exports.getTaskActivities = async (req, res) => {
   try {
@@ -9,6 +10,24 @@ exports.getTaskActivities = async (req, res) => {
       where: { taskId },
       include: [{ model: User, attributes: ['name'] }],
       order: [['createdAt', 'DESC']]
+    });
+
+    res.json(activities);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ msg: 'Failed to fetch activities' });
+  }
+};
+
+exports.getAllActivities = async (req, res) => {
+  try {
+    const activities = await ActivityLog.findAll({
+      include: [
+        { model: User, attributes: ['id', 'name'] },
+        { model: Task, attributes: ['id', 'title'] }
+      ],
+      order: [['createdAt', 'DESC']],
+      limit: 50
     });
 
     res.json(activities);

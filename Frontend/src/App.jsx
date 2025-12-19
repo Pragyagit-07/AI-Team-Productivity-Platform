@@ -32,6 +32,9 @@ import MemberLogin from "./pages/member/Login";
 import MemberRegister from "./pages/member/Register";
 import MemberForgotPassword from "./pages/member/ForgotPassword";
 import MemberDashboard from "./pages/member/Dashboard";
+// Member Home
+import MemberDashboardHome from "./pages/member/Home";
+
 // Project Page
 import ProjectsList from "./pages/member/Projects/ProjectsList";
 import ProjectForm from "./pages/member/Projects/ProjectForm";
@@ -43,7 +46,9 @@ import TaskForm from "./pages/member/Tasks/TaskForm";
 import TaskList from "./pages/member/Tasks/TaskList";
 import TaskView from "./pages/member/Tasks/TaskView";
 
-
+// calender page
+import CalendarTab from "./pages/member/Calender";
+import Activity from "./pages/member/Activity";
 
 function TaskBoardWrapper() {
   const { projectId } = useParams();
@@ -100,6 +105,9 @@ function App() {
       <Route path="/forgot-password" element={<MemberForgotPassword />} />
       
       <Route path="/dashboard/*" element={<MemberDashboard />}>
+        
+  <Route index element={<MemberDashboardHome />} />
+
 
         <Route path="projects" element={<ProjectsList />} />
         <Route path="projects/add" element={<ProjectForm />} />
@@ -117,6 +125,9 @@ function App() {
 
     <Route path="tasks/edit/:id" element={<TaskForm />} />
 
+
+  <Route path="calender" element={<CalendarTab />} />
+    <Route path="activity" element={<Activity />} />
 
 
 

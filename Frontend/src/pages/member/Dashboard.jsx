@@ -42,6 +42,7 @@ export default function MemberDashboard() {
   const [sidebarOpen, setSidebarOpen] = useState(true);
 
   const links = [
+    {name: "Home", path: "/dashboard"},
     { name: "Projects", path: "/dashboard/projects" },
     { name: "Tasks", path: "/dashboard/tasks" },
     // { name: "Chat", path: "/dashboard/chat" },

@@ -106,6 +106,13 @@ exports.createTask = async (req, res) => {
       priority,
       dueDate,
     });
+await ActivityLog.create({
+  action: "task_created",
+  description: `${req.user.name} created task "${task.title}"`,
+  taskId: task.id,
+  projectId: task.projectId,
+  userId: req.user.id
+});
 
     res.status(201).json(task);
   } catch (err) {
@@ -121,6 +128,14 @@ exports.updateTask = async (req, res) => {
     if (!task) return res.status(404).json({ msg: "Task not found" });
 
     await task.update(req.body);
+    await ActivityLog.create({
+  action: "task_updated",
+  description: `${req.user.name} updated task "${task.title}"`,
+  taskId: task.id,
+  projectId: task.projectId,
+  userId: req.user.id
+});
+
     res.json(task);
   } catch (err) {
     console.error(err);
@@ -200,6 +215,15 @@ exports.deleteTask = async (req, res) => {
   try {
     const task = await Task.findByPk(req.params.id);
     if (!task) return res.status(404).json({ msg: "Task not found" });
+await ActivityLog.create({
+  action: "task_deleted",
+  description: `${req.user.name} deleted task "${task.title}"`,
+  taskId: task.id,
+  projectId: task.projectId,
+  userId: req.user.id
+});
+
+await task.destroy();
 
     await task.destroy();
     res.json({ msg: "Task deleted" });

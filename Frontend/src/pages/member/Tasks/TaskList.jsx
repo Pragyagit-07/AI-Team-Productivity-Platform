@@ -322,8 +322,8 @@ export default function TaskList({ projectId }) {
   return (
     <div className="p-4 md:p-6 min-h-screen bg-gray-50">
       {/* Header */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
-        <h2 className="text-2xl font-bold text-gray-700">Tasks</h2>
+      <div className="flex flex-col md:flex-row justify-end items-start md:items-center mb-6 gap-4">
+        {/* <h2 className="text-2xl font-bold text-gray-700">Tasks</h2> */}
 
         <div className="flex flex-wrap gap-3 w-full md:w-auto">
           <input
