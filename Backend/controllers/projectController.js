@@ -1,19 +1,48 @@
 const Project = require('../models/Project');
 const User = require('../models/User');
- const Task = require('../models/Task');
+const Task = require('../models/Task');
 
 
 // ---------- GET ALL PROJECTS ----------
+// exports.getAllProjects = async (req, res) => {
+//   try {
+//     const projects = await Project.findAll({
+//       include: [
+//         { model: User, as: 'creator', attributes: ['id', 'name'] },
+//         { model: User, as: 'members', attributes: ['id', 'name'], through: { attributes: [] } } 
+//       ]
+//     });
+
+//     res.json(projects);
+//   } catch (err) {
+//     console.error(err);
+//     res.status(500).json({ msg: 'Server error' });
+//   }
+// };
+
 exports.getAllProjects = async (req, res) => {
   try {
-    const projects = await Project.findAll({
+    const page = parseInt(req.query.page) || 1;
+    const pageSize = parseInt(req.query.pageSize) || 5;
+    const offset = (page - 1) * pageSize;
+
+    const { count, rows } = await Project.findAndCountAll({
+      limit: pageSize,
+      offset,
+      order: [['createdAt', 'DESC']],
       include: [
         { model: User, as: 'creator', attributes: ['id', 'name'] },
-        { model: User, as: 'members', attributes: ['id', 'name'], through: { attributes: [] } } // members
-      ]
+        { model: User, as: 'members', attributes: ['id', 'name'], through: { attributes: [] } }
+      ],
+      distinct: true // IMPORTANT for count with include
     });
 
-    res.json(projects);
+    res.json({
+      projects: rows,
+      total: count,
+      page,
+      pageSize
+    });
   } catch (err) {
     console.error(err);
     res.status(500).json({ msg: 'Server error' });
@@ -23,7 +52,7 @@ exports.getAllProjects = async (req, res) => {
 // ---------- CREATE PROJECT ----------
 exports.createProject = async (req, res) => {
   try {
-    const userId = req.user.id; // logged-in user
+    const userId = req.user.id; 
     const { name, description, status, startDate, endDate , members} = req.body;
 
     // Validate status
@@ -85,7 +114,7 @@ exports.getProjectById = async (req, res) => {
       endDate: project.endDate,
       creator: project.creator,
       members,
-      tasks: project.tasks // rename Tasks -> tasks
+      tasks: project.tasks 
     };
 
     res.json(response);
@@ -114,7 +143,6 @@ exports.updateProject = async (req, res) => {
     // Update project fields
     await project.update({ name, description, status, startDate, endDate });
 
-    // 🔥 THIS WAS MISSING
     if (members !== undefined) {
       const memberIds = Array.isArray(members) ? members : [members];
 

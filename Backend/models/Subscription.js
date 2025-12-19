@@ -14,6 +14,6 @@ const Subscription = sequelize.define('Subscription', {
   expiryDate: { type: DataTypes.DATE }
 }, { tableName: 'subscriptions', timestamps: true });
 
-Subscription.belongsTo(User, { foreignKey: 'userId' }); // FK User.id
+Subscription.belongsTo(User, { foreignKey: 'userId' }); 
 
 module.exports = Subscription;

@@ -2,63 +2,94 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const sequelize = require('./db');
-
-
 const app = express();
-app.use(cors({ origin: process.env.FRONTEND_URL }));
-app.use(express.json());
 
-// 🔥 LOAD MODELS HERE (VERY IMPORTANT)
-require('./models/User');
-require('./models/Project');
-require('./models/Task');
-require('./models/ActivityLog');
+
+/* -------------------- MIDDLEWARE -------------------- */
+// app.use(cors({ origin: process.env.FRONTEND_URL }));
+
+
+// app.use(
+//   cors({
+//     origin: [
+//       "http://localhost:5173",
+//       "http://localhost:5174",
+//       "http://localhost:5175"
+//     ],
+//     credentials: true
+//   })
+// );
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      if (!origin || origin.startsWith("http://localhost")) {
+        callback(null, true);
+      } else {
+        callback(new Error("CORS not allowed"));
+      }
+    },
+    credentials: true
+  })
+);
+
+
+app.use(express.json());
+app.use('/api/uploads', express.static('uploads'));
+
+/* -------------------- LOAD MODELS (ORDER MATTERS) -------------------- */
+const User = require('./models/User');
+const Project = require('./models/Project');
+const Task = require('./models/Task');
+const Comment = require('./models/Comment');
+const File = require('./models/File');
+const ActivityLog = require('./models/ActivityLog');
+
 require('./models/Subscription');
 require('./models/ChatMessage');
 require('./models/Organization');
 require('./models/Branch');
 require('./models/OrgUser');
 
-// Routes
-const organizationRoutes = require('./routes/organizationRoutes');
-const branchRoutes = require('./routes/branchRoutes');
-const orgUserRoutes= require('./routes/orgUserRoutes');
-
+/* -------------------- ROUTES -------------------- */
 const authRoutes = require('./routes/auth');
 const projectRoutes = require('./routes/projects');
 const taskRoutes = require('./routes/tasks');
-const activityRoutes = require('./routes/activity');
+const activityRoutes = require('./routes/activityRoutes');
+const commentRoutes = require('./routes/commentRoutes');
+const fileRoutes = require('./routes/fileRoutes');
 const subscriptionRoutes = require('./routes/subscription');
 const chatRoutes = require('./routes/chat');
-const memberRoutes = require("./routes/memberRoutes");
-// admin routes
+const memberRoutes = require('./routes/memberRoutes');
+
+const organizationRoutes = require('./routes/organizationRoutes');
+const branchRoutes = require('./routes/branchRoutes');
+const orgUserRoutes = require('./routes/orgUserRoutes');
+
+/* -------------------- ROUTE MOUNTS -------------------- */
+// Admin / Org
 app.use('/api/organizations', organizationRoutes);
 app.use('/api/branches', branchRoutes);
-app.use('/api/org-users',orgUserRoutes);
+app.use('/api/org-users', orgUserRoutes);
 
-// main routes
+// Auth & Core
 app.use('/api/auth', authRoutes);
-
-app.use("/api/members", memberRoutes);
-
+app.use('/api/members', memberRoutes);
 app.use('/api/projects', projectRoutes);
 app.use('/api/tasks', taskRoutes);
+
+// Task related
+app.use('/api/comments', commentRoutes);
+app.use('/api/files', fileRoutes);
 app.use('/api/activity', activityRoutes);
+
+// Other
 app.use('/api/subscription', subscriptionRoutes);
 app.use('/api/chat', chatRoutes);
 
-
-// 🔥 LOAD MODELS AS VARIABLES
-const User = require('./models/User');
-const Project = require('./models/Project');
-const Task = require('./models/Task');
-
-
-// ----------------- ASSOCIATIONS -----------------
+/* -------------------- ASSOCIATIONS -------------------- */
 
 // Project creator
- Project.belongsTo(User, { foreignKey: 'createdBy', as: 'creator' });
-
+Project.belongsTo(User, { foreignKey: 'createdBy', as: 'creator' });
 
 // Project ↔ Task
 Project.hasMany(Task, { foreignKey: 'projectId', as: 'tasks' });
@@ -68,7 +99,7 @@ Task.belongsTo(Project, { foreignKey: 'projectId' });
 User.hasMany(Task, { foreignKey: 'assigneeId' });
 Task.belongsTo(User, { foreignKey: 'assigneeId', as: 'assignee' });
 
-// Project ↔ Members
+// Project ↔ Members (Many-to-Many)
 Project.belongsToMany(User, {
   through: 'ProjectMembers',
   foreignKey: 'projectId',
@@ -81,14 +112,39 @@ User.belongsToMany(Project, {
   as: 'projects'
 });
 
-// -----------------------------------------------
+/* -------------------- TASK RELATED -------------------- */
 
+// Task ↔ Comments
+Task.hasMany(Comment, { foreignKey: 'taskId', as: 'comments' });
+Comment.belongsTo(Task, { foreignKey: 'taskId' });
 
-// ✅ NOW Sequelize knows about models
-sequelize.sync({ alter: true }).then(() => {
-  console.log('✅ Database synced and tables created');
-  const PORT = process.env.PORT || 5000;
-  app.listen(PORT, () => console.log('Server running on port', PORT));
-}).catch(err => {
-  console.error("❌ Sequelize Sync Error:", err);
-});
+User.hasMany(Comment, { foreignKey: 'userId' });
+Comment.belongsTo(User, { foreignKey: 'userId' });
+
+// Task ↔ Files
+Task.hasMany(File, { foreignKey: 'taskId', as: 'files' });
+File.belongsTo(Task, { foreignKey: 'taskId' });
+
+User.hasMany(File, { foreignKey: 'userId' });
+File.belongsTo(User, { foreignKey: 'userId' });
+
+// Task ↔ Activity Logs
+Task.hasMany(ActivityLog, { foreignKey: 'taskId', as: 'activities' });
+ActivityLog.belongsTo(Task, { foreignKey: 'taskId' });
+
+User.hasMany(ActivityLog, { foreignKey: 'userId' });
+ActivityLog.belongsTo(User, { foreignKey: 'userId' });
+
+/* -------------------- START SERVER -------------------- */
+sequelize
+  .sync({ alter: true })
+  .then(() => {
+    console.log(' Database synced successfully');
+    const PORT = process.env.PORT || 5000;
+    app.listen(PORT, () =>
+      console.log(` Server running on port ${PORT}`)
+    );
+  })
+  .catch((err) => {
+    console.error(' Sequelize Sync Error:', err);
+  });

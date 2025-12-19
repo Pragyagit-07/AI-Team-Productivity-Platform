@@ -1,4 +1,3 @@
-
 const OrgUser = require('../models/OrgUser');
 const Organization = require('../models/Organization');
 const Branch = require('../models/Branch');

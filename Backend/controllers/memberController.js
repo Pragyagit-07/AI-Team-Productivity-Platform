@@ -9,7 +9,7 @@ exports.getMembers = async (req, res) => {
 
     res.json(members);
   } catch (err) {
-    console.error("❌ getMembers error:", err);
+    console.error(" getMembers error:", err);
     res.status(500).json({ msg: "Server error" });
   }
 };

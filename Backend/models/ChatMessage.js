@@ -12,6 +12,6 @@ const ChatMessage = sequelize.define('ChatMessage', {
   response: { type: DataTypes.TEXT }
 }, { tableName: 'chat_messages', timestamps: true });
 
-ChatMessage.belongsTo(User, { foreignKey: 'userId' }); // FK User.id
+ChatMessage.belongsTo(User, { foreignKey: 'userId' }); 
 
 module.exports = ChatMessage;

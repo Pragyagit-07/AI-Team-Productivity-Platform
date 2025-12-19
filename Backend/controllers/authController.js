@@ -5,7 +5,7 @@ exports.register = async (req, res) => {
   try {
     if (!req.body) return res.status(400).json({ msg: 'No data sent' });
 
-    const { name, email, password, role } = req.body; // added optional role
+    const { name, email, password, role } = req.body; 
 
     if (!name || !email || !password) {
       return res.status(400).json({ msg: 'Name, email, and password are required' });
@@ -20,7 +20,7 @@ exports.register = async (req, res) => {
       name,
       email,
       passwordHash: hash,
-      role: role || 'member', // default to member if not sent
+      role: role || 'member', 
     });
 
     const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: '7d' });
@@ -30,7 +30,7 @@ exports.register = async (req, res) => {
       user: { id: user.id, name: user.name, email: user.email, role: user.role },
     });
   } catch (err) {
-    console.error("❌ /register error:", err);
+    console.error(" /register error:", err);
     res.status(500).json({ msg: 'Server error' });
   }
 };

@@ -5,21 +5,38 @@ import axios from "axios";
 
 export default function ProjectsList() {
   const [projects, setProjects] = useState([]);
+  
+const [page, setPage] = useState(1);
+const [total, setTotal] = useState(0);
+
+const pageSize = 5;
+const totalPages = Math.ceil(total / pageSize);
+
 
   useEffect(() => {
     const fetchProjects = async () => {
       try {
-        const token = localStorage.getItem("token");
-        const res = await axios.get(`${import.meta.env.VITE_API_URL}/projects`, {
-          headers: { Authorization: `Bearer ${token}` }
-        });
-        setProjects(res.data);
+         const token = localStorage.getItem("token");
+        // const res = await axios.get(`${import.meta.env.VITE_API_URL}/projects`, {
+        //   headers: { Authorization: `Bearer ${token}` }
+        // });
+        // setProjects(res.data);
+        const res = await axios.get(
+  `${import.meta.env.VITE_API_URL}/projects?page=${page}&pageSize=${pageSize}`,
+  {
+    headers: { Authorization: `Bearer ${token}` }
+  }
+);
+
+setProjects(res.data.projects);
+setTotal(res.data.total);
+
       } catch (err) {
         console.error(err);
       }
     };
     fetchProjects();
-  }, []);
+  }, [page]);
 
   return (
     <div className="p-6 bg-gray-50 min-h-screen">
@@ -83,6 +100,28 @@ export default function ProjectsList() {
           </tbody>
         </table>
       </div>
+      <div className="flex justify-end mt-6 gap-4 items-center flex-wrap">
+  <button
+    disabled={page === 1}
+    onClick={() => setPage(page - 1)}
+    className="px-3 py-1 bg-indigo-200 rounded disabled:opacity-50"
+  >
+    Prev
+  </button>
+
+  <span className="px-3 py-1 bg-white border rounded">
+     {page} 
+  </span>
+
+  <button
+    disabled={page === totalPages}
+    onClick={() => setPage(page + 1)}
+    className="px-3 py-1 bg-indigo-200 rounded disabled:opacity-50"
+  >
+    Next
+  </button>
+</div>
+
     </div>
   );
 }

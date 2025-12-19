@@ -1,6 +1,3 @@
-
-
-
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
@@ -133,6 +130,8 @@ export default function TaskView() {
           <p className="mb-3">
             <b>Description:</b><br />
             <span className="text-gray-600">
+                            
+
               {task.Project?.description || "No description"}
             </span>
           </p>

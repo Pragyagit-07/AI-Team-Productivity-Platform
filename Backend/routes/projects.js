@@ -5,7 +5,6 @@ const authMiddleware = require('../middleware/authMiddleware');
 
 
 router.get('/:projectId/members', authMiddleware, projectController.getProjectMembers);
-
 router.get('/', authMiddleware, projectController.getAllProjects);
 router.post('/', authMiddleware, projectController.createProject);
 router.get('/:id', authMiddleware, projectController.getProjectById);

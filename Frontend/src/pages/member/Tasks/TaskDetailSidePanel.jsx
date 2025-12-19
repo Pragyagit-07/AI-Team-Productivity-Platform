@@ -1,5 +1,3 @@
-
-
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { X, Send, Upload } from "lucide-react";
@@ -9,6 +7,8 @@ export default function TaskDetailSidePanel({ taskId, onClose, onTaskUpdated }) 
   const [activeTab, setActiveTab] = useState("comments");
   const [newComment, setNewComment] = useState("");
   const token = localStorage.getItem("token");
+const [description, setDescription] = useState("");
+const API_URL = import.meta.env.VITE_API_URL;
 
   /* ================= FETCH ================= */
   const fetchTaskDetails = async () => {
@@ -26,6 +26,37 @@ export default function TaskDetailSidePanel({ taskId, onClose, onTaskUpdated }) 
   useEffect(() => {
     if (taskId) fetchTaskDetails();
   }, [taskId]);
+  // for description
+  useEffect(() => {
+  if (task?.description !== undefined) {
+    setDescription(task.description || "");
+  }
+}, [task]);
+const saveDescription = () => {
+  if (description !== task.description) {
+    updateTask("description", description);
+  }
+};
+// upload file
+
+const uploadFile = async (file) => {
+  const formData = new FormData();
+  formData.append('file', file);
+  formData.append('taskId', taskId);
+
+  try {
+    await axios.post(`${API_URL}/files`, formData, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'multipart/form-data'
+      }
+    });
+
+    fetchTaskDetails();
+  } catch (err) {
+    console.error(err);
+  }
+};
 
   /* ================= UPDATE FIELD ================= */
   const updateTask = async (field, value) => {
@@ -36,8 +67,8 @@ export default function TaskDetailSidePanel({ taskId, onClose, onTaskUpdated }) 
       { headers: { Authorization: `Bearer ${token}` } }
     );
 
-    fetchTaskDetails();   // Side panel update
-    onTaskUpdated?.();   // ⭐ TaskBoard update
+    fetchTaskDetails();   
+    onTaskUpdated?.();   
   } catch (err) {
     console.error(err);
   }
@@ -79,7 +110,9 @@ export default function TaskDetailSidePanel({ taskId, onClose, onTaskUpdated }) 
 
   /* ================= UI ================= */
   return (
-    <div className="fixed inset-y-0 right-0 z-40 w-full sm:w-[460px] bg-white shadow-xl overflow-y-auto">
+    <div className="fixed inset-y-0 right-0 z-40 w-full sm:w-[460px] bg-white shadow-xl overflow-hidden">
+
+     {/* <div className="fixed inset-y-0 right-0 z-40 w-full sm:w-[460px] bg-white shadow-xl overflow-y-auto"> */}
       {/* Close */}
       <button
         onClick={onClose}
@@ -152,17 +185,37 @@ export default function TaskDetailSidePanel({ taskId, onClose, onTaskUpdated }) 
           </div>
         </div>
 
+        
         {/* ================= DESCRIPTION ================= */}
-        <div>
-          <label className="text-xs text-gray-500">Description</label>
-          <textarea
-            rows="3"
-            value={task.description || ""}
-            onChange={(e) => updateTask("description", e.target.value)}
-            className="w-full p-2 rounded bg-gray-100 resize-none"
-            placeholder="Add task description..."
-          />
-        </div>
+<div>
+  <label className="text-xs text-gray-500">Description</label>
+
+  <textarea
+    rows={4}
+    value={description}
+    onChange={(e) => setDescription(e.target.value)}
+    onBlur={saveDescription}
+    onKeyDown={(e) => {
+      if (e.key === "Enter" && !e.shiftKey) {
+        e.preventDefault();
+        saveDescription();
+      }
+    }}
+    placeholder="Add task description..."
+    className="
+      w-full
+      p-3
+      rounded-lg
+      bg-gray-100
+      focus:bg-white
+      focus:ring-2
+      focus:ring-blue-500
+      resize-none
+      text-sm
+    "
+  />
+</div>
+
 
         {/* ================= TABS ================= */}
         <div className="flex gap-6 text-sm">
@@ -182,76 +235,162 @@ export default function TaskDetailSidePanel({ taskId, onClose, onTaskUpdated }) 
         </div>
 
         {/* ================= COMMENTS ================= */}
+        
         {activeTab === "comments" && (
-          <div className="space-y-4">
-            {task.comments?.map((c) => (
-              <div key={c.id} className="flex gap-3">
-                <div className="w-8 h-8 rounded-full bg-blue-500 text-white flex items-center justify-center text-xs">
-                  {c.userName?.charAt(0)}
-                </div>
-                <div>
-                  <p className="text-sm font-medium">{c.userName}</p>
-                  <p className="text-sm text-gray-600">{c.text}</p>
-                  <p className="text-xs text-gray-400">
-                    {new Date(c.createdAt).toLocaleString()}
-                  </p>
-                </div>
-              </div>
-            ))}
+  <div className="flex flex-col h-[200px]">
 
-            <div className="flex gap-2">
-              <input
-                value={newComment}
-                onChange={(e) => setNewComment(e.target.value)}
-                placeholder="Write a comment..."
-                className="flex-1 p-2 rounded bg-gray-100"
-              />
-              <button
-                onClick={postComment}
-                className="p-2 bg-blue-500 text-white rounded"
-              >
-                <Send size={16} />
-              </button>
-            </div>
-          </div>
-        )}
+    {/* COMMENTS LIST — SCROLL ONLY HERE */}
+    <div className="flex-1 overflow-y-auto space-y-4 pr-2">
+      {task.comments?.length === 0 && (
+        <p className="text-sm text-gray-400">No comments yet</p>
+      )}
+
+      {task.comments?.map((c) => (
+  <div key={c.id} className="flex items-start justify-between gap-3">
+
+    {/* LEFT ICON */}
+    <div className="w-8 h-8 rounded-full bg-blue-500 text-white flex items-center justify-center text-xs font-medium">
+      {c.User?.name?.charAt(0)}
+    </div>
+
+    {/* COMMENT TEXT */}
+    <div className="flex-1">
+      <p className="text-sm text-gray-700">{c.text}</p>
+    </div>
+
+    {/* DATE */}
+    <div className="text-xs text-gray-400 whitespace-nowrap">
+      {new Date(c.createdAt).toLocaleString()}
+    </div>
+
+  </div>
+))}
+
+    </div>
+
+    {/* INPUT — FIXED */}
+  
+    <div className="flex gap-2 pt-2  sticky bottom-0 bg-white">
+
+      <input
+        value={newComment}
+        onChange={(e) => setNewComment(e.target.value)}
+        placeholder="Write a comment..."
+        className="flex-1 p-2 rounded bg-gray-100"
+      />
+      <button
+        onClick={postComment}
+        className="p-2 bg-blue-500 text-white rounded"
+      >
+        <Send size={16} />
+      </button>
+    </div>
+  </div>
+)}
+
 
         {/* ================= ACTIVITY ================= */}
+        
+
         {activeTab === "activity" && (
-          <div className="space-y-3">
-            {task.activities?.map((a) => (
-              <div key={a.id} className="text-sm">
-                <p className="font-medium">{a.userName}</p>
-                <p className="text-gray-600">{a.description}</p>
-                <p className="text-xs text-gray-400">
-                  {new Date(a.createdAt).toLocaleString()}
-                </p>
-              </div>
-            ))}
-          </div>
-        )}
+  <div className="flex flex-col h-[200px]">
+
+    {/* ACTIVITY LIST — SCROLL */}
+      <div className="flex-1 overflow-y-auto space-y-4 pr-2">
+     {task.activities?.length === 0 && (
+     <p className="text-sm text-gray-400">No activity yet</p>
+      )}
+    {task.activities?.map((a) => (
+  <div key={a.id} className="flex items-start justify-between gap-3">
+<div className="w-8 h-8 rounded-full bg-blue-500 text-white flex items-center justify-center text-xs">
+      {a.User?.name?.charAt(0)}
+    </div>
+    <div className="flex-1 text-sm text-gray-700">
+      {a.description}
+    </div>
+
+    <div className="text-xs text-gray-400">
+      {new Date(a.createdAt).toLocaleString()}
+    </div>
+
+  </div>
+))}
+</div> 
+</div>
+)}
+
 
         {/* ================= FILES ================= */}
+        
         {activeTab === "files" && (
-          <div className="space-y-3">
-            <label className="flex items-center gap-2 text-blue-600 cursor-pointer">
-              <Upload size={16} /> Upload File
-              <input type="file" hidden />
-            </label>
+  <div className="flex flex-col h-[200px]">
 
-            {task.files?.map((f) => (
-              <a
-                key={f.id}
-                href={f.url}
-                target="_blank"
-                className="block text-sm text-blue-600 hover:underline"
-              >
-                {f.name}
-              </a>
-            ))}
-          </div>
-        )}
-      </div>
+    {/* UPLOAD — FIXED */}
+    <label className="flex items-center gap-2 text-blue-600 cursor-pointer mb-3">
+      <Upload size={16} /> Upload File
+      <input
+        type="file"
+        hidden
+        onChange={(e) => uploadFile(e.target.files[0])}
+      />
+    </label>
+
+    {/* FILE LIST — SCROLL */}
+    
+        <div className="flex-1 overflow-y-auto space-y-4 pr-2">
+
+      {task.files?.length === 0 && (
+        <p className="text-sm text-gray-400">No files uploaded</p>
+      )}
+
+    
+{task.files?.map((f) => (
+  <div key={f.id} className="flex items-center justify-between gap-3">
+
+    {/* ICON */}
+    <div className="w-8 h-8 rounded-full bg-blue-500 text-white flex items-center justify-center text-xs">
+      p
+    </div>
+
+    {/* PREVIEW */}
+    <div className="flex-1">
+      {f.type?.startsWith("image") ? (
+        <img
+         src={`${API_URL}/${f.path}`}
+              
+
+          alt={f.name}
+          className="w-20 h-20 object-cover rounded border"
+        />
+      ) : (
+        <a
+           href={`${API_URL}/${f.path}`}
+            
+
+          target="_blank"
+            
+
+          className="text-sm text-blue-600 hover:underline"
+        >
+          {f.name}
+        </a>
+      )}
+    </div>
+
+    {/* DATE */}
+    <div className="text-xs text-gray-400">
+      {new Date(f.createdAt).toLocaleDateString()}
+    </div>
+  </div>
+))}
+</div>
+</div>
+)}
+
+    </div>
     </div>
   );
 }
+
+
+

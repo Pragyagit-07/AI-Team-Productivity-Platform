@@ -1,9 +1,9 @@
-
-
-
 const Task = require("../models/Task");
 const User = require("../models/User");
 const Project = require("../models/Project");
+const ActivityLog = require("../models/ActivityLog");
+const Comment = require("../models/Comment");
+const File = require("../models/File");
 
 // GET TASKS BY PROJECT
 exports.getTasksByProject = async (req, res) => {
@@ -24,9 +24,54 @@ exports.getTasksByProject = async (req, res) => {
 };
 
 // GET ALL TASKS (GLOBAL TASK TAB)
+// exports.getAllTasks = async (req, res) => {
+//   try {
+//     const tasks = await Task.findAll({
+//       include: [
+//         { model: User, as: "assignee", attributes: ["id", "name"] },
+//         { model: Project, attributes: ["id", "name"] },
+//       ],
+//       order: [["createdAt", "DESC"]],
+//     });
+
+//     res.json(tasks);
+//   } catch (err) {
+//     console.error(err);
+//     res.status(500).json({ msg: "Server error" });
+//   }
+// };
+const { Op } = require("sequelize");
+
 exports.getAllTasks = async (req, res) => {
   try {
-    const tasks = await Task.findAll({
+    const {
+      page = 1,
+      pageSize = 5,
+      search = "",
+      status,
+      priority,
+      projectId
+    } = req.query;
+
+    const limit = parseInt(pageSize);
+    const offset = (page - 1) * limit;
+
+    const where = {};
+
+    // filters
+    if (projectId) where.projectId = projectId;
+    if (status) where.status = status;
+    if (priority) where.priority = priority;
+
+    // search
+    if (search) {
+      where.title = { [Op.like]: `%${search}%` };
+    }
+
+    const { rows, count } = await Task.findAndCountAll({
+      where,
+      limit,
+      offset,
       include: [
         { model: User, as: "assignee", attributes: ["id", "name"] },
         { model: Project, attributes: ["id", "name"] },
@@ -34,12 +79,18 @@ exports.getAllTasks = async (req, res) => {
       order: [["createdAt", "DESC"]],
     });
 
-    res.json(tasks);
+    res.json({
+      tasks: rows,
+      total: count,
+      page: Number(page),
+      pageSize: Number(pageSize),
+    });
   } catch (err) {
     console.error(err);
     res.status(500).json({ msg: "Server error" });
   }
 };
+
 
 // CREATE TASK
 exports.createTask = async (req, res) => {
@@ -77,24 +128,57 @@ exports.updateTask = async (req, res) => {
   }
 };
 // GET SINGLE TASK (FOR EDIT / VIEW)
+
+
+    
 exports.getTaskById = async (req, res) => {
   try {
     const task = await Task.findByPk(req.params.id, {
       include: [
         { model: User, as: "assignee", attributes: ["id", "name"] },
-        { model: Project,  attributes: ["id", "name", "startDate", "description", "status"],
-                    include: [
+
+        {
+          model: Project,
+          attributes: ["id", "name", "status"],
+          include: [
             { model: User, as: "creator", attributes: ["id", "name"] },
-      {
+            {
               model: User,
               as: "members",
               attributes: ["id", "name"],
               through: { attributes: [] }
             }
-         
+          ]
+        },
+
+        //  COMMENTS
+        {
+          model: Comment,
+          as: "comments",
+          include: [{ model: User, attributes: ["id", "name"] }]
+        },
+
+        //  FILES
+        {
+          model: File,
+          as: "files",
+          include: [{ model: User, attributes: ["id", "name"] }]
+        },
+
+        //  ACTIVITIES
+        {
+          model: ActivityLog,
+          as: "activities",
+          include: [{ model: User, attributes: ["id", "name"] }]
+        }
+      ],
+
+      //  ORDER MUST BE HERE (TOP LEVEL)
+      order: [
+        [{ model: Comment, as: "comments" }, "createdAt", "ASC"],
+        [{ model: File, as: "files" }, "createdAt", "DESC"],
+        [{ model: ActivityLog, as: "activities" }, "createdAt", "DESC"]
       ]
-    }
-  ],
     });
 
     if (!task) {
@@ -107,6 +191,8 @@ exports.getTaskById = async (req, res) => {
     res.status(500).json({ msg: "Server error" });
   }
 };
+
+
 
 
 // DELETE TASK

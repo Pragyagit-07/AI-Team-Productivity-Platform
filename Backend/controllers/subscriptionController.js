@@ -1,5 +1,3 @@
-
-
 const Subscription = require('../models/Subscription');
 
 exports.getUserSubscriptions = async (req, res) => {

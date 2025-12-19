@@ -1,5 +1,3 @@
-
-
 import { useEffect, useState } from "react";
 import axios from "axios";
 import TaskDetailSidePanel from "./TaskDetailSidePanel";
@@ -10,12 +8,9 @@ export default function TaskBoard({ projectId, showAll }) {
   const [members, setMembers] = useState([]);
   const [selectedTaskId, setSelectedTaskId] = useState(null);
   const [loading, setLoading] = useState(false);
-
   const [quickAdd, setQuickAdd] = useState(null);
   const [editingTaskId, setEditingTaskId] = useState(null);
   const [editingTask, setEditingTask] = useState({});
-
-  // 🔹 COLLAPSE STATE (Asana style)
   const [collapsed, setCollapsed] = useState({
     todo: false,
     inprogress: false,
@@ -356,7 +351,7 @@ export default function TaskBoard({ projectId, showAll }) {
         <TaskDetailSidePanel
           taskId={selectedTaskId}
           onClose={() => setSelectedTaskId(null)}
-              onTaskUpdated={fetchTasks}   // ⭐ IMPORTANT
+              onTaskUpdated={fetchTasks}   
 
         />
       )}

@@ -1,12 +1,8 @@
-
-
-
-
 const { DataTypes } = require('sequelize');
 const sequelize = require('../db');
 const Organization = require('./Organization');
 const Branch = require('./Branch');
-const bcrypt = require('bcryptjs');  // required for hashing
+const bcrypt = require('bcryptjs');  
 
 const OrgUser = sequelize.define('OrgUser', {
   id: { 
@@ -25,7 +21,7 @@ const OrgUser = sequelize.define('OrgUser', {
     allowNull: false 
   },
 
-  password: {                   // 🔥 ADD PASSWORD FIELD
+  password: {                  
     type: DataTypes.STRING,
     allowNull: false
   },
@@ -49,7 +45,7 @@ const OrgUser = sequelize.define('OrgUser', {
   tableName: 'org_users',
   timestamps: true,
 
-  // 🔐 Automatically hash password
+  //  Automatically hash password
   hooks: {
     beforeCreate: async (user) => {
       if (user.password) {

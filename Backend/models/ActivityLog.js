@@ -1,7 +1,3 @@
-
-
-
-
 const { DataTypes } = require('sequelize');
 const sequelize = require('../db');
 const User = require('./User');
@@ -13,13 +9,30 @@ const ActivityLog = sequelize.define('ActivityLog', {
     defaultValue: DataTypes.UUIDV4,
     primaryKey: true
   },
-  action: { type: DataTypes.STRING, allowNull: false },
-  projectId: { type: DataTypes.UUID, allowNull: false },  // project for easier filtering
-  taskId: { type: DataTypes.UUID },                        // optional task reference
-  userId: { type: DataTypes.UUID, allowNull: false }       // user who performed action
-}, { tableName: 'activity_logs', timestamps: true });
+  action: {
+    type: DataTypes.STRING,
+    allowNull: false
+  },
+  description: {
+    type: DataTypes.STRING,
+    allowNull: false
+  },
+  projectId: {
+    type: DataTypes.UUID,
+    allowNull: false
+  },
+  taskId: {
+    type: DataTypes.UUID
+  },
+  userId: {
+    type: DataTypes.UUID,
+    allowNull: false
+  }
+}, {
+  tableName: 'activity_logs',
+  timestamps: true
+});
 
-// Associations
 ActivityLog.belongsTo(User, { foreignKey: 'userId' });
 ActivityLog.belongsTo(Task, { foreignKey: 'taskId' });
 
