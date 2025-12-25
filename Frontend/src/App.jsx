@@ -92,9 +92,9 @@ function App() {
 
         {/* ───────── ORG USERS ROUTES ───────── */}
         <Route path="org-users" element={<OrgUserTable />} />
-        <Route path="org-user/add" element={<OrgUserForm />} />
-        <Route path="org-user/edit/:id" element={<OrgUserEdit />} />
-        <Route path="org-user/view/:id" element={<OrgUserView />} />
+        <Route path="org-users/add" element={<OrgUserForm />} />
+        <Route path="org-users/edit/:id" element={<OrgUserEdit />} />
+        <Route path="org-users/view/:id" element={<OrgUserView />} />
 
 
       </Route>

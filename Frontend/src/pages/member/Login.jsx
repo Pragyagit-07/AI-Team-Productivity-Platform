@@ -1,7 +1,3 @@
-
-
-
-
 import { useState } from "react";
 import API from "../../api/axios";
 import { useNavigate, Link } from "react-router-dom";
@@ -20,8 +16,8 @@ export default function MemberLogin() {
 
     try {
       const res = await API.post("/auth/login", { email, password });
-      localStorage.setItem("token", res.data.token);
-          localStorage.setItem("userId", res.data.user.id); // ⭐ IMPORTANT FIX
+      localStorage.setItem("memberToken", res.data.token);
+          localStorage.setItem("memberId", res.data.user.id); 
 
       navigate("/dashboard");
     } catch (err) {

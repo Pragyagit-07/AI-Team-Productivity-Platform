@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import API from "../../../api/axios";
 import { useNavigate, useParams } from "react-router-dom";
 
 export default function BranchEdit() {
@@ -20,17 +20,15 @@ export default function BranchEdit() {
 
   // Fetch Branch Data + Organizations
   useEffect(() => {
-    // 1️⃣ Load existing branch data
-    axios
-      .get(`http://localhost:5000/api/branches/${id}`)
+    //  Load existing branch data
+     API.get(`/branches/${id}`)
       .then((res) => {
         setFormData(res.data);
       })
       .catch((err) => console.log("Branch fetch error:", err));
 
-    // 2️⃣ Load organizations
-    axios
-      .get("http://localhost:5000/api/organizations")
+    //  Load organizations
+    API.get("/organizations")
       .then((res) => setOrganizations(res.data))
       .catch((err) => console.log(err));
   }, [id]);
@@ -45,8 +43,7 @@ export default function BranchEdit() {
   // Validation
   const validate = () => {
     const newErrors = {};
-
-    if (!formData.name.trim()) newErrors.name = "Name is required";
+if (!formData.name.trim()) newErrors.name = "Name is required";
     if (!formData.email.trim()) newErrors.email = "Email is required";
     else if (!/^\S+@\S+\.\S+$/.test(formData.email))
       newErrors.email = "Invalid email";
@@ -68,13 +65,9 @@ export default function BranchEdit() {
     if (!validate()) return;
 
     try {
-      await axios.put(
-        `http://localhost:5000/api/branches/${id}`,
-        formData
-      );
-
+      await 
+      API.put(`/branches/${id}`,formData);
       setMessage("Branch updated successfully!");
-
       setTimeout(() => navigate("/admin/dashboard/branches"), 800);
 
     } catch (err) {
@@ -85,8 +78,6 @@ export default function BranchEdit() {
 
   // Back Button
   const goBack = () => navigate("/admin/dashboard/branches");
-
-
   return (
     <div className="max-w-3xl mx-auto mt-10 p-6 bg-white rounded-xl shadow-lg">
       

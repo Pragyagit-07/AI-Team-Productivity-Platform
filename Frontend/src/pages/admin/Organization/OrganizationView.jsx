@@ -1,129 +1,5 @@
-// import React, { useEffect, useState } from "react";
-// import axios from "axios";
-// import { useParams, useNavigate } from "react-router-dom";
-
-// export default function OrganizationView() {
-//   const { id } = useParams();
-//   const navigate = useNavigate();
-
-//   const [data, setData] = useState(null);
-//   const [message, setMessage] = useState("");
-
-//   // Fetch organization
-//   useEffect(() => {
-//     const loadData = async () => {
-//       try {
-//         const res = await axios.get(
-//           `http://localhost:5000/api/organizations/${id}`
-//         );
-//         setData(res.data);
-//       } catch (err) {
-//         console.log(err);
-//         setMessage("Failed to load organization details");
-//       }
-//     };
-
-//     loadData();
-//   }, [id]);
-
-//   const goBack = () => navigate("/admin/dashboard/organizations");
-//   const goEdit = () => navigate(`/admin/dashboard/organization/edit/${id}`);
-
-//   if (!data) {
-//     return (
-//       <div className="flex justify-center mt-20 text-gray-600 text-lg">
-//         Loading...
-//       </div>
-//     );
-//   }
-
-//   return (
-//     <div className="max-w-3xl mx-auto mt-10 p-6 bg-white rounded-xl shadow-lg">
-
-//       {/* Back Button */}
-//       <button
-//         onClick={goBack}
-//         className="mb-4 text-blue-600 hover:text-blue-800 font-medium flex items-center gap-2"
-//       >
-//         ← Back
-//       </button>
-
-//       <h1 className="text-2xl font-bold mb-6 text-center">
-//         Organization Details
-//       </h1>
-
-//       {message && (
-//         <p className="text-center text-red-500 font-medium mb-3">
-//           {message}
-//         </p>
-//       )}
-
-//       {/* Details Card */}
-//       <div className="space-y-4">
-
-//         {/* Name */}
-//         <div>
-//           <p className="text-gray-600 font-medium">Organization Name</p>
-//           <p className="text-lg font-semibold">{data.name}</p>
-//         </div>
-
-//         {/* Domain */}
-//         <div>
-//           <p className="text-gray-600 font-medium">Domain (Email)</p>
-//           <p className="text-lg font-semibold">{data.domain}</p>
-//         </div>
-
-//         {/* Phone */}
-//         <div>
-//           <p className="text-gray-600 font-medium">Phone</p>
-//           <p className="text-lg font-semibold">{data.phone}</p>
-//         </div>
-
-//         {/* Contact Person */}
-//         <div>
-//           <p className="text-gray-600 font-medium">Contact Person</p>
-//           <p className="text-lg font-semibold">{data.createdBy}</p>
-//         </div>
-
-//         {/* Address */}
-//         <div>
-//           <p className="text-gray-600 font-medium">Address</p>
-//           <p className="text-lg font-semibold whitespace-pre-line">
-//             {data.address}
-//           </p>
-//         </div>
-
-//         {/* Created Date */}
-//         {data.createdAt && (
-//           <div>
-//             <p className="text-gray-600 font-medium">Created On</p>
-//             <p className="text-lg font-semibold">
-//               {new Date(data.createdAt).toLocaleDateString()}
-//             </p>
-//           </div>
-//         )}
-//       </div>
-
-//       {/* Buttons */}
-//       <div className="flex justify-end gap-3 mt-6">
-
-//         <button
-//           onClick={goEdit}
-//           className="px-6 py-2 bg-blue-600 text-white rounded-md font-semibold hover:bg-blue-700"
-//         >
-//           Edit Organization
-//         </button>
-
-//       </div>
-//     </div>
-//   );
-// }
-
-
-
-
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import API from "../../../api/axios";
 import { useParams, useNavigate } from "react-router-dom";
 import { FaEdit, FaEye, FaTrash } from "react-icons/fa";
 
@@ -143,7 +19,8 @@ export default function OrganizationView() {
 
   const loadOrganization = async () => {
     try {
-      const res = await axios.get(`http://localhost:5000/api/organizations/${id}`);
+      const res = await API.get(`/organizations/${id}`);
+
       setOrganization(res.data);
     } catch (err) {
       console.log(err);
@@ -153,7 +30,8 @@ export default function OrganizationView() {
 
   const loadBranches = async () => {
     try {
-      const res = await axios.get(`http://localhost:5000/api/branches?organizationId=${id}`);
+      const res = await API.get(`/branches?organizationId=${id}`);
+      
       setBranches(res.data);
     } catch (err) {
       console.log(err);
@@ -163,22 +41,16 @@ export default function OrganizationView() {
 
   const goBack = () => navigate("/admin/dashboard/organizations");
   const goEdit = () => navigate(`/admin/dashboard/organization/edit/${id}`);
-
-  // const goAddBranch = () => navigate(`/admin/dashboard/branch/add`);
   const goAddBranch = () => navigate(`/admin/dashboard/branch/add?organizationId=${id}`);
-
-
   const goEditBranch = (branchId) =>
     navigate(`/admin/dashboard/branch/edit/${branchId}`);
-
   const goViewBranch = (branchId) =>
     navigate(`/admin/dashboard/branch/view/${branchId}`);
-
   const deleteBranch = async (branchId) => {
     if (!window.confirm("Are you sure you want to delete this branch?")) return;
 
     try {
-      await axios.delete(`http://localhost:5000/api/branches/${branchId}`);
+      await API.delete(`/branches/${branchId}`);
       loadBranches();
     } catch (err) {
       console.log(err);
@@ -330,7 +202,6 @@ export default function OrganizationView() {
           </table>
         </div>
       </div>
-
-    </div>
+     </div>
   );
 }

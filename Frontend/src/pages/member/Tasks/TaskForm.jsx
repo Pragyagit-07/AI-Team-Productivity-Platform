@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import { useNavigate , useParams} from "react-router-dom";
-import axios from "axios";
+// import axios from "axios";
+import API from "../../../api/axios";
 import { ArrowLeft, PlusCircle } from "lucide-react";
 
 export default function TaskForm({ projectId, onTaskSaved }) {
   const navigate = useNavigate();
-  const token = localStorage.getItem("token");
+  // const token = localStorage.getItem("token");
 
 
 
@@ -35,10 +36,11 @@ const taskId = isEdit ? id : null;
 
   const fetchMembers = async () => {
     try {
-      const res = await axios.get(
-        `${import.meta.env.VITE_API_URL}/projects/${projectIdState}/members`,
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      // const res = await axios.get(
+        // `${import.meta.env.VITE_API_URL}/projects/${projectIdState}/members`,
+        // { headers: { Authorization: `Bearer ${token}` } }
+      // );
+      const res = await API.get(`/projects/${projectIdState}/members`);
       setMembers(res.data);
     } catch {
       setError("Failed to fetch project members");
@@ -54,11 +56,11 @@ const taskId = isEdit ? id : null;
 
   const fetchTask = async () => {
     try {
-      const res = await axios.get(
-        `${import.meta.env.VITE_API_URL}/tasks/${taskId}`,
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-
+      // const res = await axios.get(
+        // `${import.meta.env.VITE_API_URL}/tasks/${taskId}`,
+        // { headers: { Authorization: `Bearer ${token}` } }
+      // );
+const res = await API.get(`/tasks/${taskId}`);
       const task = res.data;
 
       setFormData({
@@ -70,7 +72,7 @@ const taskId = isEdit ? id : null;
         assigneeId: task.assigneeId || "",
       });
 
-      // ✅ VERY IMPORTANT
+      
       setProjectIdState(task.projectId);
 
     } catch (err) {
@@ -99,20 +101,22 @@ const taskId = isEdit ? id : null;
       };
 
         if (isEdit) {
-      await axios.put(
-        `${import.meta.env.VITE_API_URL}/tasks/${id}`,
-       payload,
-               { headers: { Authorization: `Bearer ${token}` } }
-      );
+      // await axios.put(
+        // `${import.meta.env.VITE_API_URL}/tasks/${id}`,
+      //  payload,
+              //  { headers: { Authorization: `Bearer ${token}` } }
+      // );
+      await API.put(`/tasks/${id}`, payload);
     
   } else {
 
-            await axios.post(
-        `${import.meta.env.VITE_API_URL}/tasks`,
-        payload,
-        { headers: { Authorization: `Bearer ${token}` } }
-            );
-          }
+            // await axios.post(
+        // `${import.meta.env.VITE_API_URL}/tasks`,
+        // payload,
+        // { headers: { Authorization: `Bearer ${token}` } }
+            // );
+            await API.post(`/tasks`, payload);
+           }
 
       if (onTaskSaved) onTaskSaved();
       navigate(-1);

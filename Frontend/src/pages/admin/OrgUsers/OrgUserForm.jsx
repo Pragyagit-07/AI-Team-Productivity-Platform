@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import API from "../../../api/axios";
 import { useNavigate } from "react-router-dom";
 import { Eye, EyeOff } from "lucide-react";
 
@@ -18,16 +18,14 @@ const [showPassword, setShowPassword] = useState(false);
 
   const [organizations, setOrganizations] = useState([]);
   const [branches, setBranches] = useState([]);
-
   const [errors, setErrors] = useState({});
   const [message, setMessage] = useState("");
 
   // Fetch all organizations
   useEffect(() => {
-    axios
-      .get("http://localhost:5000/api/organizations")
-      .then((res) => setOrganizations(res.data))
-      .catch((err) => console.log("Error fetching organizations", err));
+    API.get("/organizations")
+    .then((res) => setOrganizations(res.data))
+    .catch((err) => console.log("Error fetching organizations", err));
   }, []);
 
   // Fetch branches on organization change
@@ -36,17 +34,14 @@ const [showPassword, setShowPassword] = useState(false);
       setBranches([]);
       return;
     }
-
-    axios
-      .get("http://localhost:5000/api/branches?orgId=" + formData.organizationId)
+       API.get("/branches?orgId=" + formData.organizationId)
       .then((res) => setBranches(res.data))
       .catch((err) => console.log("Error fetching branches", err));
   }, [formData.organizationId]);
 
   // Handle input
   const handleChange = (e) => {
-    const { name, value } = e.target;
-
+  const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value.toString() }));
     setErrors((prev) => ({ ...prev, [name]: "" }));
   };
@@ -91,10 +86,9 @@ else if (
     if (!validate()) return;
 
     try {
-      const res = await axios.post(
-        "http://localhost:5000/api/org-users",
-        formData
-      );
+      const res = await 
+  
+      API.post("/org-users",formData);
 
       setMessage("Org User Created Successfully!");
 

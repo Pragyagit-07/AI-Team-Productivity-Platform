@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import API from "../../../api/axios";
 import { useParams, useNavigate } from "react-router-dom";
 import { FaEdit, FaEye, FaTrash } from "react-icons/fa";
 
 export default function BranchView() {
   const { id } = useParams(); // branchId
   const navigate = useNavigate();
-
   const [branch, setBranch] = useState(null);
   const [users, setUsers] = useState([]);
   const [message, setMessage] = useState("");
@@ -19,7 +18,7 @@ export default function BranchView() {
 
   const loadBranch = async () => {
     try {
-      const res = await axios.get(`http://localhost:5000/api/branches/${id}`);
+      const res = await API.get(`/branches/${id}`);
       setBranch(res.data);
     } catch (err) {
       console.log(err);
@@ -29,15 +28,8 @@ export default function BranchView() {
 
   const loadOrgUsers = async () => {
     try {
-     const res = await axios.get(
-  // `http://localhost:5000/api/orgusers/branch/${id}`
-  `http://localhost:5000/api/org-users/branch/${id}`
-
-);
-  console.log("Branch ID:", id);
-
-
-      setUsers(res.data);
+      const res= await API.get(`/org-users/branch/${id}`);
+     setUsers(res.data);
     } catch (err) {
       console.log(err);
       setMessage("Failed to load users");
@@ -45,23 +37,17 @@ export default function BranchView() {
   };
 
   const goBack = () => navigate("/admin/dashboard/branches");
-
-  const goAddOrgUser = () =>
-    navigate(`/admin/dashboard/org-user/add?branchId=${id}`);
-
-  const goViewUser = (userId) =>
-    navigate(`/admin/dashboard/org-user/view/${userId}`);
-
-  const goEditUser = (userId) =>
-    navigate(`/admin/dashboard/org-user/edit/${userId}`);
-
-  const deleteUser = async (userId) => {
+ const goAddOrgUser = () =>
+    navigate(`/admin/dashboard/org-users/add?branchId=${id}`);
+ const goViewUser = (userId) =>
+    navigate(`/admin/dashboard/org-users/view/${userId}`);
+   const goEditUser = (userId) =>
+    navigate(`/admin/dashboard/org-users/edit/${userId}`);
+ const deleteUser = async (userId) => {
     if (!window.confirm("Are you sure you want to delete this user?")) return;
-
     try {
-      
-      await axios.delete(`http://localhost:5000/api/org-users/${userId}`);
-loadOrgUsers();
+      await API.delete(`/org-users/${userId}`);
+      loadOrgUsers();
 
     } catch (err) {
       console.log(err);
@@ -80,7 +66,7 @@ loadOrgUsers();
   return (
     <div className="max-w-6xl mx-auto mt-10 p-6 bg-white rounded-xl shadow-lg">
 
-      {/* 🔙 Back Button */}
+      {/* Back Button */}
       <button
         onClick={goBack}
         className="mb-4 text-blue-600 hover:text-blue-800 font-medium flex items-center gap-2"

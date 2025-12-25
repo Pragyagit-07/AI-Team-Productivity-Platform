@@ -2,7 +2,8 @@
 
 
 import React, { useMemo, useState, useEffect } from "react";
-import axios from "axios";
+// import axios from "axios";
+import API from "../../api/axios";
 import { Calendar, dateFnsLocalizer } from "react-big-calendar";
 import format from "date-fns/format";
 import parse from "date-fns/parse";
@@ -32,12 +33,13 @@ export default function CalendarTab() {
   useEffect(() => {
     const fetchTasks = async () => {
       try {
-        const res = await axios.get(
-          `${import.meta.env.VITE_API_URL}/tasks`,
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
-        );
+        const res = await API.get("/tasks");
+        // const res = await axios.get(
+          // `${import.meta.env.VITE_API_URL}/tasks`,
+          // {
+            // headers: { Authorization: `Bearer ${token}` },
+          // }
+        // );
         setTasks(res.data.tasks || res.data);
       } catch (err) {
         console.error("Failed to load calendar tasks", err);

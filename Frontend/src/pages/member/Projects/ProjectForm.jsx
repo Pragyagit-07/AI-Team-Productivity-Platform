@@ -1,18 +1,12 @@
-
-
-
-
-
+//src/pages/member/project/ProjectForm.jsx
 import { useState, useEffect, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import axios from "axios";
+import API from  "../../../api/axios";
 import { ArrowLeft, FolderKanban } from "lucide-react";
 
 export default function ProjectForm() {
   const { id } = useParams(); // edit mode
   const navigate = useNavigate();
-  const token = localStorage.getItem("token");
-
   const [members, setMembers] = useState([]); // selected member IDs
   const [allUsers, setAllUsers] = useState([]); // all users for selection
   const [formData, setFormData] = useState({
@@ -32,9 +26,8 @@ export default function ProjectForm() {
   useEffect(() => {
     const fetchMembers = async () => {
       try {
-        const res = await axios.get(`${import.meta.env.VITE_API_URL}/members`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const res = await API.get("/members");
+
         setAllUsers(res.data);
       } catch (err) {
         console.error(err);
@@ -50,9 +43,7 @@ export default function ProjectForm() {
     const fetchProject = async () => {
       try {
         setLoading(true);
-        const res = await axios.get(`${import.meta.env.VITE_API_URL}/projects/${id}`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const res = await API.get(`/projects/${id}`);
 
         const { name, description, status, startDate, endDate, members } = res.data;
         setFormData({
@@ -99,13 +90,11 @@ export default function ProjectForm() {
       const payload = { ...formData, members };
 
       if (id) {
-        await axios.put(`${import.meta.env.VITE_API_URL}/projects/${id}`, payload, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+      await API.put(`/projects/${id}`, payload);
+
       } else {
-        await axios.post(`${import.meta.env.VITE_API_URL}/projects`, payload, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        await API.post("/projects", payload);
+
       }
 
       navigate("/dashboard/projects");
@@ -280,3 +269,4 @@ export default function ProjectForm() {
     </div>
   );
 }
+

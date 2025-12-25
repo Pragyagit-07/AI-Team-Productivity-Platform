@@ -1,3 +1,4 @@
+//models/Comment.js
 const { DataTypes } = require('sequelize');
 const sequelize = require('../db');
 const User = require('./User');
@@ -24,6 +25,6 @@ const Comment = sequelize.define('Comment', {
 }, { timestamps: true });
 
 Comment.belongsTo(User, { foreignKey: 'userId' });
-Comment.belongsTo(Task, { foreignKey: 'taskId' });
+// Comment.belongsTo(Task, { foreignKey: 'taskId' });
 
 module.exports = Comment;

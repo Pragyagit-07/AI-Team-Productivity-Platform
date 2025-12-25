@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import API from "../../../api/axios";
 import { useParams, useNavigate } from "react-router-dom";
 import { FaEdit } from "react-icons/fa";
 
 export default function OrgUserView() {
   const { id } = useParams(); // orgUserId
   const navigate = useNavigate();
-
   const [user, setUser] = useState(null);
   const [message, setMessage] = useState("");
 
@@ -16,7 +15,9 @@ export default function OrgUserView() {
 
   const loadUser = async () => {
     try {
-      const res = await axios.get(`http://localhost:5000/api/org-users/${id}`);
+      const res = await 
+      API.get(`/org-users/${id}`);
+  
       setUser(res.data);
     } catch (err) {
       console.log(err);
@@ -25,7 +26,7 @@ export default function OrgUserView() {
   };
 
   const goBack = () => navigate("/admin/dashboard/org-users");
-  const goEditUser = () => navigate(`/admin/dashboard/org-user/edit/${id}`);
+  const goEditUser = () => navigate(`/admin/dashboard/org-users/edit/${id}`);
 
   if (!user) {
     return (
@@ -66,8 +67,6 @@ export default function OrgUserView() {
             <p className="text-gray-600 font-medium">Email</p>
             <p className="text-lg font-semibold">{user.email}</p>
           </div>
-
-
         </div>
 
         {/* Right Column */}
@@ -76,8 +75,8 @@ export default function OrgUserView() {
             <p className="text-gray-600 font-medium">Role</p>
             <p className="text-lg font-semibold">{user.role}</p>
           </div>
-
-          <div>
+           
+            <div>
             <p className="text-gray-600 font-medium">Organization</p>
             <p className="text-lg font-semibold">{user.Organization?.name}</p>
           </div>
@@ -88,7 +87,7 @@ export default function OrgUserView() {
           </div>
         </div>
 
-      </div>
+</div>
 
       {/* Edit Button */}
       <div className="flex justify-end mt-8">
@@ -99,7 +98,6 @@ export default function OrgUserView() {
           <FaEdit /> Edit User
         </button>
       </div>
-
-    </div>
+ </div>
   );
 }

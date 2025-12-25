@@ -1,19 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { FiEdit, FiEye, FiTrash2 } from "react-icons/fi";
 import { Link } from "react-router-dom";
-import axios from "axios";
+import API from "../../../api/axios";
 
 export default function OrgUserTable() {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  // ⬅️ Pagination States
   const [currentPage, setCurrentPage] = useState(1);
   const rowsPerPage = 5;
   // Fetch all Org Users
   const fetchUsers = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/org-users");
+      const res = await 
+      API.get("/org-users");
       setUsers(res.data);
     } catch (err) {
       console.error(err);
@@ -32,14 +32,15 @@ export default function OrgUserTable() {
     if (!window.confirm("Are you sure you want to delete this user?")) return;
 
     try {
-      await axios.delete(`http://localhost:5000/api/org-users/${id}`);
+      await 
+      API.delete(`/org-users/${id}`);
       setUsers((prev) => prev.filter((user) => user.id !== id));
     } catch (err) {
       console.error(err);
       alert("Failed to delete user");
     }
   };
- // ⬅️ Pagination Logic
+ //  Pagination Logic
   const totalPages = Math.ceil(users.length / rowsPerPage);
   const indexOfLastRow = currentPage * rowsPerPage;
   const indexOfFirstRow = indexOfLastRow - rowsPerPage;
@@ -52,7 +53,7 @@ export default function OrgUserTable() {
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-xl font-bold">Org Users</h2>
         <Link
-          to="/admin/dashboard/org-user/add"
+          to="/admin/dashboard/org-users/add"
           className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
         >
           + Add Org User
@@ -80,10 +81,9 @@ export default function OrgUserTable() {
                 </td>
               </tr>
             ) : (
-              // users.map((user) => (
-                              currentRows.map((user) => (
-
-                <tr key={user.id} className="hover:bg-gray-50">
+              
+                currentRows.map((user) => (
+                  <tr key={user.id} className="hover:bg-gray-50">
                   <td className="px-6 py-4">{user.name}</td>
                   <td className="px-6 py-4">{user.email}</td>
                   <td className="px-6 py-4">{user.role}</td>
@@ -91,14 +91,14 @@ export default function OrgUserTable() {
                   <td className="px-6 py-4">{user.Branch?.name || "-"}</td>
                   <td className="px-6 py-4 flex gap-3">
                     <Link
-                      to={`/admin/dashboard/org-user/view/${user.id}`}
+                      to={`/admin/dashboard/org-users/view/${user.id}`}
                       className="text-green-500 hover:text-green-700"
                       title="View"
                     >
                       <FiEye />
                     </Link>
                     <Link
-                      to={`/admin/dashboard/org-user/edit/${user.id}`}
+                      to={`/admin/dashboard/org-users/edit/${user.id}`}
                       className="text-blue-500 hover:text-blue-700"
                       title="Edit"
                     >
@@ -120,8 +120,7 @@ export default function OrgUserTable() {
       </div>
       {/* Pagination */}
 <div className="flex justify-end mt-4">
-
-  <div className="flex items-center gap-2">
+<div className="flex items-center gap-2">
 
     {/* Prev Button */}
     <button

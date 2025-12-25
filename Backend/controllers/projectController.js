@@ -5,21 +5,6 @@ const ActivityLog = require("../models/ActivityLog");
 
 
 // ---------- GET ALL PROJECTS ----------
-// exports.getAllProjects = async (req, res) => {
-//   try {
-//     const projects = await Project.findAll({
-//       include: [
-//         { model: User, as: 'creator', attributes: ['id', 'name'] },
-//         { model: User, as: 'members', attributes: ['id', 'name'], through: { attributes: [] } } 
-//       ]
-//     });
-
-//     res.json(projects);
-//   } catch (err) {
-//     console.error(err);
-//     res.status(500).json({ msg: 'Server error' });
-//   }
-// };
 
 exports.getAllProjects = async (req, res) => {
   try {
@@ -68,8 +53,10 @@ exports.createProject = async (req, res) => {
       status: status || 'planned',
       startDate,
       endDate,
-      createdBy: userId
+      createdBy: req.user.id
     });
+    console.log("REQ USER:", req.user);
+
 // Add members (array of userIds)
     if (members && members.length > 0) {
       await project.addMembers(members);
@@ -153,6 +140,8 @@ exports.updateProject = async (req, res) => {
   description: `${req.user.name} updated project "${project.name}"`,
   projectId: project.id,
   userId: req.user.id
+    
+
 });
 
 
@@ -195,7 +184,27 @@ exports.getProjectMembers = async (req, res) => {
     res.status(500).json({ msg: 'Server error' });
   }
 };
+// for
 
+exports.getProjectsWithTasks = async (req, res) => {
+  try {
+    const projects = await Project.findAll({
+      include: [
+        {
+          model: Task,
+          as: "tasks",
+          attributes: ["id", "status", "dueDate"],
+        },
+      ],
+      order: [["createdAt", "DESC"]],
+    });
+
+    res.json(projects);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ msg: "Server error" });
+  }
+};
 
 // ---------- DELETE PROJECT ----------
 exports.deleteProject = async (req, res) => {

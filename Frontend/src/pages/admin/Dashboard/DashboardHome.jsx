@@ -1,6 +1,6 @@
 // src/pages/admin/Dashboard/DashboardHome.jsx
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import API from "../../../api/axios";
 import {
   BarChart,
   Bar,
@@ -38,9 +38,11 @@ export default function DashboardHome() {
   const fetchCounts = async () => {
     try {
       const [orgs, branches, users] = await Promise.all([
-        axios.get("http://localhost:5000/api/organizations"),
-        axios.get("http://localhost:5000/api/branches"),
-        axios.get("http://localhost:5000/api/org-users"),
+        API.get("/organizations"),
+        API.get("/branches"),
+        API.get("/org-users"),
+
+
       ]);
 
       const usersWithoutBranch = users.data.filter((u) => !u.branchId).length;
@@ -58,13 +60,12 @@ export default function DashboardHome() {
 
   const fetchBranchData = async () => {
     try {
-      const branchesRes = await axios.get("http://localhost:5000/api/branches");
+      const branchesRes= await API.get("/branches");
       const data = await Promise.all(
         branchesRes.data.map(async (branch) => {
           if (!branch.id) return null;
-          const usersRes = await axios.get(
-            `http://localhost:5000/api/org-users/branch/${branch.id}`
-          );
+          
+          const usersRes = await API.get(`/org-users/branch/${branch.id}`);
           return {
             branch: branch.name,
             users: Array.isArray(usersRes.data) ? usersRes.data.length : 0,
@@ -79,7 +80,8 @@ export default function DashboardHome() {
 
   const fetchRoleData = async () => {
     try {
-      const usersRes = await axios.get("http://localhost:5000/api/org-users");
+    
+      const usersRes = await API.get("/org-users");
       const adminCount = usersRes.data.filter((u) => u.role === "ADMIN").length;
       const memberCount = usersRes.data.filter((u) => u.role === "MEMBER").length;
 
@@ -94,7 +96,8 @@ export default function DashboardHome() {
 
   const fetchRecentActivity = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/org-users");
+      
+      const res = await API.get("/org-users");
       const latest = res.data
         .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
         .slice(0, 5);

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+// import axios from "axios";
 import { X, Send, Upload } from "lucide-react";
+import API from "../../../api/axios";
 
 export default function TaskDetailSidePanel({ taskId, onClose, onTaskUpdated }) {
   const [task, setTask] = useState(null);
@@ -13,10 +14,11 @@ const API_URL = import.meta.env.VITE_API_URL;
   /* ================= FETCH ================= */
   const fetchTaskDetails = async () => {
     try {
-      const res = await axios.get(
-        `${import.meta.env.VITE_API_URL}/tasks/${taskId}`,
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      // const res = await axios.get(
+        // `${import.meta.env.VITE_API_URL}/tasks/${taskId}`,
+        // { headers: { Authorization: `Bearer ${token}` } }
+      // );
+      const res = await API.get(`/tasks/${taskId}`);
       setTask(res.data);
     } catch (err) {
       console.error(err);
@@ -45,12 +47,13 @@ const uploadFile = async (file) => {
   formData.append('taskId', taskId);
 
   try {
-    await axios.post(`${API_URL}/files`, formData, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'multipart/form-data'
-      }
-    });
+    // await axios.post(`${API_URL}/files`, formData, {
+      // headers: {
+        // Authorization: `Bearer ${token}`,
+        // 'Content-Type': 'multipart/form-data'
+      // }
+    // });
+    await API.post(`/files`, formData);
 
     fetchTaskDetails();
   } catch (err) {
@@ -61,11 +64,16 @@ const uploadFile = async (file) => {
   /* ================= UPDATE FIELD ================= */
   const updateTask = async (field, value) => {
   try {
-    await axios.put(
-      `${import.meta.env.VITE_API_URL}/tasks/${taskId}`,
-      { [field]: value },
-      { headers: { Authorization: `Bearer ${token}` } }
+    await API.put(`/tasks/${taskId}`,
+      {
+         [field] : value
+      }
     );
+    // await axios.put(
+      // `${import.meta.env.VITE_API_URL}/tasks/${taskId}`,
+      // { [field]: value },
+      // { headers: { Authorization: `Bearer ${token}` } }
+    // );
 
     fetchTaskDetails();   
     onTaskUpdated?.();   
@@ -79,11 +87,16 @@ const uploadFile = async (file) => {
   const postComment = async () => {
     if (!newComment.trim()) return;
     try {
-      await axios.post(
-        `${import.meta.env.VITE_API_URL}/comments`,
-        { taskId, text: newComment },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      await API.post(`/comments`,
+        {
+          taskId ,
+          text: newComment,
+    });
+      // await axios.post(
+        // `${import.meta.env.VITE_API_URL}/comments`,
+        // { taskId, text: newComment },
+        // { headers: { Authorization: `Bearer ${token}` } }
+      // );
       setNewComment("");
       fetchTaskDetails();
     } catch (err) {

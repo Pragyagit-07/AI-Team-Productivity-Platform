@@ -11,7 +11,8 @@ export default function AdminDashboard() {
   ];
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
+    localStorage.removeItem("adminToken");
+    localStorage.removeItem("adminId");
     window.location.href = "/admin/login";
   };
 
@@ -21,7 +22,7 @@ export default function AdminDashboard() {
       <div className="flex-1 flex flex-col">
         <Header username="Admin" onLogout={handleLogout} />
         <main className="p-6 bg-gray-100 flex-1 overflow-auto">
-          <Outlet /> {/* Nested routes render here */}
+          <Outlet /> 
         </main>
       </div>
     </div>

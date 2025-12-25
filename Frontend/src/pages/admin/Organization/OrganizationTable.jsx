@@ -1,19 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { FiEdit, FiEye, FiTrash2 } from "react-icons/fi";
-import axios from "axios";
+import API from "../../../api/axios";
 
 export default function OrganizationTable() {
   const [organizations, setOrganizations] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-// ⬅️ Pagination States
   const [currentPage, setCurrentPage] = useState(1);
   const rowsPerPage = 5;
   // Fetch organizations from backend
   const fetchOrganizations = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/organizations");
+      const res = await 
+      API.get("/organizations");
       setOrganizations(res.data);
     } catch (err) {
       console.error(err);
@@ -31,7 +31,8 @@ export default function OrganizationTable() {
       return;
 
     try {
-      await axios.delete(`http://localhost:5000/api/organizations/${id}`);
+      await 
+      API.delete(`/organizations/${id}`);
       setOrganizations((prev) => prev.filter((org) => org.id !== id));
     } catch (err) {
       console.error(err);
@@ -39,7 +40,7 @@ export default function OrganizationTable() {
     }
   };
 
-  // ⬅️ Pagination Logic
+  //  Pagination Logic
   const totalPages = Math.ceil(organizations.length / rowsPerPage);
   const indexOfLastRow = currentPage * rowsPerPage;
   const indexOfFirstRow = indexOfLastRow - rowsPerPage;
@@ -125,8 +126,7 @@ export default function OrganizationTable() {
       </div>
       {/* Pagination */}
 <div className="flex justify-end mt-4">
-
-  <div className="flex items-center gap-2">
+<div className="flex items-center gap-2">
 
     {/* Prev Button */}
     <button

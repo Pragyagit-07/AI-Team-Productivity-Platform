@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import axios from "axios";
+// import axios from "axios";
+import API from "../../../api/axios";
 import {
   ArrowLeft,
   Pencil,
@@ -28,10 +29,11 @@ export default function TaskView() {
 
   const fetchTask = async () => {
     try {
-      const res = await axios.get(
-        `${import.meta.env.VITE_API_URL}/tasks/${id}`,
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      // const res = await axios.get(
+        // `${import.meta.env.VITE_API_URL}/tasks/${id}`,
+        // { headers: { Authorization: `Bearer ${token}` } }
+      // );
+      const res = await API.get(`/tasks/${id}`);
       setTask(res.data);
     } catch (err) {
       console.error(err);
@@ -44,10 +46,11 @@ export default function TaskView() {
   const handleDelete = async () => {
     if (!window.confirm("Delete this task?")) return;
     try {
-      await axios.delete(
-        `${import.meta.env.VITE_API_URL}/tasks/${id}`,
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      // await axios.delete(
+        // `${import.meta.env.VITE_API_URL}/tasks/${id}`,
+        // { headers: { Authorization: `Bearer ${token}` } }
+      // );
+      await API.delete(`/tasks/${id}`);
       navigate("/dashboard/tasks");
     } catch (err) {
       alert("Delete failed");

@@ -1,40 +1,32 @@
 import { useEffect, useState } from "react";
 import { Eye, Pencil } from "lucide-react";
 import { Link } from "react-router-dom";
-import axios from "axios";
+import API from "../../../api/axios";
 
 export default function ProjectsList() {
   const [projects, setProjects] = useState([]);
+
+  const [page, setPage] = useState(1);
+  const [total, setTotal] = useState(0);
   
-const [page, setPage] = useState(1);
-const [total, setTotal] = useState(0);
 
-const pageSize = 5;
-const totalPages = Math.ceil(total / pageSize);
-
+  const pageSize = 5;
+  const totalPages = Math.ceil(total / pageSize);
 
   useEffect(() => {
     const fetchProjects = async () => {
       try {
-         const token = localStorage.getItem("token");
-        // const res = await axios.get(`${import.meta.env.VITE_API_URL}/projects`, {
-        //   headers: { Authorization: `Bearer ${token}` }
-        // });
-        // setProjects(res.data);
-        const res = await axios.get(
-  `${import.meta.env.VITE_API_URL}/projects?page=${page}&pageSize=${pageSize}`,
-  {
-    headers: { Authorization: `Bearer ${token}` }
-  }
-);
+        const res = await API.get(
+          `/projects?page=${page}&pageSize=${pageSize}`
+        );
 
-setProjects(res.data.projects);
-setTotal(res.data.total);
-
+        setProjects(res.data.projects);
+        setTotal(res.data.total);
       } catch (err) {
-        console.error(err);
+        console.error("Failed to fetch projects", err);
       }
     };
+
     fetchProjects();
   }, [page]);
 
@@ -42,8 +34,8 @@ setTotal(res.data.total);
     <div className="p-6 bg-gray-50 min-h-screen">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold text-gray-800">Projects</h1>
-        <Link 
-          to="/dashboard/projects/add" 
+        <Link
+          to="/dashboard/projects/add"
           className="bg-blue-500 hover:bg-blue-600 text-white px-5 py-2 rounded-lg shadow"
         >
           + Add Project
@@ -63,65 +55,74 @@ setTotal(res.data.total);
             </tr>
           </thead>
           <tbody>
-            {projects.map(project => (
-              <tr 
-                key={project.id} 
+            {projects.map((project) => (
+              <tr
+                key={project.id}
                 className="border-b border-gray-200 hover:bg-gray-50 transition"
               >
                 <td className="px-6 py-4 text-gray-800">{project.name}</td>
-                <td className="px-6 py-4 text-gray-800 capitalize">{project.status}</td>
-                <td className="px-6 py-4 text-gray-800">
-                  {project.startDate ? new Date(project.startDate).toLocaleDateString() : '-'}
+                <td className="px-6 py-4 text-gray-800 capitalize">
+                  {project.status}
                 </td>
                 <td className="px-6 py-4 text-gray-800">
-                  {project.endDate ? new Date(project.endDate).toLocaleDateString() : '-'}
+                  {project.startDate
+                    ? new Date(project.startDate).toLocaleDateString()
+                    : "-"}
                 </td>
-                <td className="px-6 py-4 text-gray-800">{project.creator?.name || '-'}</td>
+                <td className="px-6 py-4 text-gray-800">
+                  {project.endDate
+                    ? new Date(project.endDate).toLocaleDateString()
+                    : "-"}
+                </td>
+                <td className="px-6 py-4 text-gray-800">
+                  {project.creator?.name || "-"}
+                </td>
                 <td className="px-6 py-4 text-center flex justify-center items-center gap-4">
                   <Link
                     to={`/dashboard/projects/view/${project.id}`}
-                    className="text-blue-600 hover:text-blue-800"
+                    className="text-green-600 hover:text-green-800"
                     title="View Project"
                   >
                     <Eye className="w-5 h-5" />
                   </Link>
-                  {project.creator?.id === localStorage.getItem("userId") && (
-                    <Link
-                      to={`/dashboard/projects/edit/${project.id}`}
-                      className="text-green-600 hover:text-green-800"
-                      title="Edit Project"
-                    >
-                      <Pencil className="w-5 h-5" />
-                    </Link>
-                  )}
+
+            
+                  {project.creator?.id === localStorage.getItem("memberId") && (
+        <Link
+    to={`/dashboard/projects/edit/${project.id}`}
+    className="text-blue-600 hover:text-blue-800"
+    title="Edit Project"
+  >
+    <Pencil className="w-5 h-5" />
+  </Link>
+)}
+
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
+
       <div className="flex justify-end mt-6 gap-4 items-center flex-wrap">
-  <button
-    disabled={page === 1}
-    onClick={() => setPage(page - 1)}
-    className="px-3 py-1 bg-indigo-200 rounded disabled:opacity-50"
-  >
-    Prev
-  </button>
+        <button
+          disabled={page === 1}
+          onClick={() => setPage(page - 1)}
+          className="px-3 py-1 bg-indigo-200 rounded disabled:opacity-50"
+        >
+          Prev
+        </button>
 
-  <span className="px-3 py-1 bg-white border rounded">
-     {page} 
-  </span>
+        <span className="px-3 py-1 bg-white border rounded">{page}</span>
 
-  <button
-    disabled={page === totalPages}
-    onClick={() => setPage(page + 1)}
-    className="px-3 py-1 bg-indigo-200 rounded disabled:opacity-50"
-  >
-    Next
-  </button>
-</div>
-
+        <button
+          disabled={page === totalPages}
+          onClick={() => setPage(page + 1)}
+          className="px-3 py-1 bg-indigo-200 rounded disabled:opacity-50"
+        >
+          Next
+        </button>
+      </div>
     </div>
   );
 }

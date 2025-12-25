@@ -183,6 +183,8 @@ exports.getTaskById = async (req, res) => {
         //  ACTIVITIES
         {
           model: ActivityLog,
+            
+
           as: "activities",
           include: [{ model: User, attributes: ["id", "name"] }]
         }
@@ -210,23 +212,32 @@ exports.getTaskById = async (req, res) => {
 
 
 
-// DELETE TASK
+// // DELETE TASK
+
+
 exports.deleteTask = async (req, res) => {
   try {
     const task = await Task.findByPk(req.params.id);
     if (!task) return res.status(404).json({ msg: "Task not found" });
-await ActivityLog.create({
-  action: "task_deleted",
-  description: `${req.user.name} deleted task "${task.title}"`,
-  taskId: task.id,
-  projectId: task.projectId,
-  userId: req.user.id
-});
 
-await task.destroy();
+    // 1️⃣ delete ALL task-dependent records
+    await ActivityLog.destroy({ where: { taskId: task.id } });
+    await Comment.destroy({ where: { taskId: task.id } });
+    await File.destroy({ where: { taskId: task.id } });
 
+    // 2️⃣ delete task
     await task.destroy();
-    res.json({ msg: "Task deleted" });
+
+    // 3️⃣ log deletion WITHOUT taskId (project-level log)
+    await ActivityLog.create({
+      action: "task_deleted",
+      description: `${req.user.name} deleted a task`,
+      projectId: task.projectId,
+      userId: req.user.id,
+      taskId: null // 👈 VERY IMPORTANT
+    });
+
+    res.json({ msg: "Task deleted successfully" });
   } catch (err) {
     console.error(err);
     res.status(500).json({ msg: "Server error" });

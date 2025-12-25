@@ -8,17 +8,6 @@ const app = express();
 /* -------------------- MIDDLEWARE -------------------- */
 // app.use(cors({ origin: process.env.FRONTEND_URL }));
 
-
-// app.use(
-//   cors({
-//     origin: [
-//       "http://localhost:5173",
-//       "http://localhost:5174",
-//       "http://localhost:5175"
-//     ],
-//     credentials: true
-//   })
-// );
 app.use(
   cors({
     origin: (origin, callback) => {
@@ -60,6 +49,7 @@ const fileRoutes = require('./routes/fileRoutes');
 const subscriptionRoutes = require('./routes/subscription');
 const chatRoutes = require('./routes/chat');
 const memberRoutes = require('./routes/memberRoutes');
+const adminRoutes = require('./routes/adminRoutes');
 
 const organizationRoutes = require('./routes/organizationRoutes');
 const branchRoutes = require('./routes/branchRoutes');
@@ -67,6 +57,7 @@ const orgUserRoutes = require('./routes/orgUserRoutes');
 
 /* -------------------- ROUTE MOUNTS -------------------- */
 // Admin / Org
+app.use('/api/admin', adminRoutes);
 app.use('/api/organizations', organizationRoutes);
 app.use('/api/branches', branchRoutes);
 app.use('/api/org-users', orgUserRoutes);
@@ -115,29 +106,46 @@ User.belongsToMany(Project, {
 /* -------------------- TASK RELATED -------------------- */
 
 // Task ↔ Comments
-Task.hasMany(Comment, { foreignKey: 'taskId', as: 'comments' });
-Comment.belongsTo(Task, { foreignKey: 'taskId' });
+// Task.hasMany(Comment, { foreignKey: 'taskId', as: 'comments', onDelete: 'CASCADE', hooks: true });
+// Comment.belongsTo(Task, { foreignKey: 'taskId' , onDelete: 'CASCADE'});
 
 User.hasMany(Comment, { foreignKey: 'userId' });
 Comment.belongsTo(User, { foreignKey: 'userId' });
 
 // Task ↔ Files
-Task.hasMany(File, { foreignKey: 'taskId', as: 'files' });
-File.belongsTo(Task, { foreignKey: 'taskId' });
+// Task.hasMany(File, { foreignKey: 'taskId', as: 'files', onDelete: 'CASCADE', hooks: true });
+// File.belongsTo(Task, { foreignKey: 'taskId', onDelete: 'CASCADE' });
 
 User.hasMany(File, { foreignKey: 'userId' });
 File.belongsTo(User, { foreignKey: 'userId' });
 
 // Task ↔ Activity Logs
-Task.hasMany(ActivityLog, { foreignKey: 'taskId', as: 'activities' });
-ActivityLog.belongsTo(Task, { foreignKey: 'taskId' });
+// Task.hasMany(ActivityLog, {
+  // foreignKey: 'taskId',
+  // as: 'activities',
+    // constraints: false   
+
+
+// });
+
+// ActivityLog.belongsTo(Task, {
+  // foreignKey: 'taskId',
+    // constraints: false   
+
+// });
+
+
+ Task.hasMany(ActivityLog, { foreignKey: 'taskId', as: 'activities' , onDelete: 'setNull',  hooks: true});
+ ActivityLog.belongsTo(Task, { foreignKey: 'taskId',   onDelete: 'CASCADE'});
 
 User.hasMany(ActivityLog, { foreignKey: 'userId' });
 ActivityLog.belongsTo(User, { foreignKey: 'userId' });
 
 /* -------------------- START SERVER -------------------- */
 sequelize
-  .sync({ alter: true })
+.sync({force: false})
+
+  //  .sync({ alter: true })
   .then(() => {
     console.log(' Database synced successfully');
     const PORT = process.env.PORT || 5000;

@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import API from "../../../api/axios";
 import { useNavigate, useParams } from "react-router-dom";
 
 export default function OrganizationEdit() {
   const { id } = useParams(); // get ID from URL
   const navigate = useNavigate();
-
   const [formData, setFormData] = useState({
     name: "",
     domain: "",
@@ -17,16 +16,13 @@ export default function OrganizationEdit() {
   const [errors, setErrors] = useState({});
   const [message, setMessage] = useState("");
 
-  // -----------------------------
-  // 🔥 Fetch Organization by ID
-  // -----------------------------
-  useEffect(() => {
+  
+  //  Fetch Organization by ID
+    useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await axios.get(
-          `http://localhost:5000/api/organizations/${id}`
-        );
-        setFormData(res.data); // fill data
+        const res = await API.get(`/organizations/${id}`);
+        setFormData(res.data); 
       } catch (err) {
         console.log(err);
         setMessage("Failed to load organization data");
@@ -40,49 +36,37 @@ export default function OrganizationEdit() {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
-
-    setErrors((prev) => ({ ...prev, [name]: "" }));
+      setErrors((prev) => ({ ...prev, [name]: "" }));
   };
 
   // Validation
   const validate = () => {
     const newErrors = {};
-
     if (!formData.name.trim()) newErrors.name = "Name is required";
     else if (formData.name.trim().length < 3)
       newErrors.name = "Name must be at least 3 characters";
-
     if (!formData.domain.trim()) newErrors.domain = "Email is required";
     else if (!/^\S+@\S+\.\S+$/.test(formData.domain))
       newErrors.domain = "Invalid email format";
-
     if (!formData.phone.trim()) newErrors.phone = "Phone is required";
     else if (!/^[0-9]{10,}$/.test(formData.phone))
       newErrors.phone = "Phone must be at least 10 digits";
-
-    if (!formData.address.trim()) newErrors.address = "Address is required";
+     if (!formData.address.trim()) newErrors.address = "Address is required";
     else if (formData.address.trim().length < 10)
       newErrors.address = "Address must be at least 10 characters";
-
-    setErrors(newErrors);
+     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
   // Update Handler
   const handleUpdate = async (e) => {
     e.preventDefault();
-
     if (!validate()) return;
 
     try {
-      const res = await axios.put(
-        `http://localhost:5000/api/organizations/${id}`,
-        formData
-      );
-
+      const res = await API.put(`/organizations/${id}`, formData);
       setMessage("Organization updated successfully!");
       console.log(res.data);
-
       setTimeout(() => navigate("/admin/dashboard/organizations"), 700);
 
     } catch (err) {

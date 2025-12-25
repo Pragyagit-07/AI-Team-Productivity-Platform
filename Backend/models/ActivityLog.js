@@ -1,7 +1,8 @@
+//models/ActivityLog.js
 const { DataTypes } = require('sequelize');
 const sequelize = require('../db');
 const User = require('./User');
-const Task = require('./Task');
+// const Task = require('./Task');
 
 const ActivityLog = sequelize.define('ActivityLog', {
   id: {
@@ -22,7 +23,9 @@ const ActivityLog = sequelize.define('ActivityLog', {
     allowNull: false
   },
   taskId: {
-    type: DataTypes.UUID
+    type: DataTypes.UUID,
+    allowNull: true,
+    constraints: false
   },
   userId: {
     type: DataTypes.UUID,
@@ -34,6 +37,6 @@ const ActivityLog = sequelize.define('ActivityLog', {
 });
 
 ActivityLog.belongsTo(User, { foreignKey: 'userId' });
-ActivityLog.belongsTo(Task, { foreignKey: 'taskId' });
+// ActivityLog.belongsTo(Task, { foreignKey: 'taskId' , onDelete: 'CASCADE', hooks: true});
 
 module.exports = ActivityLog;

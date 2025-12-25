@@ -1,10 +1,9 @@
 import React, { useState } from "react";
-import axios from "axios";
+import API from "../../../api/axios";
 import { useNavigate } from "react-router-dom";
 
 export default function OrganizationForm() {
   const navigate = useNavigate();
-
   const [formData, setFormData] = useState({
     name: "",
     domain: "",
@@ -14,7 +13,7 @@ export default function OrganizationForm() {
   });
 
   const [errors, setErrors] = useState({});
-  const [message, setMessage] = useState(""); // ✅ FIXED
+  const [message, setMessage] = useState(""); 
 
   // Handle Change
   const handleChange = (e) => {
@@ -48,18 +47,16 @@ export default function OrganizationForm() {
     return Object.keys(newErrors).length === 0;
   };
 
-  // Submit Handler (API Connect)
+  // Submit Handler 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!validate()) return; // ❗ validation first
+    if (!validate()) return; // validation first
 
     try {
-      const res = await axios.post(
-        "http://localhost:5000/api/organizations",
-        formData
-      );
-
+      const res = await 
+      
+      API.post("/organizations", formData);
       setMessage("Organization saved successfully!");
       console.log(res.data);
 
@@ -78,7 +75,7 @@ export default function OrganizationForm() {
   return (
     <div className="max-w-3xl mx-auto mt-10 p-6 bg-white rounded-xl shadow-lg">
 
-      {/* 🔙 Top Left Back Button */}
+      {/*  Top Left Back Button */}
       <button
         onClick={goBack}
         className="mb-4 text-blue-600 hover:text-blue-800 font-medium flex items-center gap-2"
@@ -195,7 +192,7 @@ export default function OrganizationForm() {
           )}
         </div>
 
-        {/* 🔘 Action Buttons */}
+        {/*  Action Buttons */}
         <div className="flex justify-end gap-3 pt-4">
 
           {/* Cancel */}

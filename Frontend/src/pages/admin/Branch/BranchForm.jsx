@@ -1,10 +1,9 @@
 import React, { useState , useEffect} from "react";
-import axios from "axios";
+import API from "../../../api/axios";
 import { useNavigate } from "react-router-dom";
 
 export default function BranchForm() {
   const navigate = useNavigate();
-
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -22,8 +21,8 @@ const [organizations, setOrganizations] = useState([]);
   // fetch organization
 
 useEffect(() => {
-  axios
-    .get("http://localhost:5000/api/organizations")
+  API.get("/organizations")
+  
     .then((res) => setOrganizations(res.data))
     .catch((err) => console.log("Error fetching organizations:", err));
 }, []);
@@ -68,14 +67,11 @@ if (!formData.organizationId.trim())
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!validate()) return; // ❗ validation first
+    if (!validate()) return; //  validation first
 
     try {
-      const res = await axios.post(
-        "http://localhost:5000/api/branches",
-        formData
-      );
-
+      const res = await  API.post("/branches", formData);
+      
       setMessage("Branch saved successfully!");
       console.log(res.data);
 
@@ -226,7 +222,7 @@ if (!formData.organizationId.trim())
           )}
         </div>
 
-        {/* 🔘 Action Buttons */}
+        {/*  Action Buttons */}
         <div className="flex justify-end gap-3 pt-4">
 
           {/* Cancel */}
