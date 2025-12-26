@@ -222,7 +222,7 @@ export default function MemberRegister() {
       {/* RIGHT — IMAGE */}
       <div className="hidden lg:flex w-1/2 items-center justify-center relative overflow-hidden">
         <img
-          // src="/src/assets/member-register-gear.png"
+        
           src= "/src/assets/images.png"
           alt="Productivity illustration"
           className="w-[75%] animate-floatSlow"
