@@ -106,37 +106,24 @@ User.belongsToMany(Project, {
 /* -------------------- TASK RELATED -------------------- */
 
 // Task ↔ Comments
-// Task.hasMany(Comment, { foreignKey: 'taskId', as: 'comments', onDelete: 'CASCADE', hooks: true });
-// Comment.belongsTo(Task, { foreignKey: 'taskId' , onDelete: 'CASCADE'});
+ Task.hasMany(Comment, { foreignKey: 'taskId', as: 'comments', onDelete: 'CASCADE', hooks: true });
+Comment.belongsTo(Task, { foreignKey: 'taskId' , onDelete: 'CASCADE'});
 
 User.hasMany(Comment, { foreignKey: 'userId' });
 Comment.belongsTo(User, { foreignKey: 'userId' });
 
 // Task ↔ Files
-// Task.hasMany(File, { foreignKey: 'taskId', as: 'files', onDelete: 'CASCADE', hooks: true });
-// File.belongsTo(Task, { foreignKey: 'taskId', onDelete: 'CASCADE' });
+ Task.hasMany(File, { foreignKey: 'taskId', as: 'files', onDelete: 'CASCADE', hooks: true });
+File.belongsTo(Task, { foreignKey: 'taskId', onDelete: 'CASCADE' });
 
 User.hasMany(File, { foreignKey: 'userId' });
 File.belongsTo(User, { foreignKey: 'userId' });
 
 // Task ↔ Activity Logs
-// Task.hasMany(ActivityLog, {
-  // foreignKey: 'taskId',
-  // as: 'activities',
-    // constraints: false   
-
-
-// });
-
-// ActivityLog.belongsTo(Task, {
-  // foreignKey: 'taskId',
-    // constraints: false   
-
-// });
 
 
  Task.hasMany(ActivityLog, { foreignKey: 'taskId', as: 'activities' , onDelete: 'setNull',  hooks: true});
- ActivityLog.belongsTo(Task, { foreignKey: 'taskId',   onDelete: 'CASCADE'});
+  ActivityLog.belongsTo(Task, { foreignKey: 'taskId',    onDelete: 'CASCADE'});
 
 User.hasMany(ActivityLog, { foreignKey: 'userId' });
 ActivityLog.belongsTo(User, { foreignKey: 'userId' });
