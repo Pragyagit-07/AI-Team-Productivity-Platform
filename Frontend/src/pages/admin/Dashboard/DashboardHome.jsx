@@ -20,7 +20,7 @@ export default function DashboardHome() {
     organizations: 0,
     branches: 0,
     orgUsers: 0,
-    usersWithoutBranch: 0,
+   
   });
   const [branchData, setBranchData] = useState([]);
   const [roleData, setRoleData] = useState([]);
@@ -45,13 +45,12 @@ export default function DashboardHome() {
 
       ]);
 
-      const usersWithoutBranch = users.data.filter((u) => !u.branchId).length;
 
       setCounts({
         organizations: orgs.data.length,
         branches: branches.data.length,
         orgUsers: users.data.length,
-        usersWithoutBranch,
+        
       });
     } catch (err) {
       console.log("Error fetching counts", err);
@@ -110,7 +109,9 @@ export default function DashboardHome() {
   return (
     <div className="space-y-8">
       {/* Info Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+
         <div className="p-6 bg-gradient-to-r from-blue-500 to-blue-700 text-white rounded-lg shadow-lg flex items-center gap-4">
           <FaBuilding className="text-4xl sm:text-5xl" />
           <div>
@@ -132,13 +133,7 @@ export default function DashboardHome() {
             <p className="mt-1 text-sm sm:text-base">Org Users</p>
           </div>
         </div>
-        <div className="p-6 bg-gradient-to-r from-red-500 to-red-700 text-white rounded-lg shadow-lg flex items-center gap-4">
-          <FaUserPlus className="text-4xl sm:text-5xl" />
-          <div>
-            <h2 className="text-2xl sm:text-3xl font-bold">{counts.usersWithoutBranch}</h2>
-            <p className="mt-1 text-sm sm:text-base">Users without Branch</p>
-          </div>
-        </div>
+        
       </div>
 
       {/* Charts */}

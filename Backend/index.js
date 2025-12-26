@@ -5,7 +5,7 @@ const sequelize = require('./db');
 const app = express();
 
 
-/* -------------------- MIDDLEWARE -------------------- */
+//  MIDDLEWARE
 // app.use(cors({ origin: process.env.FRONTEND_URL }));
 
 app.use(
@@ -25,7 +25,7 @@ app.use(
 app.use(express.json());
 app.use('/api/uploads', express.static('uploads'));
 
-/* -------------------- LOAD MODELS (ORDER MATTERS) -------------------- */
+//  LOAD MODELS (ORDER MATTERS)
 const User = require('./models/User');
 const Project = require('./models/Project');
 const Task = require('./models/Task');
@@ -38,8 +38,7 @@ require('./models/ChatMessage');
 require('./models/Organization');
 require('./models/Branch');
 require('./models/OrgUser');
-
-/* -------------------- ROUTES -------------------- */
+//  ROUTES
 const authRoutes = require('./routes/auth');
 const projectRoutes = require('./routes/projects');
 const taskRoutes = require('./routes/tasks');
@@ -50,12 +49,11 @@ const subscriptionRoutes = require('./routes/subscription');
 const chatRoutes = require('./routes/chat');
 const memberRoutes = require('./routes/memberRoutes');
 const adminRoutes = require('./routes/adminRoutes');
-
 const organizationRoutes = require('./routes/organizationRoutes');
 const branchRoutes = require('./routes/branchRoutes');
 const orgUserRoutes = require('./routes/orgUserRoutes');
 
-/* -------------------- ROUTE MOUNTS -------------------- */
+// ROUTE MOUNTS 
 // Admin / Org
 app.use('/api/admin', adminRoutes);
 app.use('/api/organizations', organizationRoutes);
@@ -77,7 +75,7 @@ app.use('/api/activity', activityRoutes);
 app.use('/api/subscription', subscriptionRoutes);
 app.use('/api/chat', chatRoutes);
 
-/* -------------------- ASSOCIATIONS -------------------- */
+//  ASSOCIATIONS 
 
 // Project creator
 Project.belongsTo(User, { foreignKey: 'createdBy', as: 'creator' });

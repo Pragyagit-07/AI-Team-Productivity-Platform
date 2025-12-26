@@ -4,6 +4,8 @@ const Project = require("../models/Project");
 const ActivityLog = require("../models/ActivityLog");
 const Comment = require("../models/Comment");
 const File = require("../models/File");
+const { Op } = require("sequelize");
+
 
 // GET TASKS BY PROJECT
 exports.getTasksByProject = async (req, res) => {
@@ -23,24 +25,7 @@ exports.getTasksByProject = async (req, res) => {
   }
 };
 
-// GET ALL TASKS (GLOBAL TASK TAB)
-// exports.getAllTasks = async (req, res) => {
-//   try {
-//     const tasks = await Task.findAll({
-//       include: [
-//         { model: User, as: "assignee", attributes: ["id", "name"] },
-//         { model: Project, attributes: ["id", "name"] },
-//       ],
-//       order: [["createdAt", "DESC"]],
-//     });
 
-//     res.json(tasks);
-//   } catch (err) {
-//     console.error(err);
-//     res.status(500).json({ msg: "Server error" });
-//   }
-// };
-const { Op } = require("sequelize");
 
 exports.getAllTasks = async (req, res) => {
   try {
@@ -154,7 +139,7 @@ exports.getTaskById = async (req, res) => {
 
         {
           model: Project,
-          attributes: ["id", "name", "status"],
+          attributes: ["id", "name", "status", "description", "startDate", "endDate" ],
           include: [
             { model: User, as: "creator", attributes: ["id", "name"] },
             {
@@ -166,14 +151,14 @@ exports.getTaskById = async (req, res) => {
           ]
         },
 
-        //  COMMENTS
+        
         {
           model: Comment,
           as: "comments",
           include: [{ model: User, attributes: ["id", "name"] }]
         },
 
-        //  FILES
+        
         {
           model: File,
           as: "files",
@@ -190,7 +175,7 @@ exports.getTaskById = async (req, res) => {
         }
       ],
 
-      //  ORDER MUST BE HERE (TOP LEVEL)
+      
       order: [
         [{ model: Comment, as: "comments" }, "createdAt", "ASC"],
         [{ model: File, as: "files" }, "createdAt", "DESC"],
@@ -212,7 +197,7 @@ exports.getTaskById = async (req, res) => {
 
 
 
-// // DELETE TASK
+ // DELETE TASK
 
 
 exports.deleteTask = async (req, res) => {
@@ -220,21 +205,21 @@ exports.deleteTask = async (req, res) => {
     const task = await Task.findByPk(req.params.id);
     if (!task) return res.status(404).json({ msg: "Task not found" });
 
-    // 1️⃣ delete ALL task-dependent records
+    // 1 delete ALL task-dependent records
     await ActivityLog.destroy({ where: { taskId: task.id } });
     await Comment.destroy({ where: { taskId: task.id } });
     await File.destroy({ where: { taskId: task.id } });
 
-    // 2️⃣ delete task
+    // 2 delete task
     await task.destroy();
 
-    // 3️⃣ log deletion WITHOUT taskId (project-level log)
+    // 3 log deletion WITHOUT taskId (project-level log)
     await ActivityLog.create({
       action: "task_deleted",
       description: `${req.user.name} deleted a task`,
       projectId: task.projectId,
       userId: req.user.id,
-      taskId: null // 👈 VERY IMPORTANT
+      taskId: null
     });
 
     res.json({ msg: "Task deleted successfully" });

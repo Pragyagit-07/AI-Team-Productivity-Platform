@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-// import axios from "axios";
 import API from "../../api/axios";
 import {
   CheckCircle,
@@ -42,7 +41,7 @@ export default function Activity() {
 
   return (
     <div className="p-6 min-h-screen bg-gray-100">
-      {/* <h2 className="text-2xl font-bold mb-6 text-gray-800">Activity Feed</h2> */}
+     
 
       <div className="relative max-w-4xl mx-auto">
         {/* Timeline line */}

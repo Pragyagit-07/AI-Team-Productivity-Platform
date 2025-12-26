@@ -5,7 +5,6 @@ const Task = require('../models/Task');
 exports.createComment = async (req, res) => {
   try {
     const { taskId, text } = req.body;
-
     const comment = await Comment.create({
       text,
       taskId,

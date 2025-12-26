@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-// import axios from "axios";
 import { X, Send, Upload } from "lucide-react";
 import API from "../../../api/axios";
 
@@ -11,13 +10,9 @@ export default function TaskDetailSidePanel({ taskId, onClose, onTaskUpdated }) 
 const [description, setDescription] = useState("");
 const API_URL = import.meta.env.VITE_API_URL;
 
-  /* ================= FETCH ================= */
+  /* FETCH */
   const fetchTaskDetails = async () => {
     try {
-      // const res = await axios.get(
-        // `${import.meta.env.VITE_API_URL}/tasks/${taskId}`,
-        // { headers: { Authorization: `Bearer ${token}` } }
-      // );
       const res = await API.get(`/tasks/${taskId}`);
       setTask(res.data);
     } catch (err) {
@@ -47,21 +42,14 @@ const uploadFile = async (file) => {
   formData.append('taskId', taskId);
 
   try {
-    // await axios.post(`${API_URL}/files`, formData, {
-      // headers: {
-        // Authorization: `Bearer ${token}`,
-        // 'Content-Type': 'multipart/form-data'
-      // }
-    // });
     await API.post(`/files`, formData);
-
     fetchTaskDetails();
   } catch (err) {
     console.error(err);
   }
 };
 
-  /* ================= UPDATE FIELD ================= */
+  /*  UPDATE FIELD */
   const updateTask = async (field, value) => {
   try {
     await API.put(`/tasks/${taskId}`,
@@ -69,11 +57,7 @@ const uploadFile = async (file) => {
          [field] : value
       }
     );
-    // await axios.put(
-      // `${import.meta.env.VITE_API_URL}/tasks/${taskId}`,
-      // { [field]: value },
-      // { headers: { Authorization: `Bearer ${token}` } }
-    // );
+   
 
     fetchTaskDetails();   
     onTaskUpdated?.();   
@@ -83,7 +67,7 @@ const uploadFile = async (file) => {
 };
 
 
-  /* ================= COMMENT ================= */
+  /*  COMMENT */
   const postComment = async () => {
     if (!newComment.trim()) return;
     try {
@@ -92,11 +76,7 @@ const uploadFile = async (file) => {
           taskId ,
           text: newComment,
     });
-      // await axios.post(
-        // `${import.meta.env.VITE_API_URL}/comments`,
-        // { taskId, text: newComment },
-        // { headers: { Authorization: `Bearer ${token}` } }
-      // );
+      
       setNewComment("");
       fetchTaskDetails();
     } catch (err) {
@@ -106,7 +86,7 @@ const uploadFile = async (file) => {
 
   if (!task) return null;
 
-  /* ================= COLOR HELPERS ================= */
+  /*  COLOR HELPERS */
   const priorityColor =
     task.priority === "high"
       ? "bg-red-200 text-red-800"
@@ -121,11 +101,11 @@ const uploadFile = async (file) => {
       ? "bg-blue-200 text-blue-800"
       : "bg-gray-200 text-gray-700";
 
-  /* ================= UI ================= */
+  
   return (
     <div className="fixed inset-y-0 right-0 z-40 w-full sm:w-[460px] bg-white shadow-xl overflow-hidden">
 
-     {/* <div className="fixed inset-y-0 right-0 z-40 w-full sm:w-[460px] bg-white shadow-xl overflow-y-auto"> */}
+  
       {/* Close */}
       <button
         onClick={onClose}
@@ -135,7 +115,7 @@ const uploadFile = async (file) => {
       </button>
 
       <div className="p-6 space-y-6">
-        {/* ================= TITLE ================= */}
+        {/* title */}
         <div>
           <label className="text-xs text-gray-500">Task Title</label>
           <input
@@ -145,7 +125,7 @@ const uploadFile = async (file) => {
           />
         </div>
 
-        {/* ================= META ================= */}
+    
         <div className="grid grid-cols-2 gap-4 text-sm">
           {/* Status */}
           <div>
@@ -199,7 +179,7 @@ const uploadFile = async (file) => {
         </div>
 
         
-        {/* ================= DESCRIPTION ================= */}
+        {/* DESCRIPTION  */}
 <div>
   <label className="text-xs text-gray-500">Description</label>
 
@@ -230,7 +210,7 @@ const uploadFile = async (file) => {
 </div>
 
 
-        {/* ================= TABS ================= */}
+        {/* TABS  */}
         <div className="flex gap-6 text-sm">
           {["comments", "activity", "files"].map((tab) => (
             <button
@@ -247,12 +227,12 @@ const uploadFile = async (file) => {
           ))}
         </div>
 
-        {/* ================= COMMENTS ================= */}
+        {/*  COMMENTS */}
         
         {activeTab === "comments" && (
   <div className="flex flex-col h-[200px]">
 
-    {/* COMMENTS LIST — SCROLL ONLY HERE */}
+    {/* COMMENTS LIST */}
     <div className="flex-1 overflow-y-auto space-y-4 pr-2">
       {task.comments?.length === 0 && (
         <p className="text-sm text-gray-400">No comments yet</p>
@@ -302,13 +282,13 @@ const uploadFile = async (file) => {
 )}
 
 
-        {/* ================= ACTIVITY ================= */}
+        {/*ACTIVITY*/}
         
 
         {activeTab === "activity" && (
   <div className="flex flex-col h-[200px]">
 
-    {/* ACTIVITY LIST — SCROLL */}
+    {/* ACTIVITY LIST  */}
       <div className="flex-1 overflow-y-auto space-y-4 pr-2">
      {task.activities?.length === 0 && (
      <p className="text-sm text-gray-400">No activity yet</p>
@@ -333,7 +313,7 @@ const uploadFile = async (file) => {
 )}
 
 
-        {/* ================= FILES ================= */}
+        {/*  FILES */}
         
         {activeTab === "files" && (
   <div className="flex flex-col h-[200px]">

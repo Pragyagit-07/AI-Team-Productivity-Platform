@@ -1,8 +1,5 @@
-
-
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-// import axios from "axios";
 import API from "../../../api/axios";
 import { Plus, Eye, Pencil, Trash2 } from "lucide-react";
 
@@ -264,3 +261,6 @@ export default function TaskList({ projectId }) {
     </div>
   );
 }
+
+
+

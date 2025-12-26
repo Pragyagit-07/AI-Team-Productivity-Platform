@@ -1,30 +1,23 @@
 import { useEffect, useState } from "react";
 import { useNavigate , useParams} from "react-router-dom";
-// import axios from "axios";
 import API from "../../../api/axios";
 import { ArrowLeft, PlusCircle } from "lucide-react";
 
 export default function TaskForm({ projectId, onTaskSaved }) {
   const navigate = useNavigate();
-  // const token = localStorage.getItem("token");
-
-
-
-const { id } = useParams(); 
-const isEdit = window.location.pathname.includes("/edit/"); // safer
-const taskId = isEdit ? id : null;
-
-
+  const { id } = useParams(); 
+  const isEdit = window.location.pathname.includes("/edit/"); 
+  const taskId = isEdit ? id : null;
   const [formData, setFormData] = useState({
     title: "",
     description: "",
     status: "todo",
     priority: "medium",
     dueDate: "",
-    assigneeId: "", // Single assignee
+    assigneeId: "", 
   });
 
-  const [members, setMembers] = useState([]); // project members for assignee select
+  const [members, setMembers] = useState([]); 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [projectIdState, setProjectIdState] = useState(projectId || null);
@@ -36,10 +29,7 @@ const taskId = isEdit ? id : null;
 
   const fetchMembers = async () => {
     try {
-      // const res = await axios.get(
-        // `${import.meta.env.VITE_API_URL}/projects/${projectIdState}/members`,
-        // { headers: { Authorization: `Bearer ${token}` } }
-      // );
+      
       const res = await API.get(`/projects/${projectIdState}/members`);
       setMembers(res.data);
     } catch {
@@ -56,10 +46,7 @@ const taskId = isEdit ? id : null;
 
   const fetchTask = async () => {
     try {
-      // const res = await axios.get(
-        // `${import.meta.env.VITE_API_URL}/tasks/${taskId}`,
-        // { headers: { Authorization: `Bearer ${token}` } }
-      // );
+      
 const res = await API.get(`/tasks/${taskId}`);
       const task = res.data;
 
@@ -101,20 +88,10 @@ const res = await API.get(`/tasks/${taskId}`);
       };
 
         if (isEdit) {
-      // await axios.put(
-        // `${import.meta.env.VITE_API_URL}/tasks/${id}`,
-      //  payload,
-              //  { headers: { Authorization: `Bearer ${token}` } }
-      // );
+      
       await API.put(`/tasks/${id}`, payload);
     
   } else {
-
-            // await axios.post(
-        // `${import.meta.env.VITE_API_URL}/tasks`,
-        // payload,
-        // { headers: { Authorization: `Bearer ${token}` } }
-            // );
             await API.post(`/tasks`, payload);
            }
 
@@ -142,12 +119,10 @@ const res = await API.get(`/tasks/${taskId}`);
       <div className="w-full max-w-3xl bg-white rounded-2xl shadow-md p-8 border border-gray-200">
         <div className="flex items-center gap-3 mb-6">
           <PlusCircle className="h-8 w-8 text-blue-600" />
-          {/* <h2 className="text-3xl font-bold text-gray-800">Create Task</h2> */}
           <h2 className="text-3xl font-bold text-gray-800">
-  {isEdit ? "Edit Task" : "Create Task"}
-</h2>
-
-        </div>
+          {isEdit ? "Edit Task" : "Create Task"}
+          </h2>
+         </div>
 
         {error && <p className="text-red-500 mb-4">{error}</p>}
 
@@ -256,7 +231,7 @@ const res = await API.get(`/tasks/${taskId}`);
                 loading ? "bg-gray-400 cursor-not-allowed" : "bg-blue-600 hover:bg-blue-700"
               }`}
             >
-              {/* {loading ? "Saving..." : "Create Task"} */}
+              
               {loading ? "Saving..." : isEdit ? "Update Task" : "Create Task"}
 
             </button>

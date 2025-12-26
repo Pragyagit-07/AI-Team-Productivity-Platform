@@ -52,7 +52,7 @@ export default function OrgUserEdit() {
     if (!formData.email.trim()) newErrors.email = "Email is required";
     else if (!/^\S+@\S+\.\S+$/.test(formData.email)) newErrors.email = "Invalid email format";
 
-    // Optional password validation if user entered a new password
+  
     if (formData.password.trim()) {
       if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(formData.password)) {
         newErrors.password = "Password must be 8 chars, include uppercase, lowercase, number & special char";

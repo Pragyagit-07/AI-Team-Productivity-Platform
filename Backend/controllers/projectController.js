@@ -11,7 +11,6 @@ exports.getAllProjects = async (req, res) => {
     const page = parseInt(req.query.page) || 1;
     const pageSize = parseInt(req.query.pageSize) || 5;
     const offset = (page - 1) * pageSize;
-
     const { count, rows } = await Project.findAndCountAll({
       limit: pageSize,
       offset,
@@ -20,7 +19,7 @@ exports.getAllProjects = async (req, res) => {
         { model: User, as: 'creator', attributes: ['id', 'name'] },
         { model: User, as: 'members', attributes: ['id', 'name'], through: { attributes: [] } }
       ],
-      distinct: true // IMPORTANT for count with include
+      distinct: true 
     });
 
     res.json({
@@ -64,12 +63,12 @@ exports.createProject = async (req, res) => {
 
     // Add creator also as member automatically
     await project.addMembers(userId);
-await ActivityLog.create({
-  action: "project_created",
-  description: `${req.user.name} created project "${project.name}"`,
-  projectId: project.id,
-  userId: req.user.id
-});
+    await ActivityLog.create({
+    action: "project_created",
+    description: `${req.user.name} created project "${project.name}"`,
+    projectId: project.id,
+    userId: req.user.id
+  });
     res.json(project);
   } catch (err) {
     console.error(err);
@@ -147,8 +146,6 @@ exports.updateProject = async (req, res) => {
 
     if (members !== undefined) {
       const memberIds = Array.isArray(members) ? members : [members];
-
-      // creator always stays member
       const finalMembers = [...new Set([...memberIds, req.user.id])];
 
       await project.setMembers(finalMembers);
@@ -184,7 +181,7 @@ exports.getProjectMembers = async (req, res) => {
     res.status(500).json({ msg: 'Server error' });
   }
 };
-// for
+
 
 exports.getProjectsWithTasks = async (req, res) => {
   try {
@@ -216,7 +213,7 @@ exports.deleteProject = async (req, res) => {
     if (project.createdBy !== req.user.id) {
       return res.status(403).json({ msg: 'You are not allowed to delete this project' });
     }
-await ActivityLog.create({
+  await ActivityLog.create({
   action: "project_deleted",
   description: `${req.user.name} deleted project "${project.name}"`,
   projectId: project.id,

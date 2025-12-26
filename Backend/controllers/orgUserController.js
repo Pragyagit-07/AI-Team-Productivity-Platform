@@ -2,7 +2,7 @@ const OrgUser = require('../models/OrgUser');
 const Organization = require('../models/Organization');
 const Branch = require('../models/Branch');
 
-// Helper: remove password before sending response
+//  remove password before sending response
 const removePassword = (user) => {
   if (!user) return user;
   const plain = user.toJSON();

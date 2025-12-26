@@ -83,7 +83,7 @@ export default function OrganizationTable() {
                 </td>
               </tr>
             ) : (
-              // organizations.map((org) => (
+              
                 currentRows.map((org) => (
 
                 <tr key={org.id} className="hover:bg-gray-50">

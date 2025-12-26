@@ -7,8 +7,8 @@ import { ArrowLeft, FolderKanban } from "lucide-react";
 export default function ProjectForm() {
   const { id } = useParams(); // edit mode
   const navigate = useNavigate();
-  const [members, setMembers] = useState([]); // selected member IDs
-  const [allUsers, setAllUsers] = useState([]); // all users for selection
+  const [members, setMembers] = useState([]); 
+  const [allUsers, setAllUsers] = useState([]); 
   const [formData, setFormData] = useState({
     name: "",
     description: "",
@@ -22,7 +22,7 @@ export default function ProjectForm() {
   const [memberDropdownOpen, setMemberDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
 
-  // Fetch all users for member selection
+  // Fetch 
   useEffect(() => {
     const fetchMembers = async () => {
       try {
@@ -65,7 +65,7 @@ export default function ProjectForm() {
     fetchProject();
   }, [id]);
 
-  // Close dropdown if clicked outside
+  // Close dropdown 
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {

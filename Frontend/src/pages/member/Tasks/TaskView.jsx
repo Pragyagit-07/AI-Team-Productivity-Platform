@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-// import axios from "axios";
 import API from "../../../api/axios";
 import {
   ArrowLeft,
@@ -18,7 +17,6 @@ export default function TaskView() {
   const { id } = useParams();
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
-
   const [task, setTask] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -29,10 +27,6 @@ export default function TaskView() {
 
   const fetchTask = async () => {
     try {
-      // const res = await axios.get(
-        // `${import.meta.env.VITE_API_URL}/tasks/${id}`,
-        // { headers: { Authorization: `Bearer ${token}` } }
-      // );
       const res = await API.get(`/tasks/${id}`);
       setTask(res.data);
     } catch (err) {
@@ -46,10 +40,6 @@ export default function TaskView() {
   const handleDelete = async () => {
     if (!window.confirm("Delete this task?")) return;
     try {
-      // await axios.delete(
-        // `${import.meta.env.VITE_API_URL}/tasks/${id}`,
-        // { headers: { Authorization: `Bearer ${token}` } }
-      // );
       await API.delete(`/tasks/${id}`);
       navigate("/dashboard/tasks");
     } catch (err) {
@@ -118,7 +108,9 @@ export default function TaskView() {
           <p className="mb-2">
             <b>Start Date:</b> {formatDate(task.Project?.startDate)}
           </p>
-
+         <p className="mb-2">
+            <b>Completion Date:</b> {formatDate(task.Project?.endDate)}
+          </p>
           <p className="mb-2">
             <b>Status:</b>{" "}
             <span className={`px-2 py-1 rounded ${statusColor(task.Project?.status)}`}>
