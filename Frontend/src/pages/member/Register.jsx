@@ -102,7 +102,9 @@
 
 
 import { useState } from "react";
-import API from "../../api/axios";
+import API from "../../api/axios"
+import { Eye, EyeOff } from "lucide-react";
+;
 import { useNavigate, Link } from "react-router-dom";
 
 export default function MemberRegister() {
@@ -110,6 +112,9 @@ export default function MemberRegister() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
@@ -126,8 +131,10 @@ export default function MemberRegister() {
 
     try {
       await API.post("/auth/register", { name, email, password });
-      setMessage("Registration successful! Redirecting to login...");
-      setTimeout(() => navigate("/login"), 2000);
+      navigate("/verify-email", { state: { email } });
+
+      // setMessage("Registration successful! Redirecting to login...");
+      // setTimeout(() => navigate("/login"), 2000);
     } catch (err) {
       setError(err.response?.data?.msg || "Registration failed");
     }
@@ -181,7 +188,7 @@ export default function MemberRegister() {
               />
             </div>
 
-            <div>
+           { /* <div> 
               <label className="block mb-1 font-semibold">Password</label>
               <input
                 type="password"
@@ -201,7 +208,58 @@ export default function MemberRegister() {
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 required
               />
-            </div>
+            </div>*/}
+            <div>
+  <label className="block mb-1 font-semibold">Password</label>
+
+  <div className="relative">
+    <input
+      type={showPassword ? "text" : "password"}
+      className="w-full border border-gray-300 rounded-lg px-3 py-2 pr-10 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+      value={password}
+      onChange={(e) => setPassword(e.target.value)}
+      required
+    />
+
+    <button
+      type="button"
+      onClick={() => setShowPassword(!showPassword)}
+      className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-indigo-500"
+    >
+      {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+    </button>
+  </div>
+</div>
+
+<div>
+  <label className="block mb-1 font-semibold">Confirm Password</label>
+
+  <div className="relative">
+    <input
+      type={showConfirmPassword ? "text" : "password"}
+      className="w-full border border-gray-300 rounded-lg px-3 py-2 pr-10 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+      value={confirmPassword}
+      onChange={(e) => setConfirmPassword(e.target.value)}
+      required
+    />
+
+    <button
+      type="button"
+      onClick={() =>
+        setShowConfirmPassword(!showConfirmPassword)
+      }
+      className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-indigo-500"
+    >
+      {showConfirmPassword ? (
+        <EyeOff size={18} />
+      ) : (
+        <Eye size={18} />
+      )}
+    </button>
+  </div>
+</div>
+
+                              
 
             <button
               type="submit"

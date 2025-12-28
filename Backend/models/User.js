@@ -29,6 +29,18 @@ const User = sequelize.define(
       type: DataTypes.ENUM("admin", "member"),
       defaultValue: "member",
     },
+isVerified: {
+  type: DataTypes.BOOLEAN,
+  defaultValue: false,
+},
+emailVerifyOtp: {
+  type: DataTypes.STRING,
+  allowNull: true,
+},
+emailVerifyOtpExpires: {
+  type: DataTypes.DATE,
+  allowNull: true,
+},
 
     // ✅ ADD THESE
     resetOtp: {

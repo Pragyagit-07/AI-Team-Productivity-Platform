@@ -1,5 +1,5 @@
 import { Routes, Route, Navigate, useParams } from "react-router-dom";
-
+import VerifyEmail from "./pages/member/VerifyEmail";
 // Admin Pages
 import AdminLogin from "./pages/admin/Login";
 import AdminForgotPassword from "./pages/admin/ForgotPassword";
@@ -66,6 +66,7 @@ function App() {
     <Routes>
       {/* Default */}
       <Route path="/" element={<Navigate to="/login" />} />
+      
 
       {/* Admin */}
       <Route path="/admin/login" element={<AdminLogin />} />
@@ -102,6 +103,8 @@ function App() {
       {/* Member */}
       <Route path="/login" element={<MemberLogin />} />
       <Route path="/register" element={<MemberRegister />} />
+      <Route path="/verify-email" element={<VerifyEmail />} />
+
       <Route path="/forgot-password" element={<MemberForgotPassword />} />
       
       <Route path="/dashboard/*" element={<MemberDashboard />}>

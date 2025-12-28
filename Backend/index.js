@@ -128,7 +128,7 @@ ActivityLog.belongsTo(User, { foreignKey: 'userId' });
 
 /* -------------------- START SERVER -------------------- */
 sequelize
-.sync({force: false})
+.sync({ force: false})
 
   //  .sync({ alter: true })
   .then(() => {
