@@ -6,8 +6,6 @@ import AdminForgotPassword from "./pages/admin/ForgotPassword";
 import AdminDashboard from "./pages/admin/Dashboard";
 import DashboardHome from "./pages/admin/Dashboard/DashboardHome";
 
-
-
 // Organization Pages
 import OrganizationTable from "./pages/admin/Organization/OrganizationTable";
 import OrganizationForm from "./pages/admin/Organization/OrganizationForm";
@@ -72,13 +70,13 @@ function App() {
       <Route path="/admin/login" element={<AdminLogin />} />
       <Route path="/admin/forgot-password" element={<AdminForgotPassword />} />
 
-      {/* ADMIN DASHBOARD WRAPPER (ALL INSIDE THIS) */}
+      {/* ADMIN DASHBOARD WRAPPER  */}
       <Route path="/admin/dashboard/*" element={<AdminDashboard />}>
 
         {/* Dashboard Home */}
 
       
-<Route index element={<DashboardHome />} />
+         <Route index element={<DashboardHome />} />
         {/* ───────── ORGANIZATION ROUTES ───────── */}
         <Route path="organizations" element={<OrganizationTable />} />
         <Route path="organization/add" element={<OrganizationForm />} />
@@ -109,7 +107,7 @@ function App() {
       
       <Route path="/dashboard/*" element={<MemberDashboard />}>
         
-  <Route index element={<MemberDashboardHome />} />
+      <Route index element={<MemberDashboardHome />} />
 
 
         <Route path="projects" element={<ProjectsList />} />
