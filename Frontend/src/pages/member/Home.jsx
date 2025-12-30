@@ -1,7 +1,5 @@
 import { useEffect, useState } from "react";
-
 import API from "../../api/axios";
-
 import {
   Folder,
   CheckCircle,
@@ -25,14 +23,10 @@ export default function MemberDashboardHome() {
 
   const loadStats = async () => {
     try {
-            // const resProjects = await API.get("/projects");
+        
                 const res = await API.get("/projects/with-tasks");
-    const projectsData = res.data || [];
-
-
-
-      // const projectsData = resProjects.data.projects || [];
-      setProjects(projectsData);
+                const projectsData = res.data || [];
+                 setProjects(projectsData);
 
       let tasksPending = 0;
       let tasksDone = 0;
