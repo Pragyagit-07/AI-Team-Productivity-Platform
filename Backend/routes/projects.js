@@ -4,9 +4,9 @@ const authMiddleware = require('../middleware/authMiddleware');
 const projectPermission = require('../middleware/projectPermission');
 
 
-router.get('/with-tasks', authMiddleware, projectController.getProjectsWithTasks);
+// router.get('/with-tasks', authMiddleware, projectController.getProjectsWithTasks);
 
-router.get('/:projectId/members', authMiddleware, projectController.getProjectMembers);
+ router.get('/:projectId/members', authMiddleware, projectController.getProjectMembers);
 router.get('/', authMiddleware, projectController.getAllProjects);
 router.post('/', authMiddleware, projectController.createProject);
 router.get('/:id', authMiddleware, projectPermission, projectController.getProjectById);
