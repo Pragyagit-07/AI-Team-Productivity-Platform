@@ -68,6 +68,7 @@ require('./models/ChatMessage');
 require('./models/Organization');
 require('./models/Branch');
 require('./models/OrgUser');
+require('./models/ProjectJoinRequest');
 require("./socket")(io, onlineUsers);
 
 //  ROUTES
@@ -155,14 +156,14 @@ File.belongsTo(User, { foreignKey: 'userId' });
 
 
  Task.hasMany(ActivityLog, { foreignKey: 'taskId', as: 'activities' , onDelete: 'setNull',  hooks: true});
-  ActivityLog.belongsTo(Task, { foreignKey: 'taskId',    onDelete: 'CASCADE'});
+   ActivityLog.belongsTo(Task, { foreignKey: 'taskId',    onDelete: 'CASCADE'});
 
 User.hasMany(ActivityLog, { foreignKey: 'userId' });
 ActivityLog.belongsTo(User, { foreignKey: 'userId' });
 
 /* -------------------- START SERVER -------------------- */
 sequelize
-.sync({ force: false})
+.sync({ force: false,  })
   .then(() => {
     console.log(' Database synced successfully');
     const PORT = process.env.PORT || 5000;
