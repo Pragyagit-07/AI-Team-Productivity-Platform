@@ -1,8 +1,16 @@
 require('dotenv').config();
+// for socket.io for active/inactive 
+const http = require("http");
+const { Server } = require("socket.io");
+
+
+
 const express = require('express');
 const cors = require('cors');
 const sequelize = require('./db');
 const app = express();
+
+
 
 
 //  MIDDLEWARE
@@ -21,6 +29,28 @@ app.use(
   })
 );
 
+// for active/inactive
+const server = http.createServer(app);
+
+const io = new Server(server, {
+  cors: {
+    origin: (origin, callback) => {
+      if (!origin || origin.startsWith("http://localhost")) {
+        callback(null, true);
+      } else {
+        callback(new Error("CORS not allowed"));
+      }
+    },
+    credentials: true
+  }
+});
+
+const onlineUsers = new Map();
+
+// make available everywhere
+app.set("io", io);
+app.set("onlineUsers", onlineUsers);
+
 
 app.use(express.json());
 app.use('/api/uploads', express.static('uploads'));
@@ -38,6 +68,8 @@ require('./models/ChatMessage');
 require('./models/Organization');
 require('./models/Branch');
 require('./models/OrgUser');
+require("./socket")(io, onlineUsers);
+
 //  ROUTES
 const authRoutes = require('./routes/auth');
 const projectRoutes = require('./routes/projects');
@@ -131,14 +163,16 @@ ActivityLog.belongsTo(User, { foreignKey: 'userId' });
 /* -------------------- START SERVER -------------------- */
 sequelize
 .sync({ force: false})
-
-  //  .sync({ alter: true })
   .then(() => {
     console.log(' Database synced successfully');
     const PORT = process.env.PORT || 5000;
-    app.listen(PORT, () =>
-      console.log(` Server running on port ${PORT}`)
-    );
+    // app.listen(PORT, () =>
+      // console.log(` Server running on port ${PORT}`)
+    // );
+    server.listen(PORT, () =>
+  console.log(` Server running on port ${PORT}`)
+);
+
   })
   .catch((err) => {
     console.error(' Sequelize Sync Error:', err);

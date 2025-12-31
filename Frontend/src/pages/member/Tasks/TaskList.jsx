@@ -5,7 +5,7 @@ import { Plus, Eye, Pencil, Trash2 } from "lucide-react";
 
 export default function TaskList({ projectId }) {
   const navigate = useNavigate();
-  const token = localStorage.getItem("token");
+  const token = localStorage.getItem("memberToken");
 
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);

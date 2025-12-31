@@ -114,7 +114,7 @@ exports.getAllTasks = async (req, res) => {
 
     // 🔑 get projects where user is member
     const [projects] = await sequelize.query(
-      `SELECT projectId FROM ProjectMembers WHERE userId = :userId`,
+      `SELECT projectId FROM projectmembers WHERE userId = :userId`,
       { replacements: { userId } }
     );
 

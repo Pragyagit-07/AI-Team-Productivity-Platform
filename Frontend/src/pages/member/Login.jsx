@@ -98,6 +98,7 @@ import { useState } from "react";
 import API from "../../api/axios";
 import { useNavigate, Link } from "react-router-dom";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import socket from "../../socket";
 
 export default function MemberLogin() {
   const [email, setEmail] = useState("");
@@ -114,6 +115,10 @@ export default function MemberLogin() {
       const res = await API.post("/auth/login", { email, password });
       localStorage.setItem("memberToken", res.data.token);
       localStorage.setItem("memberId", res.data.user.id);
+socket.auth = { token: res.data.token };
+socket.connect();
+
+
       navigate("/dashboard");
     } catch (err) {
       setError(err.response?.data?.msg || "Login failed");

@@ -364,13 +364,26 @@ exports.getProjectById = async (req, res) => {
 };
 exports.getProjectMembers = async (req, res) => {
 try{
+         const onlineUsers = req.app.get("onlineUsers");
+
      const project = await Project.findByPk(req.params.projectId, {
      include: [
-            { model: User,  as: 'members', attributes: ['id', 'name'], through: { attributes: [] } }
+            { model: User,  as: 'members', attributes: ['id', 'name', 'avatar'], through: { attributes: [] } }
      ]
     });
         if (!project) return res.status(404).json({ msg: 'Project not found' });
-            res.json(project.members);
+                    
+
+        // 
+            const members = project.members.map(m => ({
+              id: m.id,
+              name: m.name,
+              
+                    online: onlineUsers?.has(m.id) || false
+
+            }));
+    res.json(members);
+// 
   } catch(err) {
         res.status(500).json({ msg: 'Server error' });
   }
@@ -427,10 +440,4 @@ exports.deleteProject = async (req, res) => {
   }
 };
 
-/* ============================
-   ❌ DO NOT USE (SECURITY RISK)
-   ============================ */
 
-exports.getProjectsWithTasks = async () => {
-  throw new Error("Do not use this API — permission unsafe");
-};

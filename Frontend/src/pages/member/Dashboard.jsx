@@ -2,12 +2,15 @@
 
 
 import { Outlet } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Sidebar from "../../components/Sidebar";
 import Header from "../../components/Header";
+import socket from "../../socket";
 
 export default function MemberDashboard() {
   const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [onlineUsers, setOnlineUsers] = useState([]);
+
 
   const links = [
     {name: "Home", path: "/dashboard"},
@@ -19,14 +22,38 @@ export default function MemberDashboard() {
     { name: "AI Assistant", path: "/dashboard/ai" },
     { name: "Profile Setting", path: "/dashboard/profile" },
   ];
+useEffect(() => {
+  if (!socket.connected) {
+    socket.connect();
+  }
+
+  socket.on("user-online", (userId) => {
+    setOnlineUsers((prev) =>
+      prev.includes(userId) ? prev : [...prev, userId]
+    );
+  });
+
+  socket.on("user-offline", (userId) => {
+    setOnlineUsers((prev) => prev.filter((id) => id !== userId));
+  });
+
+  return () => {
+    socket.off("user-online");
+    socket.off("user-offline");
+  };
+}, []);
+
 
   const handleLogout = () => {
-    
+    // for socket
+    socket.disconnect();
+// 
     localStorage.removeItem("memberToken");
     localStorage.removeItem("memberId");
 window.location.href = "/login";
 
   };
+  
 
   return (
     <div className="flex h-screen overflow-hidden">
@@ -49,7 +76,10 @@ window.location.href = "/login";
         />
 
         <main className="p-6 bg-gray-100 flex-1 overflow-auto">
-          <Outlet />
+          {/* <Outlet />
+           */}
+           <Outlet context={{ onlineUsers }} />
+
         </main>
       </div>
     </div>

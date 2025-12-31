@@ -1,21 +1,114 @@
+// // const Project = require("../models/Project");
+// // const Task = require("../models/Task");
+// // const User = require("../models/User");
+// // const sequelize = require("../db");
+
+// // exports.getDashboardStats = async (req, res) => {
+// //   try {
+// //     const userId = req.user.id;
+
+// //     // 1️⃣ Projects where user is a member
+// //     const projects = await Project.findAll({
+// //       include: [
+// //         {
+// //           model: User,
+// //           as: "members",
+// //           attributes: [],
+// //           where: { id: userId },
+// //           through: { attributes: [] }
+// //         }
+// //       ]
+// //     });
+
+// //     const projectIds = projects.map(p => p.id);
+
+// //     if (!projectIds.length) {
+// //       return res.json({
+// //         projectsCount: 0,
+// //         membersCount: 0,
+// //         tasks: {
+// //           todo: 0,
+// //           inprogress: 0,
+// //           done: 0
+// //         }
+// //       });
+// //     }
+
+// //     // 2️⃣ Task stats ONLY for those projects
+// //     const taskStats = await Task.findAll({
+// //       attributes: [
+// //         "status",
+// //         [sequelize.fn("COUNT", sequelize.col("id")), "count"]
+// //       ],
+// //       where: {
+// //         projectId: projectIds
+// //       },
+// //       group: ["status"]
+// //     });
+
+// //     const tasks = {
+// //       todo: 0,
+// //       inprogress: 0,
+// //       done: 0
+// //     };
+
+// //     taskStats.forEach(t => {
+// //       tasks[t.status] = Number(t.get("count"));
+// //     });
+
+// //     // 3️⃣ Unique members count (excluding logged-in user)
+// //     const membersCount = await sequelize.query(
+// //       `
+// //       SELECT COUNT(DISTINCT userId) as count
+// //       FROM ProjectMembers
+// //       WHERE projectId IN (:projectIds)
+// //       AND userId != :userId
+// //       `,
+// //       {
+// //         replacements: { projectIds, userId },
+// //         type: sequelize.QueryTypes.SELECT
+// //       }
+// //     );
+
+// //     res.json({
+// //       projectsCount: projects.length,
+// //       membersCount: membersCount[0].count,
+// //       tasks
+// //     });
+
+// //   } catch (err) {
+// //     console.error("Dashboard error:", err);
+// //     res.status(500).json({ msg: "Dashboard error" });
+// //   }
+// // };
+
 // const Project = require("../models/Project");
 // const Task = require("../models/Task");
 // const User = require("../models/User");
 // const sequelize = require("../db");
+// const onlineUsers = require("../socket");
 
 // exports.getDashboardStats = async (req, res) => {
 //   try {
 //     const userId = req.user.id;
 
-//     // projects user is part of
+//     // 1️⃣ Projects where user is a member
 //     const projects = await Project.findAll({
+//       attributes: ["id", "name", "createdBy"],
 //       include: [
 //         {
 //           model: User,
 //           as: "members",
-//           attributes: [],
+//           attributes: ["id","name", "email", "avatar"],
 //           where: { id: userId },
 //           through: { attributes: [] }
+//         },
+//             { model: Task, as: "tasks" },
+
+//         {
+//           model: User,
+//           as: "creator",
+//           attributes: ["id", "name", "email", "avatar"]
 //         }
 //       ]
 //     });
@@ -26,11 +119,12 @@
 //       return res.json({
 //         projectsCount: 0,
 //         membersCount: 0,
-//         tasks: { pending: 0, inprogress: 0, completed: 0 }
+//         tasks: { todo: 0, inprogress: 0, done: 0 },
+//         projects: []
 //       });
 //     }
 
-//     // task status count
+//     // 2️⃣ Task stats (only related projects)
 //     const taskStats = await Task.findAll({
 //       attributes: [
 //         "status",
@@ -40,44 +134,59 @@
 //       group: ["status"]
 //     });
 
-//     const tasks = { pending: 0, inprogress: 0, completed: 0 };
+//     const tasks = { todo: 0, inprogress: 0, done: 0 };
+//     taskStats.forEach(t => {
+//       tasks[t.status] = Number(t.get("count"));
+//     });
 
-// taskStats.forEach(t => {
-//   const status = t.status;
-//   const count = Number(t.get("count"));
-
-//   if (status === "todo") tasks.pending += count;
-//   else if (status === "inprogress") tasks.inprogress += count;
-//   else if (status === "done") tasks.completed += count;
-//   else if (tasks[status] !== undefined) tasks[status] += count;
-// });
-
-
-//     // unique members count (excluding self optional)
+//     // 3️⃣ Unique members (excluding self)
 //     const membersCount = await sequelize.query(
 //       `
 //       SELECT COUNT(DISTINCT userId) as count
 //       FROM ProjectMembers
 //       WHERE projectId IN (:projectIds)
+//       AND userId != :userId
 //       `,
 //       {
-//         replacements: { projectIds },
+//         replacements: { projectIds, userId },
 //         type: sequelize.QueryTypes.SELECT
 //       }
 //     );
 
+//     // 4️⃣ Build project metadata
+//     const projectMeta = projects.map(p => ({
+//   id: p.id,
+//   name: p.name,
+//   isTeamLead: p.createdBy === userId,
+//   teamLead: {
+//     id: p.creator.id,
+//     name: p.creator.name
+//   },
+//   members: p.members.map(m => ({
+//     id: m.id,
+//     name: m.name,
+//     avatar: m.avatar || "/default-avatar.png",
+//     online: onlineUsers.has(m.id)
+//   })),
+//   tasksCount: p.tasks.length,
+//   pendingTasks: p.tasks.filter(t => t.status === "todo").length,
+//   inProgressTasks: p.tasks.filter(t => t.status === "inprogress").length,
+//   completedTasks: p.tasks.filter(t => t.status === "done").length
+// }));
+
+
 //     res.json({
 //       projectsCount: projects.length,
 //       membersCount: membersCount[0].count,
-//       tasks
+//       tasks,
+//       projects: projectMeta
 //     });
 
 //   } catch (err) {
-//     console.error(err);
+//     console.error("Dashboard error:", err);
 //     res.status(500).json({ msg: "Dashboard error" });
 //   }
 // };
-
 
 
 const Project = require("../models/Project");
@@ -89,17 +198,22 @@ exports.getDashboardStats = async (req, res) => {
   try {
     const userId = req.user.id;
 
-    // 1️⃣ Projects where user is a member
     const projects = await Project.findAll({
+      attributes: ["id", "name", "createdBy"],
       include: [
         {
           model: User,
           as: "members",
-          attributes: [],
-          where: { id: userId },
-          through: { attributes: [] }
-        }
-      ]
+          attributes: ["id", "name", "email", "avatar"],
+          through: { attributes: [] },
+        },
+        { model: Task, as: "tasks" },
+        {
+          model: User,
+          as: "creator",
+          attributes: ["id", "name", "email", "avatar"],
+        },
+      ],
     });
 
     const projectIds = projects.map(p => p.id);
@@ -108,37 +222,25 @@ exports.getDashboardStats = async (req, res) => {
       return res.json({
         projectsCount: 0,
         membersCount: 0,
-        tasks: {
-          todo: 0,
-          inprogress: 0,
-          done: 0
-        }
+        tasks: { todo: 0, inprogress: 0, done: 0 },
+        projects: [],
       });
     }
 
-    // 2️⃣ Task stats ONLY for those projects
     const taskStats = await Task.findAll({
       attributes: [
         "status",
-        [sequelize.fn("COUNT", sequelize.col("id")), "count"]
+        [sequelize.fn("COUNT", sequelize.col("id")), "count"],
       ],
-      where: {
-        projectId: projectIds
-      },
-      group: ["status"]
+      where: { projectId: projectIds },
+      group: ["status"],
     });
 
-    const tasks = {
-      todo: 0,
-      inprogress: 0,
-      done: 0
-    };
-
+    const tasks = { todo: 0, inprogress: 0, done: 0 };
     taskStats.forEach(t => {
       tasks[t.status] = Number(t.get("count"));
     });
 
-    // 3️⃣ Unique members count (excluding logged-in user)
     const membersCount = await sequelize.query(
       `
       SELECT COUNT(DISTINCT userId) as count
@@ -148,16 +250,36 @@ exports.getDashboardStats = async (req, res) => {
       `,
       {
         replacements: { projectIds, userId },
-        type: sequelize.QueryTypes.SELECT
+        type: sequelize.QueryTypes.SELECT,
       }
     );
+
+    const projectMeta = projects.map(p => ({
+      id: p.id,
+      name: p.name,
+      isTeamLead: p.createdBy === userId,
+      teamLead: {
+        id: p.creator.id,
+        name: p.creator.name,
+        avatar: p.creator.avatar,
+      },
+      members: p.members.map(m => ({
+        id: m.id,
+        name: m.name,
+        avatar: m.avatar || null, // frontend handles default
+      })),
+      tasksCount: p.tasks.length,
+      pendingTasks: p.tasks.filter(t => t.status === "todo").length,
+      inProgressTasks: p.tasks.filter(t => t.status === "inprogress").length,
+      completedTasks: p.tasks.filter(t => t.status === "done").length,
+    }));
 
     res.json({
       projectsCount: projects.length,
       membersCount: membersCount[0].count,
-      tasks
+      tasks,
+      projects: projectMeta,
     });
-
   } catch (err) {
     console.error("Dashboard error:", err);
     res.status(500).json({ msg: "Dashboard error" });
