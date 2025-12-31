@@ -112,7 +112,7 @@ exports.getAllTasks = async (req, res) => {
     const limit = parseInt(pageSize);
     const offset = (page - 1) * limit;
 
-    // 🔑 get projects where user is member
+    // get projects where user is member
     const [projects] = await sequelize.query(
       `SELECT projectId FROM projectmembers WHERE userId = :userId`,
       { replacements: { userId } }
@@ -120,7 +120,7 @@ exports.getAllTasks = async (req, res) => {
 
     const allowedProjectIds = projects.map(p => p.projectId);
 
-    // ❌ user is in no project
+    //  user is in no project
     if (!allowedProjectIds.length) {
       return res.json({
         tasks: [],
