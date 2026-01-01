@@ -23,6 +23,11 @@ const ProjectJoinRequest = sequelize.define("ProjectJoinRequest", {
     type: DataTypes.ENUM("pending", "accepted", "declined"),
     defaultValue: "pending",
   },
+  direction: {
+  type: DataTypes.ENUM("request", "invite"),
+  allowNull: false
+}
+
 });
 
 module.exports = ProjectJoinRequest;

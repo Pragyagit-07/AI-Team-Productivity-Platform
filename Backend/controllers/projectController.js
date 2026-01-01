@@ -233,7 +233,7 @@ const Project = require('../models/Project');
 const User = require('../models/User');
 const Task = require('../models/Task');
 const ActivityLog = require("../models/ActivityLog");
-
+const ProjectJoinRequest = require('../models/ProjectJoinRequest');
 
 
 
@@ -318,9 +318,23 @@ exports.createProject = async (req, res) => {
     await project.addMembers(userId);
 
     // add selected members
-    if (Array.isArray(members) && members.length > 0) {
-      await project.addMembers(members);
-    }
+    // if (Array.isArray(members) && members.length > 0) {
+      // await project.addMembers(members);
+    // }
+    // ✅ INVITE MEMBERS INSTEAD OF DIRECT ADD
+if (Array.isArray(members) && members.length > 0) {
+  for (const memberId of members) {
+    await ProjectJoinRequest.findOrCreate({
+      where: {
+        projectId: project.id,
+        userId: memberId,
+        direction: "invite",
+        status: "pending",
+      },
+    });
+  }
+}
+
 
     await ActivityLog.create({
       action: "project_created",
@@ -362,6 +376,30 @@ exports.getProjectById = async (req, res) => {
     res.status(500).json({ msg: 'Server error' });
   }
 };
+exports.getDiscoverProjects = async (req, res) => {
+  const projects = await Project.findAll({
+    where: {
+      createdBy: { [require("sequelize").Op.ne]: req.user.id }
+    },
+    include: [
+      { model: User, as: "creator", attributes: ["id", "name"] },
+      { model: User, as: "members", attributes: ["id"] }
+    ]
+  });
+
+  const requests = await require("../models/ProjectJoinRequest").findAll({
+    where: { userId: req.user.id }
+  });
+
+  const result = projects.map(p => ({
+    ...p.toJSON(),
+    isMember: p.members.some(m => m.id === req.user.id),
+    hasRequested: requests.some(r => r.projectId === p.id && r.status === "pending")
+  }));
+
+  res.json(result);
+};
+
 exports.getProjectMembers = async (req, res) => {
 try{
          const onlineUsers = req.app.get("onlineUsers");

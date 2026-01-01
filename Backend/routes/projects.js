@@ -5,6 +5,7 @@ const projectPermission = require('../middleware/projectPermission');
 
 
 // router.get('/with-tasks', authMiddleware, projectController.getProjectsWithTasks);
+router.get("/discover", authMiddleware, projectController.getDiscoverProjects);
 
  router.get('/:projectId/members', authMiddleware, projectController.getProjectMembers);
 router.get('/', authMiddleware, projectController.getAllProjects);

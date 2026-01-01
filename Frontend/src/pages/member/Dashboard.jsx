@@ -73,6 +73,8 @@ window.location.href = "/login";
           username="Member"
           onLogout={handleLogout}
           onMenuClick={() => setSidebarOpen(!sidebarOpen)}
+            showNotifications={true}
+
         />
 
         <main className="p-6 bg-gray-100 flex-1 overflow-auto">

@@ -86,7 +86,7 @@ const organizationRoutes = require('./routes/organizationRoutes');
 const branchRoutes = require('./routes/branchRoutes');
 const orgUserRoutes = require('./routes/orgUserRoutes');
 const dashboardRoutes = require('./routes/dashboardRoutes');
-
+const projectRequestRoutes = require('./routes/projectRequest');
 // ROUTE MOUNTS 
 // Admin / Org
 app.use('/api/admin', adminRoutes);
@@ -99,6 +99,8 @@ app.use('/api/auth', authRoutes);
 app.use('/api/members', memberRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/projects', projectRoutes);
+app.use("/api/project-requests", projectRequestRoutes);
+
 app.use('/api/tasks', taskRoutes);
 
 // Task related
@@ -134,6 +136,36 @@ User.belongsToMany(Project, {
   through: 'ProjectMembers',
   foreignKey: 'userId',
   as: 'projects'
+});
+
+/* -------------------- PROJECT JOIN REQUESTS -------------------- */
+
+// Project ↔ ProjectJoinRequest
+Project.hasMany(require("./models/ProjectJoinRequest"), {
+  foreignKey: "projectId",
+    as: "joinRequests",
+
+  onDelete: "CASCADE"
+});
+
+require("./models/ProjectJoinRequest").belongsTo(Project, {
+  foreignKey: "projectId",
+    as: "project"
+
+});
+
+// User ↔ ProjectJoinRequest
+User.hasMany(require("./models/ProjectJoinRequest"), {
+  foreignKey: "userId",
+    as: "joinRequests",
+
+  onDelete: "CASCADE"
+});
+
+require("./models/ProjectJoinRequest").belongsTo(User, {
+  foreignKey: "userId",
+    as: "user"
+
 });
 
 /* -------------------- TASK RELATED -------------------- */

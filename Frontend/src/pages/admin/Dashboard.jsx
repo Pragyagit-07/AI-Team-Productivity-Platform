@@ -20,7 +20,13 @@ export default function AdminDashboard() {
     <div className="flex h-screen">
       <Sidebar links={links} />
       <div className="flex-1 flex flex-col">
-        <Header username="Admin" onLogout={handleLogout} />
+        {/* <Header username="Admin" onLogout={handleLogout} /> */}
+        <Header
+  username="Admin"
+  onLogout={handleLogout}
+  showNotifications={false}
+/>
+
         <main className="p-6 bg-gray-100 flex-1 overflow-auto">
           <Outlet /> 
         </main>
