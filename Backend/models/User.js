@@ -34,8 +34,7 @@ emailVerifyOtpExpires: {
   allowNull: true,
 },
 
-    // ✅ ADD THESE
-    resetOtp: {
+resetOtp: {
       type: DataTypes.STRING,
       allowNull: true,
     },

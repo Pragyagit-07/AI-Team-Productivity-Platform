@@ -1,12 +1,14 @@
 const Project = require("../models/Project");
 const ProjectJoinRequest = require("../models/ProjectJoinRequest");
 const User = require("../models/User");
+const ActivityLog = require("../models/ActivityLog");
+
 const sequelize = require("../db");
 
 
-/* ============================
-   SEND JOIN REQUEST
-   ============================ */
+
+  //  SEND JOIN REQUEST
+  
 exports.sendRequest = async (req, res) => {
   const { projectId } = req.body;
 
@@ -38,9 +40,9 @@ exports.sendRequest = async (req, res) => {
   res.json({ msg: "Join request sent" });
 };
 
-/* ============================
-   GET REQUESTS (TEAM LEAD)
-   ============================ */
+
+  //  GET REQUESTS (TEAM LEAD)
+  
 exports.getProjectRequests = async (req, res) => {
   const projectId = req.params.projectId;
 
@@ -161,9 +163,8 @@ exports.getMyInvitations = async (req, res) => {
   res.json(invitations);
 };
 
-/* ============================
-   ACCEPT / DECLINE
-   ============================ */
+
+  //  ACCEPT / DECLINE
 exports.updateRequest = async (req, res) => {
   const { requestId } = req.params;
   const { action } = req.body; // accept | decline
@@ -189,12 +190,13 @@ exports.updateRequest = async (req, res) => {
   return res.status(403).json({ msg: "Not allowed" });
 }
 
-
+{/*
   if (action === "accept") {
     request.status = "accepted";
-    await request.save();
+    await request.save();  */}
 
-    // ✅ ADD USER TO PROJECT
+    //  ADD USER TO PROJECT
+    {/*
     await sequelize.models.ProjectMembers.findOrCreate({
       where: {
         projectId: request.projectId,
@@ -211,4 +213,57 @@ exports.updateRequest = async (req, res) => {
 
     return res.json({ msg: "Request declined" });
   }
+    */}
+    if (action === "accept") {
+  request.status = "accepted";
+  await request.save();
+
+  // add member to project
+  await sequelize.models.ProjectMembers.findOrCreate({
+    where: {
+      projectId: request.projectId,
+      userId: request.userId
+    }
+  });
+
+  // 🔔 ACTIVITY LOG FOR LEADER
+  await ActivityLog.create({
+    action: request.direction === "invite"
+      ? "project_invite_accepted"
+      : "project_join_request_accepted",
+
+    description:
+      request.direction === "invite"
+        ? `${req.user.name} accepted invitation to join project "${project.name}"`
+        : `${req.user.name} joined project "${project.name}"`,
+
+    projectId: project.id,
+    userId: req.user.id
+  });
+
+  return res.json({ msg: "Request accepted" });
+}
+
+if (action === "decline") {
+  request.status = "declined";
+  await request.save();
+
+  // 🔔 ACTIVITY LOG FOR LEADER
+  await ActivityLog.create({
+    action: request.direction === "invite"
+      ? "project_invite_declined"
+      : "project_join_request_declined",
+
+    description:
+      request.direction === "invite"
+        ? `${req.user.name} declined invitation for project "${project.name}"`
+        : `${req.user.name} declined join request for project "${project.name}"`,
+
+    projectId: project.id,
+    userId: req.user.id
+  });
+
+  return res.json({ msg: "Request declined" });
+}
+
 };

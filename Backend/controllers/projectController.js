@@ -221,12 +221,7 @@
 // });
 
 //     await project.destroy();
-//     res.json({ msg: 'Project deleted successfully' });
-//   } catch (err) {
-//     console.error(err);
-//     res.status(500).json({ msg: 'Server error' });
-//   }
-// };
+//   
 
 
 const Project = require('../models/Project');
@@ -253,7 +248,7 @@ exports.getAllProjects = async (req, res) => {
       offset,
       order: [['createdAt', 'DESC']],
       include: [
-        // 🔐 Only projects where user is member
+        //  Only projects where user is member
         {
           model: User,
           as: 'members',
@@ -292,7 +287,7 @@ exports.getAllProjects = async (req, res) => {
 
 exports.createProject = async (req, res) => {
   try {
-    // ❌ admin cannot create project
+    // admin cannot create project
     if (req.user.role === 'admin') {
       return res.status(403).json({ msg: "Admin cannot create projects" });
     }
@@ -317,11 +312,8 @@ exports.createProject = async (req, res) => {
     // creator always member (team lead)
     await project.addMembers(userId);
 
-    // add selected members
-    // if (Array.isArray(members) && members.length > 0) {
-      // await project.addMembers(members);
-    // }
-    // ✅ INVITE MEMBERS INSTEAD OF DIRECT ADD
+  
+    // INVITE MEMBERS  TO BECOME MEMBER OF PROJECT
 if (Array.isArray(members) && members.length > 0) {
   for (const memberId of members) {
     await ProjectJoinRequest.findOrCreate({
@@ -342,7 +334,7 @@ if (Array.isArray(members) && members.length > 0) {
       projectId: project.id,
       userId
     });
-
+    
     res.json(project);
   } catch (err) {
     console.error(err);

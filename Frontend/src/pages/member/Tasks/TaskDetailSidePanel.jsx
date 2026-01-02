@@ -103,7 +103,11 @@ const uploadFile = async (file) => {
 
   
   return (
-    <div className="fixed inset-y-0 right-0 z-40 w-full sm:w-[460px] bg-white shadow-xl overflow-hidden">
+    // <div className="fixed inset-y-0 right-0 z-40 w-full sm:w-[460px] bg-white shadow-xl overflow-hidden">
+<div className="fixed insect-y-0 sm:inset-y-0 sm:right-0 z-40 
+  w-full sm:w-[460px] 
+  bg-white shadow-xl 
+  overflow-y-auto">
 
   
       {/* Close */}
