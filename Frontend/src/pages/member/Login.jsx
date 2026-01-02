@@ -98,6 +98,8 @@ import { useState } from "react";
 import API from "../../api/axios";
 import { useNavigate, Link } from "react-router-dom";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import loginImage from "../../assets/member-login-time.webp";
+
 import socket from "../../socket";
 
 export default function MemberLogin() {
@@ -131,7 +133,9 @@ socket.connect();
       {/* LEFT SIDE — IMAGE / PRODUCTIVITY VISUAL */}
       <div className="hidden lg:flex w-1/2 items-center justify-center relative overflow-hidden">
         <img
-          src="/src/assets/member-login-time.webp"
+          // src="/src/assets/member-login-time.webp"
+          src={loginImage}
+
           alt="Productivity illustration"
           className="w-[80%] animate-float"
         />

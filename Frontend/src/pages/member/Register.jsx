@@ -104,7 +104,7 @@
 import { useState } from "react";
 import API from "../../api/axios"
 import { Eye, EyeOff } from "lucide-react";
-;
+import registerImage from "../../assets/images.png";
 import { useNavigate, Link } from "react-router-dom";
 
 export default function MemberRegister() {
@@ -281,7 +281,8 @@ const [showConfirmPassword, setShowConfirmPassword] = useState(false);
       <div className="hidden lg:flex w-1/2 items-center justify-center relative overflow-hidden">
         <img
         
-          src= "/src/assets/images.png"
+          // src= "/src/assets/images.png"
+          src= {registerImage}
           alt="Productivity illustration"
           className="w-[75%] animate-floatSlow"
         />
