@@ -42,11 +42,36 @@ resetOtp: {
       type: DataTypes.DATE,
       allowNull: true,
     },
+    subscriptionPlan: {
+  type: DataTypes.ENUM("free", "pro", "team"),
+  defaultValue: "free",
+},
+
+subscriptionExpiry: {
+  type: DataTypes.DATE,
+  allowNull: true,
+},
+
+aiCredits: {
+  type: DataTypes.INTEGER,
+  defaultValue: 5,
+},
+
+preferences: {
+  type: DataTypes.JSON,
+  defaultValue: {
+    theme: "light",
+    notifications: true,
   },
+},
+
+  },
+  
   {
     tableName: "users",
     timestamps: true,
   }
+  
 );
 
 module.exports = User;

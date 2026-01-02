@@ -1,10 +1,6 @@
 require('dotenv').config();
-// for socket.io for active/inactive 
 const http = require("http");
 const { Server } = require("socket.io");
-
-
-
 const express = require('express');
 const cors = require('cors');
 const sequelize = require('./db');
@@ -63,6 +59,7 @@ const Comment = require('./models/Comment');
 const File = require('./models/File');
 const ActivityLog = require('./models/ActivityLog');
 
+
 require('./models/Subscription');
 require('./models/ChatMessage');
 require('./models/Organization');
@@ -73,6 +70,7 @@ require("./socket")(io, onlineUsers);
 
 //  ROUTES
 const authRoutes = require('./routes/auth');
+const profileRoutes = require('./routes/profileRoutes');
 const projectRoutes = require('./routes/projects');
 const taskRoutes = require('./routes/tasks');
 const activityRoutes = require('./routes/activityRoutes');
@@ -97,6 +95,8 @@ app.use('/api/org-users', orgUserRoutes);
 // Auth & Core
 app.use('/api/auth', authRoutes);
 app.use('/api/members', memberRoutes);
+app.use("/api/profile", profileRoutes);
+
 app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/projects', projectRoutes);
 app.use("/api/project-requests", projectRequestRoutes);
@@ -199,9 +199,6 @@ sequelize
   .then(() => {
     console.log(' Database synced successfully');
     const PORT = process.env.PORT || 5000;
-    // app.listen(PORT, () =>
-      // console.log(` Server running on port ${PORT}`)
-    // );
     server.listen(PORT, () =>
   console.log(` Server running on port ${PORT}`)
 );

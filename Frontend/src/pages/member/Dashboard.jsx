@@ -7,8 +7,6 @@ import socket from "../../socket";
 export default function MemberDashboard() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [onlineUsers, setOnlineUsers] = useState([]);
-
-
   const links = [
     {name: "Home", path: "/dashboard"},
     { name: "Projects", path: "/dashboard/projects" },
@@ -53,7 +51,7 @@ window.location.href = "/login";
   
 
   return (
-    // <div className="flex h-screen overflow-hidden">
+    
     <div className="flex min-h-screen w-full overflow-x-auto">
 
       
@@ -78,11 +76,10 @@ window.location.href = "/login";
 
         />
 
-        {/* <main className="p-6 bg-gray-100 flex-1 overflow-auto"> */}
+       
         <main className="p-4 sm:p-6 bg-gray-100 flex-1 overflow-y-auto overflow-x-auto">
 
-          {/* <Outlet />
-           */}
+          {/* <Outlet />*/}
            <Outlet context={{ onlineUsers }} />
 
         </main>
