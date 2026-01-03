@@ -60,7 +60,6 @@ function TaskFormWrapper() {
 }
 
 function App() {
-  
   return (
     <Routes>
       {/* Default */}

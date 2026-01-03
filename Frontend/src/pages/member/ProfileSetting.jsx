@@ -5,6 +5,10 @@ export default function ProfileSettings() {
   const [profile, setProfile] = useState(null);
   const [name, setName] = useState("");
   const [loading, setLoading] = useState(false);
+  const [avatarLoading, setAvatarLoading] = useState(false);
+ 
+
+const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
   // ================= GET PROFILE =================
   useEffect(() => {
@@ -13,6 +17,7 @@ export default function ProfileSettings() {
         const res = await API.get("/profile/me");
         setProfile(res.data);
         setName(res.data.name);
+        
       } catch (err) {
         console.error("Profile load error", err);
       }
@@ -25,7 +30,10 @@ export default function ProfileSettings() {
     e.preventDefault();
     try {
       setLoading(true);
-      await API.put("/profile/update", { name });
+      await API.put("/profile/update", { name,
+       
+       });
+
       alert("Profile updated successfully");
     } catch (err) {
       alert(err.response?.data?.msg || "Update failed");
@@ -43,6 +51,7 @@ export default function ProfileSettings() {
     formData.append("avatar", file);
 
     try {
+      setAvatarLoading(true);
       const res = await API.put("/profile/avatar", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
@@ -53,82 +62,121 @@ export default function ProfileSettings() {
       }));
     } catch (err) {
       alert("Avatar upload failed");
+    } finally {
+      setAvatarLoading(false);
     }
   };
 
   if (!profile) {
     return (
-      <div className="p-6 text-center text-gray-500">
+      <div className="min-h-[60vh] flex items-center justify-center text-gray-500">
         Loading profile...
       </div>
     );
   }
 
   return (
-    <div className="p-6 max-w-xl mx-auto">
-      <h1 className="text-2xl font-semibold text-gray-800 mb-6">
-        Profile Settings
-      </h1>
+    <div className="max-w-4xl mx-auto px-4 py-10">
+      {/* HEADER */}
+      <div className="mb-8">
+      
 
-      {/* Avatar */}
-      <div className="flex flex-col items-center gap-3 mb-6">
-        <img
-          src={
-            profile.avatar
-              ? `http://localhost:5000/api${profile.avatar}`
-              : "/default-avatar.png"
-          }
-          alt="avatar"
-          className="w-28 h-28 rounded-full object-cover border"
-        />
+         <p className=" text-3xl font-bold text-gray-800  text-center">
+          Manage your personal information 
+        </p> 
+      
 
-        <label className="text-sm text-indigo-600 cursor-pointer">
-          Profile 
-          <input
-            type="file"
-            accept="image/*"
-            onChange={uploadAvatar}
-            className="hidden"
-          />
-        </label>
       </div>
 
-      {/* Profile Form */}
-      <form
-        onSubmit={updateProfile}
-        className="bg-white shadow rounded-lg p-6 space-y-4"
-      >
-        <div>
-          <label className="block text-sm text-gray-600 mb-1">
-            Name
-          </label>
-          <input
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            className="w-full  rounded px-3 py-2 focus:outline-none focus:ring focus:ring-indigo-200"
-            required
-          />
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        {/* LEFT — AVATAR CARD */}
+        <div className="bg-white rounded-xl shadow p-6 flex flex-col items-center">
+          <div className="relative group">
+            <img
+              src={
+                profile.avatar
+                      ? `${BASE_URL}${profile.avatar}`
+                       : "/default-avatar.png"
+              }
+              alt="avatar"
+              className="w-32 h-32 rounded-full object-cover border"
+            />
+
+            {/* Hover overlay */}
+            <label className="absolute inset-0 bg-black/40 rounded-full flex items-center justify-center text-white text-sm opacity-0 group-hover:opacity-100 cursor-pointer transition">
+              {avatarLoading ? "Uploading..." : "Change"}
+              <input
+                type="file"
+                accept="image/*"
+                onChange={uploadAvatar}
+                className="hidden"
+              />
+            </label>
+          </div>
+
+          <h3 className="mt-4 font-semibold text-gray-800">
+            {profile.name}
+          </h3>
+          <p className="text-sm text-gray-500">{profile.email}</p>
         </div>
 
-        <div>
-          <label className="block text-sm text-gray-600 mb-1">
-            Email
-          </label>
-          <input
-            value={profile.email}
-            disabled
-            className="w-full  rounded px-3 py-2 bg-gray-100 cursor-not-allowed"
-          />
-        </div>
+        {/* RIGHT — PROFILE FORM */}
+        <div className="md:col-span-2 bg-white rounded-xl shadow p-6">
+          <form onSubmit={updateProfile} className="space-y-6">
+            {/* NAME */}
+            <div>
+              <label className="block text-sm font-medium text-gray-600 mb-1">
+                Full Name
+              </label>
+              <input
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                className="w-full  rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+                required
+              />
+            </div>
 
-        <button
-          type="submit"
-          disabled={loading}
-          className="w-full bg-indigo-600 text-white py-2 rounded hover:bg-indigo-700 transition disabled:opacity-60"
-        >
-          {loading ? "Saving..." : "Save Changes"}
-        </button>
-      </form>
+            {/* EMAIL */}
+            <div>
+              <label className="block text-sm font-medium text-gray-600 mb-1">
+                Email Address
+              </label>
+              <input
+                value={profile.email}
+                disabled
+                className="w-full border rounded-lg px-4 py-2 bg-gray-100 text-gray-500 cursor-not-allowed"
+              />
+            </div>
+
+    
+
+            {/* SUBSCRIPTION (READ ONLY, OPTIONAL) */}
+            {profile.subscriptionPlan && (
+              <div>
+                <label className="block text-sm font-medium text-gray-600 mb-1">
+                  Subscription
+                </label>
+                <div className="inline-flex items-center px-3 py-1 rounded-full bg-indigo-50 text-indigo-600 text-sm font-medium">
+                  {profile.subscriptionPlan.toUpperCase()}
+                </div>
+              </div>
+            )}
+
+            {/* SAVE BUTTON */}
+            <div className="pt-4">
+              <button
+                type="submit"
+                disabled={loading}
+                className="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2 rounded-lg font-medium transition disabled:opacity-60"
+              >
+                {loading ? "Saving..." : "Save Changes"}
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
   );
 }
+
+

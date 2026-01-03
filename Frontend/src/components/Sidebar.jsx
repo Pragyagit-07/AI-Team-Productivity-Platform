@@ -15,8 +15,7 @@ export default function Sidebar({ links, isOpen, onClose }) {
         className={`
           fixed md:static z-50
            w-64 md:w-64 w-[85vw]
-
-          bg-white dark:bg-gray-800 shadow-md min-h-screen p-4
+           bg-white dark:bg-gray-800 shadow-md min-h-screen p-4
           transform transition-transform duration-300
           ${isOpen ? "translate-x-0" : "-translate-x-full"}
           md:translate-x-0
@@ -25,8 +24,7 @@ export default function Sidebar({ links, isOpen, onClose }) {
         <h2 className="text-2xl font-bold mb-6 text-indigo-600">
           Dashboard
         </h2>
-
-        <ul>
+         <ul>
           {links.map((link) => (
             <li
               key={link.name}

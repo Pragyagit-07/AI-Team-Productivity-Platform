@@ -19,37 +19,30 @@ export default function Header({ username, onLogout, onMenuClick ,   showNotific
         <button onClick={onMenuClick} className="lg:hidden">
           <Menu size={24} />
         </button>
-        {/* <h1 className="text-xl font-bold">Welcome, {username}</h1> */}
-        <h1 className="text-base sm:text-xl font-bold truncate">
-  Welcome, {username}
-</h1>
-
+    <h1 className="text-base sm:text-xl font-bold truncate">
+         Welcome, {username}
+        </h1>
       </div>
 
       <div className="flex items-center gap-4 relative">
         {/*  Notification */}
-      
         {showNotifications && (
-  <button onClick={() => setOpen(!open)} className="relative">
-    <Bell />
-    {requests.length > 0 && (
-      <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full px-1">
-        {requests.length}
-      </span>
+       <button onClick={() => setOpen(!open)} className="relative">
+          <Bell />
+         {requests.length > 0 && (
+          <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full px-1">
+         {requests.length}
+       </span>
     )}
   </button>
 )}
-
-
-        {/* Dropdown */}
+           {/* Dropdown */}
         { showNotifications && open && (
           <div className="absolute right-0 top-12 w-80 bg-white shadow-lg rounded p-3 z-50">
             <h4 className="font-semibold mb-2">Invitations</h4>
-
-            {requests.length === 0 && (
+             {requests.length === 0 && (
               <p className="text-sm text-gray-500">No invitations</p>
             )}
-
             {requests.map(r => (
               <div
                 key={r.id}
@@ -58,8 +51,7 @@ export default function Header({ username, onLogout, onMenuClick ,   showNotific
                 <span className="text-sm">
                   Invitation to join <b>{r.project?.name}</b>
                 </span>
-
-                <div className="flex gap-2">
+                 <div className="flex gap-2">
                   <button
                     onClick={() =>
                       API.put(`/project-requests/${r.id}`, {
@@ -94,8 +86,7 @@ export default function Header({ username, onLogout, onMenuClick ,   showNotific
             ))}
           </div>
         )}
-
-        <button
+          <button
           onClick={onLogout}
           className="bg-red-500 text-white px-4 py-2 rounded"
         >

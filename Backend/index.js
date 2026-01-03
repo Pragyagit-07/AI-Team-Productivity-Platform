@@ -6,12 +6,7 @@ const cors = require('cors');
 const sequelize = require('./db');
 const app = express();
 
-
-
-
 //  MIDDLEWARE
-// app.use(cors({ origin: process.env.FRONTEND_URL }));
-
 app.use(
   cors({
     origin: (origin, callback) => {
@@ -27,7 +22,6 @@ app.use(
 
 // for active/inactive
 const server = http.createServer(app);
-
 const io = new Server(server, {
   cors: {
     origin: (origin, callback) => {
@@ -46,8 +40,6 @@ const onlineUsers = new Map();
 // make available everywhere
 app.set("io", io);
 app.set("onlineUsers", onlineUsers);
-
-
 app.use(express.json());
 app.use('/api/uploads', express.static('uploads'));
 
@@ -125,7 +117,7 @@ Task.belongsTo(Project, { foreignKey: 'projectId' });
 User.hasMany(Task, { foreignKey: 'assigneeId' });
 Task.belongsTo(User, { foreignKey: 'assigneeId', as: 'assignee' });
 
-// Project ↔ Members (Many-to-Many)
+// Project -> Members (Many-to-Many)
 Project.belongsToMany(User, {
   through: 'ProjectMembers',
   foreignKey: 'projectId',
@@ -138,14 +130,13 @@ User.belongsToMany(Project, {
   as: 'projects'
 });
 
-/* -------------------- PROJECT JOIN REQUESTS -------------------- */
+/*  PROJECT JOIN REQUESTS */
 
-// Project ↔ ProjectJoinRequest
+// Project <-> ProjectJoinRequest
 Project.hasMany(require("./models/ProjectJoinRequest"), {
   foreignKey: "projectId",
     as: "joinRequests",
-
-  onDelete: "CASCADE"
+   onDelete: "CASCADE"
 });
 
 require("./models/ProjectJoinRequest").belongsTo(Project, {
@@ -168,12 +159,11 @@ require("./models/ProjectJoinRequest").belongsTo(User, {
 
 });
 
-/* -------------------- TASK RELATED -------------------- */
+/*  TASK RELATED  */
 
 // Task ↔ Comments
  Task.hasMany(Comment, { foreignKey: 'taskId', as: 'comments', onDelete: 'CASCADE', hooks: true });
 Comment.belongsTo(Task, { foreignKey: 'taskId' , onDelete: 'CASCADE'});
-
 User.hasMany(Comment, { foreignKey: 'userId' });
 Comment.belongsTo(User, { foreignKey: 'userId' });
 
@@ -188,12 +178,12 @@ File.belongsTo(User, { foreignKey: 'userId' });
 
 
  Task.hasMany(ActivityLog, { foreignKey: 'taskId', as: 'activities' , onDelete: 'setNull',  hooks: true});
-   ActivityLog.belongsTo(Task, { foreignKey: 'taskId',    onDelete: 'CASCADE'});
+ ActivityLog.belongsTo(Task, { foreignKey: 'taskId',    onDelete: 'CASCADE'});
 
 User.hasMany(ActivityLog, { foreignKey: 'userId' });
 ActivityLog.belongsTo(User, { foreignKey: 'userId' });
 
-/* -------------------- START SERVER -------------------- */
+/*  START SERVER */
 sequelize
 .sync({ force: false,  })
   .then(() => {
