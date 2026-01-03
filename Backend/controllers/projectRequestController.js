@@ -190,30 +190,6 @@ exports.updateRequest = async (req, res) => {
   return res.status(403).json({ msg: "Not allowed" });
 }
 
-{/*
-  if (action === "accept") {
-    request.status = "accepted";
-    await request.save();  */}
-
-    //  ADD USER TO PROJECT
-    {/*
-    await sequelize.models.ProjectMembers.findOrCreate({
-      where: {
-        projectId: request.projectId,
-        userId: request.userId
-      }
-    });
-
-    return res.json({ msg: "Request accepted" });
-  }
-
-  if (action === "decline") {
-    request.status = "declined";
-    await request.save();
-
-    return res.json({ msg: "Request declined" });
-  }
-    */}
     if (action === "accept") {
   request.status = "accepted";
   await request.save();
@@ -226,7 +202,7 @@ exports.updateRequest = async (req, res) => {
     }
   });
 
-  // 🔔 ACTIVITY LOG FOR LEADER
+  //  ACTIVITY LOG FOR LEADER
   await ActivityLog.create({
     action: request.direction === "invite"
       ? "project_invite_accepted"
@@ -248,7 +224,7 @@ if (action === "decline") {
   request.status = "declined";
   await request.save();
 
-  // 🔔 ACTIVITY LOG FOR LEADER
+  // ACTIVITY LOG FOR LEADER
   await ActivityLog.create({
     action: request.direction === "invite"
       ? "project_invite_declined"

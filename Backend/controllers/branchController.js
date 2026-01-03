@@ -19,9 +19,7 @@ exports.getBranches = async (req, res) => {
     if (organizationId) {
       where.organizationId = organizationId; 
     }
-
     const branches = await Branch.findAll({ where });
-
     res.json(branches);
 
   } catch (err) {

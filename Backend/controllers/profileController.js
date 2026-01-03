@@ -1,6 +1,6 @@
 const User = require("../models/User");
 
-// ================= GET PROFILE =================
+// GET PROFILE
 exports.getProfile = async (req, res) => {
   try {
     const user = await User.findByPk(req.user.id, {
@@ -18,7 +18,7 @@ exports.getProfile = async (req, res) => {
   }
 };
 
-// ================= UPDATE PROFILE =================
+// UPDATE PROFILE
 exports.updateProfile = async (req, res) => {
   try {
     const { name, preferences } = req.body;
@@ -40,7 +40,7 @@ exports.updateProfile = async (req, res) => {
   }
 };
 
-// ================= UPDATE AVATAR =================
+// UPDATE AVATAR 
 exports.updateAvatar = async (req, res) => {
   try {
     if (!req.file) {

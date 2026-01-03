@@ -4,5 +4,4 @@ const authMiddleware = require('../middleware/authMiddleware');
 
 
 router.get("/", authMiddleware, getMembers);
-
 module.exports = router;

@@ -12,7 +12,7 @@ const sequelize = new Sequelize(
   }
 );
 
-// Test connection
+// connection
 sequelize.authenticate()
   .then(() => console.log(' MySQL Connected'))
   .catch(err => console.error('MySQL Connection Error:', err));
