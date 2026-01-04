@@ -133,8 +133,7 @@ const [showConfirmPassword, setShowConfirmPassword] = useState(false);
       await API.post("/auth/register", { name, email, password });
       navigate("/verify-email", { state: { email } });
 
-      // setMessage("Registration successful! Redirecting to login...");
-      // setTimeout(() => navigate("/login"), 2000);
+     
     } catch (err) {
       setError(err.response?.data?.msg || "Registration failed");
     }
@@ -188,27 +187,6 @@ const [showConfirmPassword, setShowConfirmPassword] = useState(false);
               />
             </div>
 
-           { /* <div> 
-              <label className="block mb-1 font-semibold">Password</label>
-              <input
-                type="password"
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-400"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
-            </div>
-
-            <div>
-              <label className="block mb-1 font-semibold">Confirm Password</label>
-              <input
-                type="password"
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-400"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                required
-              />
-            </div>*/}
             <div>
   <label className="block mb-1 font-semibold">Password</label>
 
@@ -287,7 +265,7 @@ const [showConfirmPassword, setShowConfirmPassword] = useState(false);
           className="w-[75%] animate-floatSlow"
         />
 
-        {/* soft glow */}
+    
         <div className="absolute w-80 h-80 bg-indigo-200 rounded-full blur-3xl opacity-40 animate-pulseSlow" />
       </div>
 

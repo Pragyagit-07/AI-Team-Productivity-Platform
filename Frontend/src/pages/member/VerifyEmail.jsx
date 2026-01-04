@@ -51,7 +51,7 @@ export default function VerifyEmail() {
           placeholder="Enter 6-digit OTP"
           value={otp}
           onChange={(e) => setOtp(e.target.value)}
-          className="w-full border px-3 py-2 rounded mb-4"
+          className="w-full  px-3 py-2 rounded mb-4"
           required
         />
 

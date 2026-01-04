@@ -73,68 +73,46 @@ function App() {
       {/* ADMIN DASHBOARD WRAPPER  */}
       <Route path="/admin/dashboard/*" element={<AdminDashboard />}>
 
-        {/* Dashboard Home */}
-
-      
-         <Route index element={<DashboardHome />} />
-        {/* ───────── ORGANIZATION ROUTES ───────── */}
+        {/* Dashboard Home  */}
+        <Route index element={<DashboardHome />} />
+        {/* ORGANIZATION ROUTES*/}
         <Route path="organizations" element={<OrganizationTable />} />
         <Route path="organization/add" element={<OrganizationForm />} />
         <Route path="organization/edit/:id" element={<OrganizationEdit />} />
         <Route path="organization/view/:id" element={<OrganizationView />} />
 
-        {/* ───────── BRANCH ROUTES ───────── */}
+        {/*  BRANCH ROUTES */}
         <Route path="branches" element={<BranchTable />} />
         <Route path="branch/add" element={<BranchForm />} />
         <Route path="branch/edit/:id" element={<BranchEdit />} />
         <Route path="branch/view/:id" element={<BranchView />} />
 
-        {/* ───────── ORG USERS ROUTES ───────── */}
+        {/* ORG USERS ROUTES */}
         <Route path="org-users" element={<OrgUserTable />} />
         <Route path="org-users/add" element={<OrgUserForm />} />
         <Route path="org-users/edit/:id" element={<OrgUserEdit />} />
         <Route path="org-users/view/:id" element={<OrgUserView />} />
-
-
-      </Route>
+       </Route>
 
       {/* Member */}
       <Route path="/login" element={<MemberLogin />} />
       <Route path="/register" element={<MemberRegister />} />
       <Route path="/verify-email" element={<VerifyEmail />} />
-
       <Route path="/forgot-password" element={<MemberForgotPassword />} />
-      
       <Route path="/dashboard/*" element={<MemberDashboard />}>
-        
       <Route index element={<MemberDashboardHome />} />
-
-
-        <Route path="projects" element={<ProjectsList />} />
-        <Route path="projects/add" element={<ProjectForm />} />
-        <Route path="projects/edit/:id" element={<ProjectForm />} />
-
-        <Route path="projects/view/:id" element={<ProjectView />} />
-
-        
-<Route path="projects/:projectId/tasks" element={<TaskBoardWrapper />} />
-<Route path="projects/:projectId/tasks/add" element={<TaskFormWrapper />} />
-
-
-  <Route path="tasks" element={<TaskList />} />
-    <Route path="tasks/view/:id" element={<TaskView />} />
-
-    <Route path="tasks/edit/:id" element={<TaskForm />} />
-
-
-  <Route path="calender" element={<CalendarTab />} />
-    <Route path="activity" element={<Activity />} />
-        <Route path="profile" element={<ProfileSetting />} />
-
-
-
-
-
+      <Route path="projects" element={<ProjectsList />} />
+      <Route path="projects/add" element={<ProjectForm />} />
+      <Route path="projects/edit/:id" element={<ProjectForm />} />
+      <Route path="projects/view/:id" element={<ProjectView />} />
+      <Route path="projects/:projectId/tasks" element={<TaskBoardWrapper />} />
+       <Route path="projects/:projectId/tasks/add" element={<TaskFormWrapper />} />
+       <Route path="tasks" element={<TaskList />} />
+       <Route path="tasks/view/:id" element={<TaskView />} />
+       <Route path="tasks/edit/:id" element={<TaskForm />} />
+      <Route path="calender" element={<CalendarTab />} />
+      <Route path="activity" element={<Activity />} />
+      <Route path="profile" element={<ProfileSetting />} />
 </Route>
 
 
