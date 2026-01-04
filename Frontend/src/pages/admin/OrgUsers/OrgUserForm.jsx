@@ -5,8 +5,7 @@ import { Eye, EyeOff } from "lucide-react";
 
 export default function OrgUserForm() {
   const navigate = useNavigate();
-const [showPassword, setShowPassword] = useState(false);
-
+  const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -15,7 +14,6 @@ const [showPassword, setShowPassword] = useState(false);
     organizationId: "",
     branchId: ""
   });
-
   const [organizations, setOrganizations] = useState([]);
   const [branches, setBranches] = useState([]);
   const [errors, setErrors] = useState({});
@@ -87,12 +85,9 @@ else if (
 
     try {
       const res = await 
-  
       API.post("/org-users",formData);
-
-      setMessage("Org User Created Successfully!");
-
-      setTimeout(() => navigate("/admin/dashboard/org-users"), 600);
+     setMessage("Org User Created Successfully!");
+     setTimeout(() => navigate("/admin/dashboard/org-users"), 600);
     } catch (err) {
       setMessage("Failed to save Org User");
       console.log(err);
@@ -100,27 +95,21 @@ else if (
   };
 
   const goBack = () => navigate("/admin/dashboard/org-users");
-
   return (
     <div className="max-w-3xl mx-auto mt-10 p-6 bg-white rounded-xl shadow-lg">
-
       <button
         onClick={goBack}
         className="mb-4 text-blue-600 hover:text-blue-800 font-medium flex items-center gap-2"
       >
         ← Back
       </button>
-
       <h1 className="text-2xl font-bold mb-6 text-center">Create Org User</h1>
-
       {message && (
         <p className="text-center text-green-600 font-medium mb-3">
           {message}
         </p>
       )}
-
       <form onSubmit={handleSubmit} className="space-y-4">
-
         {/* Organization */}
         <div>
           <label className="block font-medium mb-1">Organization</label>
@@ -217,8 +206,6 @@ else if (
         errors.password ? "border-red-500" : "border-gray-300"
       }`}
     />
-
-    {/* Eye / EyeOff Icon */}
     <span
       onClick={() => setShowPassword(!showPassword)}
       className="absolute right-3 top-2.5 cursor-pointer text-gray-600 hover:text-gray-800"

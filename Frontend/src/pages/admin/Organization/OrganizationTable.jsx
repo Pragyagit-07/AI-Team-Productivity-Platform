@@ -29,7 +29,6 @@ export default function OrganizationTable() {
   const handleDelete = async (id) => {
     if (!window.confirm("Are you sure you want to delete this organization?"))
       return;
-
     try {
       await 
       API.delete(`/organizations/${id}`);
@@ -92,7 +91,6 @@ export default function OrganizationTable() {
                   <td className="px-6 py-4">{org.phone || "_" }</td>
                   <td className="px-6 py-4">{org.address || "_"}</td>
                   <td className="px-6 py-4">{org.createdBy || "—"}</td>
-
                   <td className="px-6 py-4 flex gap-3">
                     <Link
                       to={`/admin/dashboard/organization/edit/${org.id}`}
@@ -101,15 +99,13 @@ export default function OrganizationTable() {
                     >
                       <FiEdit />
                     </Link>
-
-                    <Link
+                   <Link
                       to={`/admin/dashboard/organization/view/${org.id}`}
                       className="text-green-500 hover:text-green-700"
                       title="View"
                     >
                       <FiEye />
                     </Link>
-
                     <button
                       onClick={() => handleDelete(org.id)}
                       className="text-red-500 hover:text-red-700"
@@ -124,13 +120,13 @@ export default function OrganizationTable() {
           </tbody>
         </table>
       </div>
-      {/* Pagination */}
-<div className="flex justify-end mt-4">
-<div className="flex items-center gap-2">
+                   {/* Pagination */}
+              <div className="flex justify-end mt-4">
+              <div className="flex items-center gap-2">
 
-    {/* Prev Button */}
-    <button
-      onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+             {/* Prev Button */}
+          <button
+       onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
       disabled={currentPage === 1}
       className={`px-3 py-1 rounded border ${
         currentPage === 1
@@ -169,10 +165,9 @@ export default function OrganizationTable() {
       }`}
     >
       Next
-    </button>
-
+        </button>
+       </div>
+     </div>
   </div>
-</div>
-    </div>
   );
 }

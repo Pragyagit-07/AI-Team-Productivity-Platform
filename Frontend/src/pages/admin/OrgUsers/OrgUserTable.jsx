@@ -164,9 +164,8 @@ export default function OrgUserTable() {
     >
       Next
     </button>
-
+   </div>
+   </div>
   </div>
-</div>
-    </div>
   );
 }

@@ -3,9 +3,9 @@ export default function Sidebar({ links, isOpen, onClose }) {
   const location = useLocation();
   return (
     <>
-      {/* Mobile overlay */}
-      {isOpen && (
-        <div
+        {/* Mobile overlay */}
+           {isOpen && (
+           <div
           className="fixed inset-0 bg-black/40 z-40 md:hidden"
           onClick={onClose}
         />

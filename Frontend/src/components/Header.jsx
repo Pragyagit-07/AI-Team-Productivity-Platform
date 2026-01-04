@@ -2,11 +2,15 @@ import { Menu, Bell } from "lucide-react";
 import { useEffect, useState } from "react";
 import API from "../api/axios";
 
-export default function Header({ username, onLogout, onMenuClick ,   showNotifications = false
-}) {
+export default function Header({ 
+  username, 
+  onLogout,
+  onMenuClick ,   
+  showNotifications = false
+}) 
+{
   const [requests, setRequests] = useState([]);
   const [open, setOpen] = useState(false);
-
   useEffect(() => {
     API.get("/project-requests/my-invitations")
       .then(res => setRequests(res.data || []))
@@ -19,23 +23,25 @@ export default function Header({ username, onLogout, onMenuClick ,   showNotific
         <button onClick={onMenuClick} className="lg:hidden">
           <Menu size={24} />
         </button>
-    <h1 className="text-base sm:text-xl font-bold truncate">
+        <h1 className="text-base sm:text-xl font-bold truncate">
          Welcome, {username}
         </h1>
       </div>
 
       <div className="flex items-center gap-4 relative">
-        {/*  Notification */}
-        {showNotifications && (
-       <button onClick={() => setOpen(!open)} className="relative">
+           {/*  Notification */}
+           {showNotifications && (
+          <button onClick={() => setOpen(!open)} className="relative">
           <Bell />
-         {requests.length > 0 && (
-          <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full px-1">
-         {requests.length}
-       </span>
-    )}
-  </button>
-)}
+              {requests.length > 0 && (
+              <span 
+              className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full px-1"
+              >
+             {requests.length}
+            </span>
+            )}
+           </button>
+        )}
            {/* Dropdown */}
         { showNotifications && open && (
           <div className="absolute right-0 top-12 w-80 bg-white shadow-lg rounded p-3 z-50">

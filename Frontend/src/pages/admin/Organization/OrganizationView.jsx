@@ -6,12 +6,11 @@ import { FaEdit, FaEye, FaTrash } from "react-icons/fa";
 export default function OrganizationView() {
   const { id } = useParams();
   const navigate = useNavigate();
-
   const [organization, setOrganization] = useState(null);
   const [branches, setBranches] = useState([]);
   const [message, setMessage] = useState("");
 
-  // Load organization + branches
+  // Load organization and branches
   useEffect(() => {
     loadOrganization();
     loadBranches();
@@ -20,7 +19,6 @@ export default function OrganizationView() {
   const loadOrganization = async () => {
     try {
       const res = await API.get(`/organizations/${id}`);
-
       setOrganization(res.data);
     } catch (err) {
       console.log(err);
@@ -31,7 +29,6 @@ export default function OrganizationView() {
   const loadBranches = async () => {
     try {
       const res = await API.get(`/branches?organizationId=${id}`);
-      
       setBranches(res.data);
     } catch (err) {
       console.log(err);
@@ -48,7 +45,6 @@ export default function OrganizationView() {
     navigate(`/admin/dashboard/branch/view/${branchId}`);
   const deleteBranch = async (branchId) => {
     if (!window.confirm("Are you sure you want to delete this branch?")) return;
-
     try {
       await API.delete(`/branches/${branchId}`);
       loadBranches();
@@ -57,7 +53,6 @@ export default function OrganizationView() {
       alert("Failed to delete branch");
     }
   };
-
   if (!organization) {
     return (
       <div className="flex justify-center mt-20 text-gray-600 text-lg">
@@ -68,29 +63,23 @@ export default function OrganizationView() {
 
   return (
     <div className="max-w-6xl mx-auto mt-10 p-6 bg-white rounded-xl shadow-lg">
-
-      {/* Back Button */}
+    {/* Back Button */}
       <button
         onClick={goBack}
         className="mb-4 text-blue-600 hover:text-blue-800 font-medium flex items-center gap-2"
       >
         ← Back
       </button>
-
       {/* Title */}
       <h1 className="text-2xl font-bold mb-6 text-center">
         Organization Details
       </h1>
-
       {message && (
         <p className="text-center text-red-500 font-medium mb-3">{message}</p>
       )}
-
       {/* ORG Details */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-
         <div className="space-y-4">
-
           <div>
             <p className="text-gray-600 font-medium">Organization Name</p>
             <p className="text-lg font-semibold">{organization.name}</p>
@@ -112,9 +101,7 @@ export default function OrganizationView() {
           </div>
 
         </div>
-
         <div className="space-y-4">
-
           <div>
             <p className="text-gray-600 font-medium">Address</p>
             <p className="text-lg font-semibold whitespace-pre-line">
@@ -136,9 +123,7 @@ export default function OrganizationView() {
           >
             Edit Organization
           </button>
-
         </div>
-
       </div>
 
       {/* BRANCH SECTION */}
@@ -165,7 +150,6 @@ export default function OrganizationView() {
                 <th className="p-3 text-center">Actions</th>
               </tr>
             </thead>
-
             <tbody>
               {branches.length === 0 ? (
                 <tr>
@@ -180,7 +164,6 @@ export default function OrganizationView() {
                     <td className="p-3">{b.email}</td>
                     <td className="p-3">{b.phone}</td>
                     <td className="p-3">{b.address}</td>
-
                     <td className="p-3 flex justify-center gap-3">
                       <FaEye
                         className="text-blue-600 cursor-pointer"
