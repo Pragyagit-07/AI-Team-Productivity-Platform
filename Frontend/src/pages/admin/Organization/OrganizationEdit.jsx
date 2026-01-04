@@ -3,7 +3,7 @@ import API from "../../../api/axios";
 import { useNavigate, useParams } from "react-router-dom";
 
 export default function OrganizationEdit() {
-  const { id } = useParams(); // get ID from URL
+  const { id } = useParams(); // get ID 
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: "",

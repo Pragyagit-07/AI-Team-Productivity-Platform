@@ -107,24 +107,21 @@ if (!formData.organizationId.trim())
       )}
 
       <form onSubmit={handleSubmit} className="space-y-4">
-
-
-{/* Organization Select */}
-<div>
-  <label className="block font-medium mb-1">Organization</label>
-
-  <select
-    name="organizationId"
-    value={formData.organizationId}
-    onChange={handleChange}
-    className={`w-full border rounded-md p-2 focus:outline-none focus:ring-2 ${
-      errors.organizationId
-        ? "border-red-500 focus:ring-red-500"
-        : "border-gray-300 focus:ring-blue-500"
-    }`}
-  >
-    <option value="">Select Organization</option>
-    {organizations.map((org) => (
+         {/* Organization Select */}
+        <div>
+        <label className="block font-medium mb-1">Organization</label>
+         <select
+           name="organizationId"
+            value={formData.organizationId}
+            onChange={handleChange}
+            className={`w-full border rounded-md p-2 focus:outline-none focus:ring-2 ${
+             errors.organizationId
+              ? "border-red-500 focus:ring-red-500"
+              : "border-gray-300 focus:ring-blue-500"
+             }`}
+           >
+        <option value="">Select Organization</option>
+        {organizations.map((org) => (
       <option key={org.id} value={org.id}>
         {org.name}
       </option>
@@ -136,11 +133,7 @@ if (!formData.organizationId.trim())
   )}
 </div>
 
-
-
-
-
-        {/* Name */}
+       {/* Name */}
         <div>
           <label className="block font-medium mb-1">Branch Name</label>
           <input
@@ -241,8 +234,7 @@ if (!formData.organizationId.trim())
           >
             Save Branch
           </button>
-
-        </div>
+          </div>
       </form>
     </div>
   );

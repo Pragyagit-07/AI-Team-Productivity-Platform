@@ -11,7 +11,6 @@ export default function OrganizationForm() {
     createdBy: "",
     address: "",
   });
-
   const [errors, setErrors] = useState({});
   const [message, setMessage] = useState(""); 
 
@@ -19,7 +18,6 @@ export default function OrganizationForm() {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
-
     setErrors((prev) => ({ ...prev, [name]: "" }));
   };
 
@@ -211,7 +209,6 @@ export default function OrganizationForm() {
           >
             Save Organization
           </button>
-
         </div>
       </form>
     </div>

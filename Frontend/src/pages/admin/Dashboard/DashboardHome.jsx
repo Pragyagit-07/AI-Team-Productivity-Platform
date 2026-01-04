@@ -25,7 +25,6 @@ export default function DashboardHome() {
   const [branchData, setBranchData] = useState([]);
   const [roleData, setRoleData] = useState([]);
   const [recentActivity, setRecentActivity] = useState([]);
-
   const COLORS = ["#0088FE", "#FF8042"];
 
   useEffect(() => {
@@ -41,12 +40,8 @@ export default function DashboardHome() {
         API.get("/organizations"),
         API.get("/branches"),
         API.get("/org-users"),
-
-
-      ]);
-
-
-      setCounts({
+         ]);
+       setCounts({
         organizations: orgs.data.length,
         branches: branches.data.length,
         orgUsers: users.data.length,
@@ -79,12 +74,10 @@ export default function DashboardHome() {
 
   const fetchRoleData = async () => {
     try {
-    
       const usersRes = await API.get("/org-users");
       const adminCount = usersRes.data.filter((u) => u.role === "ADMIN").length;
       const memberCount = usersRes.data.filter((u) => u.role === "MEMBER").length;
-
-      setRoleData([
+       setRoleData([
         { name: "Admin", value: adminCount },
         { name: "Member", value: memberCount },
       ]);

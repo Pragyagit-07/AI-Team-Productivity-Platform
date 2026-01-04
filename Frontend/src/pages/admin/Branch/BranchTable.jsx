@@ -7,8 +7,6 @@ export default function BranchTable() {
   const [branches, setBranches] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-
-  //  Pagination States
   const [currentPage, setCurrentPage] = useState(1);
   const rowsPerPage = 5;
 
@@ -117,12 +115,9 @@ export default function BranchTable() {
         </table>
       </div>
 
-     
-
-{/* Pagination */}
+     {/* Pagination */}
 <div className="flex justify-end mt-4">
-
-  <div className="flex items-center gap-2">
+ <div className="flex items-center gap-2">
 
     {/* Prev Button */}
     <button

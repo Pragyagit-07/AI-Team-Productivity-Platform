@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
 import API from "../../../api/axios";
 import { useNavigate, useParams } from "react-router-dom";
-
 export default function BranchEdit() {
   const navigate = useNavigate();
-  const { id } = useParams(); // branch id from URL
+  const { id } = useParams(); // branch id 
 
   const [formData, setFormData] = useState({
     name: "",
@@ -18,7 +17,7 @@ export default function BranchEdit() {
   const [errors, setErrors] = useState({});
   const [message, setMessage] = useState("");
 
-  // Fetch Branch Data + Organizations
+  // Fetch Branch Data and Organizations
   useEffect(() => {
     //  Load existing branch data
      API.get(`/branches/${id}`)
@@ -42,18 +41,15 @@ export default function BranchEdit() {
 
   // Validation
   const validate = () => {
-    const newErrors = {};
-if (!formData.name.trim()) newErrors.name = "Name is required";
+  const newErrors = {};
+    if (!formData.name.trim()) newErrors.name = "Name is required";
     if (!formData.email.trim()) newErrors.email = "Email is required";
     else if (!/^\S+@\S+\.\S+$/.test(formData.email))
       newErrors.email = "Invalid email";
-
-    if (!formData.phone.trim()) newErrors.phone = "Phone is required";
+      if (!formData.phone.trim()) newErrors.phone = "Phone is required";
     else if (!/^\d{10,}$/.test(formData.phone))
       newErrors.phone = "Phone must be at least 10 digits";
-
     if (!formData.address.trim()) newErrors.address = "Address is required";
-
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -61,9 +57,7 @@ if (!formData.name.trim()) newErrors.name = "Name is required";
   // Submit / Update Handler
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     if (!validate()) return;
-
     try {
       await 
       API.put(`/branches/${id}`,formData);
@@ -76,7 +70,7 @@ if (!formData.name.trim()) newErrors.name = "Name is required";
     }
   };
 
-  // Back Button
+  // Button
   const goBack = () => navigate("/admin/dashboard/branches");
   return (
     <div className="max-w-3xl mx-auto mt-10 p-6 bg-white rounded-xl shadow-lg">
@@ -96,7 +90,7 @@ if (!formData.name.trim()) newErrors.name = "Name is required";
 
       <form className="space-y-4" onSubmit={handleSubmit}>
         
-        {/* Organization (Disabled) */}
+        {/* Organization  */}
         <div >
           <label className="block font-medium mb-2">Organization</label>
 
@@ -112,9 +106,7 @@ if (!formData.name.trim()) newErrors.name = "Name is required";
               </option>
             ))}
           </select>
-
-    
-        </div>
+         </div>
 
         {/* Branch Name */}
         <div>
