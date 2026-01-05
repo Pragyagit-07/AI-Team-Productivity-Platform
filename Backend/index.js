@@ -185,7 +185,7 @@ ActivityLog.belongsTo(User, { foreignKey: 'userId' });
 
 /*  START SERVER */
 sequelize
-.sync({ force: false,  })
+.sync({ force: false, })
   .then(() => {
     console.log(' Database synced successfully');
     const PORT = process.env.PORT || 5000;

@@ -1,77 +1,79 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../db");
-
 const User = sequelize.define(
   "User",
   {
-    id: {
+     id: {
       type: DataTypes.UUID,
       defaultValue: DataTypes.UUIDV4,
       primaryKey: true,
     },
-    name: { type: DataTypes.STRING, allowNull: false },
+    name: { 
+      type: DataTypes.STRING, 
+      allowNull: false 
+    },
     avatar: {
-  type: DataTypes.STRING,
-  allowNull: true,
-},
-
-    email: { type: DataTypes.STRING, allowNull: false, unique: true },
-    passwordHash: { type: DataTypes.STRING, allowNull: false },
+     type: DataTypes.STRING,
+      allowNull: true,
+    },
+    email: { 
+      type: DataTypes.STRING, 
+      allowNull: false, 
+      unique: true 
+    },
+    passwordHash: { 
+      type: DataTypes.STRING, 
+      allowNull: false 
+    },
     role: {
       type: DataTypes.ENUM("admin", "member"),
       defaultValue: "member",
     },
-isVerified: {
-  type: DataTypes.BOOLEAN,
-  defaultValue: false,
-},
-emailVerifyOtp: {
-  type: DataTypes.STRING,
-  allowNull: true,
-},
-emailVerifyOtpExpires: {
-  type: DataTypes.DATE,
-  allowNull: true,
-},
-
-resetOtp: {
+    isVerified: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: false,
+   },
+    emailVerifyOtp: {
+    type: DataTypes.STRING,
+    allowNull: true,
+   },
+    emailVerifyOtpExpires: {
+    type: DataTypes.DATE,
+    allowNull: true,
+  },
+    resetOtp: {
       type: DataTypes.STRING,
       allowNull: true,
-    },
+  },
     resetOtpExpires: {
       type: DataTypes.DATE,
       allowNull: true,
-    },
+  },
     subscriptionPlan: {
-  type: DataTypes.ENUM("free", "pro", "team"),
-  defaultValue: "free",
-},
+    type: DataTypes.ENUM("free", "pro", "team"),
+    defaultValue: "free",
+  },
 
-subscriptionExpiry: {
-  type: DataTypes.DATE,
-  allowNull: true,
-},
-
-aiCredits: {
+   subscriptionExpiry: {
+   type: DataTypes.DATE,
+   allowNull: true,
+  },
+   aiCredits: {
   type: DataTypes.INTEGER,
   defaultValue: 5,
-},
-
-preferences: {
+ },
+  preferences: {
   type: DataTypes.JSON,
   defaultValue: {
     theme: "light",
     notifications: true,
   },
 },
-
-  },
-  
+},
   {
     tableName: "users",
     timestamps: true,
   }
-  
 );
 
 module.exports = User;

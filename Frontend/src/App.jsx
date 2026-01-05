@@ -48,6 +48,7 @@ import TaskView from "./pages/member/Tasks/TaskView";
 import CalendarTab from "./pages/member/Calender";
 import Activity from "./pages/member/Activity";
 import ProfileSetting from "./pages/member/ProfileSetting";
+import Subscriptions from "./pages/member/Subscriptions";
 
 function TaskBoardWrapper() {
   const { projectId } = useParams();
@@ -113,6 +114,8 @@ function App() {
       <Route path="calender" element={<CalendarTab />} />
       <Route path="activity" element={<Activity />} />
       <Route path="profile" element={<ProfileSetting />} />
+      <Route path="subscriptions" element={<Subscriptions />} />
+
 </Route>
 
 
