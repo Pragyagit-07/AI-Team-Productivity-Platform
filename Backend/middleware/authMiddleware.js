@@ -20,6 +20,9 @@ module.exports = (req, res, next) => {
     };
 
     next();
+    console.log("JWT_SECRET:", process.env.JWT_SECRET);
+console.log("TOKEN RECEIVED:", token);
+
   } catch (err) {
     console.error("Auth middleware error:", err);
     return res.status(401).json({ msg: "Invalid token" });

@@ -26,7 +26,7 @@ exports.register = async (req, res) => {
       passwordHash,
       role: role || "member",
     });
-    // ===== EMAIL VERIFICATION OTP =====
+    //  EMAIL VERIFICATION OTP 
 const otp = Math.floor(100000 + Math.random() * 900000).toString();
 
 const hashedOtp = crypto
@@ -51,22 +51,6 @@ await sendEmail({
 });
 
 
-    // ✅ TOKEN CONTAINS ROLE
-    // const token = jwt.sign(
-      // { id: user.id, role: user.role },
-      // process.env.JWT_SECRET,
-      // { expiresIn: "7d" }
-    // );
-
-    // res.json({
-      // token,
-      // user: {
-        // id: user.id,
-        // name: user.name,
-        // email: user.email,
-        // role: user.role,
-      // },
-    // });
         res.status(201).json({
             msg: "Registration successful. Please verify your email. OTP snet to email",
             email,
@@ -80,7 +64,7 @@ await sendEmail({
   }
 };
 
-// ================= LOGIN =================
+//  LOGIN 
 exports.login = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -105,7 +89,7 @@ if (!user.isVerified) {
       return res.status(400).json({ msg: "Invalid credentials" });
     }
 
-    // ✅ TOKEN CONTAINS ROLE
+    // TOKEN CONTAINS ROLE
     const token = jwt.sign(
       { id: user.id, role: user.role },
       process.env.JWT_SECRET,
@@ -146,7 +130,7 @@ exports.forgotPassword = async (req, res) => {
       .digest("hex");
 
     user.resetOtp = hashedOtp;
-    user.resetOtpExpires = Date.now() + 10 * 60 * 1000; // ⏱ 10 minutes
+    user.resetOtpExpires = Date.now() + 10 * 60 * 1000; // 10 minutes
     await user.save();
 
     // Send email
