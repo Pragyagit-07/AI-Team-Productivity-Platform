@@ -100,6 +100,8 @@ if (Array.isArray(members) && members.length > 0) {
     await ActivityLog.create({
       action: "project_created",
       description: `${req.user.name} created project "${project.name}"`,
+          
+
       projectId: project.id,
       userId
     });

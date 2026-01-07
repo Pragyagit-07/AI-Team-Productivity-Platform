@@ -78,7 +78,7 @@ export default function SubscriptionTab({ user }) {
     {
       id: "pro",
       name: "Pro",
-      price: "₹100 / month",
+      price: "₹1000 / month",
       icon: Crown,
       gradient: "from-indigo-500 to-purple-600",
       features: [
@@ -103,6 +103,15 @@ export default function SubscriptionTab({ user }) {
       ],
     },
   ];
+  // const handleSubscribe = async (planId) => {
+  // if (!planId || planId === "free") {
+    // alert("Invalid plan");
+    // return;
+  // }
+
+  // const res = await API.post("/subscription/create-order", { planId });
+// };
+
 
   const handleSubscribe = async (planId) => {
   try {
@@ -129,42 +138,7 @@ export default function SubscriptionTab({ user }) {
 };
 
 
-  // const handleSubscribe = async (planId) => {
-  //   if (planId === "free") {
-  //     alert("You are already on Free plan");
-  //     return;
-  //   }
 
-  //   const res = await API.post("/subscription/create-order", { planId });
-  //   const { orderId, amount, currency } = res.data;
-  //   console.log(import.meta.env.VITE_RAZORPAY_KEY_ID);
-
-
-  //   const options = {
-  //     // key: process.env.REACT_APP_RAZORPAY_KEY_ID,
-  //     key: import.meta.env.VITE_RAZORPAY_KEY_ID,
-
-  //     amount,
-  //     currency,
-  //     name: "AI Team Productivity Platform",
-  //     order_id: orderId,
-  //     handler: async (response) => {
-  //       await API.post("/subscription/verify", {
-  //         planId,
-  //         ...response,
-  //       });
-  //       alert("Subscription activated successfully ");
-  //     },
-  //     prefill: {
-  //       email: user.email,
-  //       name: user.name,
-  //     },
-  //     theme: { color: "#4f46e5" },
-  //   };
-
-  //   const rzp = new window.Razorpay(options);
-  //   rzp.open();
-  // };
 
   return (
     <div className="space-y-6">

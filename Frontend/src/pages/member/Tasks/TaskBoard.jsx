@@ -137,8 +137,7 @@ export default function TaskBoard({ projectId, showAll }) {
           </button>
         </div>
 
-        {/* <div className="flex gap-4 p-4 overflow-x-auto">
-         */}
+  
          <div className="flex gap-4 p-4 overflow-x-auto w-full">
 
           {["todo", "inprogress", "done"].map((status) => (

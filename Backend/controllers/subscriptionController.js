@@ -8,18 +8,48 @@ const razorpay = new Razorpay({
   key_secret: process.env.RAZORPAY_SECRET, // Razorpay secret key, backend only
 });
 
+// exports.createOrder = async (req, res) => {
+  // const { planId } = req.body; // frontend sends planId
+  // const plans = { pro: 10000, team: 149900 }; // prices in paise
+
+  // const order = await razorpay.orders.create({
+    // amount: plans[planId], // required by Razorpay, paise
+    // currency: "INR",
+    // receipt: `receipt_${req.user.id}_${Date.now()}`, // unique receipt
+  // });
+
+  // res.json({ orderId: order.id, amount: order.amount, currency: order.currency });
+// };
 exports.createOrder = async (req, res) => {
-  const { planId } = req.body; // frontend sends planId
-  const plans = { pro: 10000, team: 149900 }; // prices in paise
+  try {
+    const { planId } = req.body;
 
-  const order = await razorpay.orders.create({
-    amount: plans[planId], // required by Razorpay, paise
-    currency: "INR",
-    receipt: `receipt_${req.user.id}_${Date.now()}`, // unique receipt
-  });
+    const plans = {
+      pro: 10000,
+      team: 149900,
+    };
 
-  res.json({ orderId: order.id, amount: order.amount, currency: order.currency });
+    if (!plans[planId]) {
+      return res.status(400).json({ msg: "Invalid plan selected" });
+    }
+
+    const order = await razorpay.orders.create({
+      amount: plans[planId],
+      currency: "INR",
+      receipt: `receipt_${req.user.id}_${Date.now()}`,
+    });
+
+    res.json({
+      orderId: order.id,
+      amount: order.amount,
+      currency: order.currency,
+    });
+  } catch (err) {
+    console.error("RAZORPAY ERROR:", err);
+    res.status(500).json({ msg: "Order creation failed" });
+  }
 };
+
 exports.getUserSubscriptions = async (req, res) => {
   try {
     const subs = await Subscription.findAll({ where: { userId: req.user.id } });

@@ -21,7 +21,9 @@ exports.uploadFile = async (req, res) => {
 
     await ActivityLog.create({
       action: 'file_uploaded',
-      description: `${req.user.name} uploaded file ${file.originalname}`,
+       description: `${req.user.name} uploaded file ${file.originalname}`,
+            // description: ` uploaded file ${file.originalname}`,
+
       taskId,
       projectId: task.projectId,
       userId: req.user.id

@@ -131,6 +131,8 @@ exports.createTask = async (req, res) => {
     await ActivityLog.create({
       action: "task_created",
       description: `${req.user.name} created task "${task.title}"`,
+            
+
       taskId: task.id,
       projectId: task.projectId,
       userId: req.user.id
