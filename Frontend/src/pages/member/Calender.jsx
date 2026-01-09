@@ -7,11 +7,9 @@ import startOfWeek from "date-fns/startOfWeek";
 import getDay from "date-fns/getDay";
 import enUS from "date-fns/locale/en-US";
 import "react-big-calendar/lib/css/react-big-calendar.css";
-
 import TaskDetailSidePanel from "../member/Tasks/TaskDetailSidePanel";
 
 const locales = { "en-US": enUS };
-
 const localizer = dateFnsLocalizer({
   format,
   parse,
@@ -24,7 +22,6 @@ export default function CalendarTab() {
   const [tasks, setTasks] = useState([]);
   const [currentDate, setCurrentDate] = useState(new Date());
   const [currentView, setCurrentView] = useState("month");
-
   const [selectedTaskId, setSelectedTaskId] = useState(null);
 
   // FETCH TASKS
@@ -75,18 +72,13 @@ export default function CalendarTab() {
   return (
     <div className="relative">
       {/* CALENDAR — stays fully visible */}
-      {/* <div className="p-4 bg-white rounded-md shadow">
-       */}
        <div className="p-3 sm:p-4 bg-white rounded-md shadow overflow-x-auto">
-
         <Calendar
           localizer={localizer}
           events={events}
           startAccessor="start"
           endAccessor="end"
           style={{ height: 600 }}
-          // style={{ height: "80vh" }}
-
           date={currentDate}
           view={currentView}
           onNavigate={setCurrentDate}

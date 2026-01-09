@@ -42,37 +42,27 @@ useEffect(() => {
   const handleLogout = () => {
     // for socket
     socket.disconnect();
-// 
-    localStorage.removeItem("memberToken");
-    localStorage.removeItem("memberId");
-window.location.href = "/login";
-
+   localStorage.removeItem("memberToken");
+   localStorage.removeItem("memberId");
+    window.location.href = "/login";
   };
   
 
   return (
     
     <div className="flex min-h-screen w-full overflow-x-auto">
-
-      
-      <Sidebar
+          <Sidebar
         links={links}
         isOpen={sidebarOpen}
         onClose={() => setSidebarOpen(false)}
       />
-{/* 
-      <div
-        className="flex-1 flex flex-col"
-        onClick={() => setSidebarOpen(false)}
-        onDoubleClick={() => setSidebarOpen(true)}
-      > */}
       <div className="flex-1 flex flex-col">
-
         <Header
-          username="Member"
+          username="userId"
           onLogout={handleLogout}
           onMenuClick={() => setSidebarOpen(!sidebarOpen)}
             showNotifications={true}
+              onlineCount={onlineUsers.length}
 
         />
 
@@ -81,8 +71,7 @@ window.location.href = "/login";
 
           {/* <Outlet />*/}
            <Outlet context={{ onlineUsers }} />
-
-        </main>
+                   </main>
       </div>
     </div>
   );

@@ -6,7 +6,10 @@ export default function Header({
   username, 
   onLogout,
   onMenuClick ,   
+    onlineCount = 0,
+
   showNotifications = false
+  
 }) 
 {
   const [requests, setRequests] = useState([]);
@@ -26,6 +29,11 @@ export default function Header({
         <h1 className="text-base sm:text-xl font-bold truncate">
          Welcome, {username}
         </h1>
+        <div className="flex items-center gap-2 text-sm text-gray-600">
+  <span className="w-2 h-2 bg-green-500 rounded-full"></span>
+  <span>{onlineCount} online</span>
+</div>
+
       </div>
 
       <div className="flex items-center gap-4 relative">

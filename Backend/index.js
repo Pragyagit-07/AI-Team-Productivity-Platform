@@ -175,9 +175,7 @@ User.hasMany(File, { foreignKey: 'userId' });
 File.belongsTo(User, { foreignKey: 'userId' });
 
 // Task ↔ Activity Logs
-
-
- Task.hasMany(ActivityLog, { foreignKey: 'taskId', as: 'activities' , onDelete: 'setNull',  hooks: true});
+Task.hasMany(ActivityLog, { foreignKey: 'taskId', as: 'activities' , onDelete: 'setNull',  hooks: true});
  ActivityLog.belongsTo(Task, { foreignKey: 'taskId',    onDelete: 'CASCADE'});
 
 User.hasMany(ActivityLog, { foreignKey: 'userId' });
