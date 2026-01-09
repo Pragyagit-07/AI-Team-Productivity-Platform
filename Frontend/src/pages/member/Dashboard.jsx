@@ -3,10 +3,14 @@ import { useState, useEffect } from "react";
 import Sidebar from "../../components/Sidebar";
 import Header from "../../components/Header";
 import socket from "../../socket";
+import API from "../../api/axios"; 
 
 export default function MemberDashboard() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [onlineUsers, setOnlineUsers] = useState([]);
+const [memberName, setMemberName] = useState("");
+
+
   const links = [
     {name: "Home", path: "/dashboard"},
     { name: "Projects", path: "/dashboard/projects" },
@@ -32,10 +36,22 @@ useEffect(() => {
     setOnlineUsers((prev) => prev.filter((id) => id !== userId));
   });
 
+
   return () => {
     socket.off("user-online");
     socket.off("user-offline");
   };
+}, []);
+
+useEffect(() => {
+  API.get("/auth/me")
+    .then(res => {
+      setMemberName(res.data.name);
+    })
+    .catch(err => {
+      console.error("ME ERROR:", err.response?.data);
+      setMemberName("Member");
+    });
 }, []);
 
 
@@ -58,7 +74,10 @@ useEffect(() => {
       />
       <div className="flex-1 flex flex-col">
         <Header
-          username="userId"
+          // username="member"
+            username={memberName}
+
+
           onLogout={handleLogout}
           onMenuClick={() => setSidebarOpen(!sidebarOpen)}
             showNotifications={true}

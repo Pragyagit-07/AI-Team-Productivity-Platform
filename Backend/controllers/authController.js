@@ -217,3 +217,20 @@ exports.verifyEmail = async (req, res) => {
     res.status(500).json({ msg: "Email verification failed" });
   }
 };
+// ================= GET CURRENT USER =================
+exports.getMe = async (req, res) => {
+  try {
+    const user = await User.findByPk(req.user.id, {
+      attributes: ["id", "name", "email", "role", "avatar"],
+    });
+
+    if (!user) {
+      return res.status(404).json({ msg: "User not found" });
+    }
+
+    res.json(user);
+  } catch (err) {
+    console.error("getMe error:", err);
+    res.status(500).json({ msg: "Server error" });
+  }
+};
