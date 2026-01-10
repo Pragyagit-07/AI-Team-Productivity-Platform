@@ -77,6 +77,9 @@ const branchRoutes = require('./routes/branchRoutes');
 const orgUserRoutes = require('./routes/orgUserRoutes');
 const dashboardRoutes = require('./routes/dashboardRoutes');
 const projectRequestRoutes = require('./routes/projectRequest');
+const aiAssistantRoutes = require("./routes/aiAssistantRoutes");
+
+
 // ROUTE MOUNTS 
 // Admin / Org
 app.use('/api/admin', adminRoutes);
@@ -102,6 +105,8 @@ app.use('/api/activity', activityRoutes);
 
 // Other
 app.use('/api/subscription', subscriptionRoutes);
+app.use("/api/ai-assistant", aiAssistantRoutes);
+
 app.use('/api/chat', chatRoutes);
 
 //  ASSOCIATIONS 

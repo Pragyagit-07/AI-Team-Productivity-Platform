@@ -11,7 +11,6 @@ exports.getAllProjects = async (req, res) => {
     const page = parseInt(req.query.page) || 1;
     const pageSize = parseInt(req.query.pageSize) || 5;
     const offset = (page - 1) * pageSize;
-
     const { count, rows } = await Project.findAndCountAll({
       limit: pageSize,
       offset,
@@ -50,9 +49,7 @@ exports.getAllProjects = async (req, res) => {
   }
 };
 
-/* ============================
-   CREATE PROJECT
-   ============================ */
+/*  CREATE PROJECT */
 
 exports.createProject = async (req, res) => {
   try {

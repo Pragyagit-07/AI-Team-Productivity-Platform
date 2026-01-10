@@ -6,8 +6,7 @@ export default function Header({
   username, 
   onLogout,
   onMenuClick ,   
-    onlineCount = 0,
-
+  onlineCount = 0,
   showNotifications = false
   
 }) 

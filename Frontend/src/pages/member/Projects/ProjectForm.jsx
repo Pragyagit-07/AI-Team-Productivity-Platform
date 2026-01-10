@@ -27,7 +27,6 @@ export default function ProjectForm() {
     const fetchMembers = async () => {
       try {
         const res = await API.get("/members");
-
         setAllUsers(res.data);
       } catch (err) {
         console.error(err);

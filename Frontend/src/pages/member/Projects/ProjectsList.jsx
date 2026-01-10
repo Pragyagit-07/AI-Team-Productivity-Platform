@@ -118,7 +118,7 @@ export default function ProjectsList() {
       </div>
 
       {/* PAGINATION */}
-      {/* <div className="flex justify-end mt-6 gap-4 items-center flex-wrap"> */}
+      
       <div className="flex justify-center sm:justify-end mt-6 gap-4 items-center flex-wrap">
 
         <button

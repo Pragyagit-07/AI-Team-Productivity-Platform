@@ -44,12 +44,13 @@ import TaskForm from "./pages/member/Tasks/TaskForm";
 import TaskList from "./pages/member/Tasks/TaskList";
 import TaskView from "./pages/member/Tasks/TaskView";
 
-// calender page
+
 import CalendarTab from "./pages/member/Calender";
 import Activity from "./pages/member/Activity";
 import ProfileSetting from "./pages/member/ProfileSetting";
 import Subscriptions from "./pages/member/Subscriptions";
-
+import ai from "./pages/member/AIAssistant";
+import AIAssistant from "./pages/member/AIAssistant";
 function TaskBoardWrapper() {
   const { projectId } = useParams();
   return <TaskBoard projectId={projectId} />;
@@ -115,6 +116,8 @@ function App() {
       <Route path="activity" element={<Activity />} />
       <Route path="profile" element={<ProfileSetting />} />
       <Route path="subscriptions" element={<Subscriptions />} />
+      <Route path="ai" element={<AIAssistant />} />
+
 
 </Route>
 
