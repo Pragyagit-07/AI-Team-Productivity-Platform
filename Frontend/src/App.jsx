@@ -49,8 +49,9 @@ import CalendarTab from "./pages/member/Calender";
 import Activity from "./pages/member/Activity";
 import ProfileSetting from "./pages/member/ProfileSetting";
 import Subscriptions from "./pages/member/Subscriptions";
-import ai from "./pages/member/AIAssistant";
+
 import AIAssistant from "./pages/member/AIAssistant";
+import FloatingAIChat  from "./pages/member/FloatingAIChat";
 function TaskBoardWrapper() {
   const { projectId } = useParams();
   return <TaskBoard projectId={projectId} />;
@@ -63,8 +64,12 @@ function TaskFormWrapper() {
 
 function App() {
   return (
+    <>
+                <FloatingAIChat />
+
     <Routes>
       {/* Default */}
+
       <Route path="/" element={<Navigate to="/login" />} />
       
 
@@ -97,6 +102,7 @@ function App() {
        </Route>
 
       {/* Member */}
+
       <Route path="/login" element={<MemberLogin />} />
       <Route path="/register" element={<MemberRegister />} />
       <Route path="/verify-email" element={<VerifyEmail />} />
@@ -128,6 +134,7 @@ function App() {
         element={<div className="text-center mt-20 text-red-500 text-xl">Page Not Found</div>}
       />
     </Routes>
+    </>
   );
 }
 

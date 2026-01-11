@@ -106,6 +106,7 @@ app.use('/api/activity', activityRoutes);
 // Other
 app.use('/api/subscription', subscriptionRoutes);
 app.use("/api/ai-assistant", aiAssistantRoutes);
+app.use("/help-bot", require("./routes/helpBotRoutes"));
 
 app.use('/api/chat', chatRoutes);
 

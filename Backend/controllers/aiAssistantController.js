@@ -13,7 +13,7 @@ exports.taskAIHelper = async (req, res) => {
     // user from auth middleware
     const user = req.user;
 
-    // 🔐 subscription check
+    // subscription check
     if (!["pro", "team"].includes(user.subscriptionPlan)) {
       return res.status(403).json({
         msg: "Upgrade to Pro or Team to use AI Assistance",
@@ -65,3 +65,4 @@ exports.taskAIHelper = async (req, res) => {
     res.status(500).json({ msg: "AI service error" });
   }
 };
+
