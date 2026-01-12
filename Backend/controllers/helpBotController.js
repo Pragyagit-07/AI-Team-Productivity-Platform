@@ -8,7 +8,7 @@ exports.chatWithBot = async (req, res) => {
   if (msg.includes("create project")) {
     reply = "Go to Dashboard → Projects → Create Project ";
   } else if (msg.includes("add task")) {
-    reply = "Open a project → Click Add Task → Save ";
+    reply = "Open a project -> Click Add Task → Save ";
   } else if (msg.includes("subscription")) {
     reply = "Manage your plan from Profile → Subscriptions ";
   }

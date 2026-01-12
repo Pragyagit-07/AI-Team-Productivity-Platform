@@ -29,13 +29,9 @@ export default function ProjectsList() {
   }, [page]);
 
   return (
-    // <div className="p-6 bg-gray-50 min-h-screen">
     <div className="p-3 sm:p-6 bg-gray-50 min-h-screen">
-
-      {/* <div className="flex justify-between items-center mb-6"> */}
-      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 mb-6">
-
-        <h1 className="text-2xl font-bold text-gray-800">Projects</h1>
+    <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 mb-6">
+      <h1 className="text-2xl font-bold text-gray-800">Projects</h1>
         <Link
           to="/dashboard/projects/add"
           className="bg-blue-500 hover:bg-blue-600 text-white px-5 py-2 rounded-lg shadow"
@@ -43,11 +39,8 @@ export default function ProjectsList() {
           + Add Project
         </Link>
       </div>
-
-
         <div className="bg-white shadow rounded-lg overflow-x-auto">
-  <table className="min-w-[800px] w-full">
-
+         <table className="min-w-[800px] w-full">
           <thead className="bg-gray-100">
             <tr>
               <th className="text-left px-6 py-3 text-gray-700 font-medium">Name</th>
@@ -67,7 +60,7 @@ export default function ProjectsList() {
               >
                 <td className="px-3 sm:px-6 py-3 text-gray-800">{project.name}</td>
 
-                <td className="px-6 py-4 text-gray-800 capitalize">
+               <td className="px-6 py-4 text-gray-800 capitalize">
                   {project.status}
                 </td>
 
@@ -118,9 +111,7 @@ export default function ProjectsList() {
       </div>
 
       {/* PAGINATION */}
-      
       <div className="flex justify-center sm:justify-end mt-6 gap-4 items-center flex-wrap">
-
         <button
           disabled={page === 1}
           onClick={() => setPage(page - 1)}

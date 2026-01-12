@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import API from "../../api/axios";
-import {
-  CheckCircle,
+import {  
   Trash2,
   Edit3,
   FileText,
@@ -41,13 +40,10 @@ export default function Activity() {
 
   return (
     <div className="p-6 min-h-screen bg-gray-100">
-     
-
-      <div className="relative max-w-4xl mx-auto">
+     <div className="relative max-w-4xl mx-auto">
         {/* Timeline line */}
         <div className="hidden md:block absolute left-5 top-0 bottom-0 w-px bg-gray-300" />
-
-        <AnimatePresence>
+           <AnimatePresence>
           <div className="space-y-8">
             {activities.length === 0 && (
               <p className="text-center text-gray-500 mt-10">No activity yet</p>
@@ -87,8 +83,7 @@ export default function Activity() {
                     <p className="text-xs text-gray-400 mt-2">
                       {new Date(a.createdAt).toLocaleString()}
                     </p>
-                    
-                  </div>
+                   </div>
                 </motion.div>
               );
             })}

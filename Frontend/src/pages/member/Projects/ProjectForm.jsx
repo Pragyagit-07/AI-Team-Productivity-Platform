@@ -43,8 +43,7 @@ export default function ProjectForm() {
       try {
         setLoading(true);
         const res = await API.get(`/projects/${id}`);
-
-        const { name, description, status, startDate, endDate, members } = res.data;
+       const { name, description, status, startDate, endDate, members } = res.data;
         setFormData({
           name,
           description,
@@ -95,8 +94,7 @@ export default function ProjectForm() {
         await API.post("/projects", payload);
 
       }
-
-      navigate("/dashboard/projects");
+     navigate("/dashboard/projects");
     } catch (err) {
       console.error(err);
       setError(err.response?.data?.msg || "Something went wrong");
@@ -131,8 +129,7 @@ export default function ProjectForm() {
             {id ? "Edit Project" : "Create Project"}
           </h2>
         </div>
-
-        {error && <p className="text-red-500 mb-4">{error}</p>}
+           {error && <p className="text-red-500 mb-4">{error}</p>}
 
         <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Project Name */}

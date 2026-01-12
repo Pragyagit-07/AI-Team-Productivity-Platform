@@ -23,7 +23,7 @@ const API_URL = import.meta.env.VITE_API_URL;
   useEffect(() => {
     if (taskId) fetchTaskDetails();
   }, [taskId]);
-  // for description
+  
   useEffect(() => {
   if (task?.description !== undefined) {
     setDescription(task.description || "");
@@ -86,7 +86,7 @@ const uploadFile = async (file) => {
 
   if (!task) return null;
 
-  /*  COLOR HELPERS */
+  
   const priorityColor =
     task.priority === "high"
       ? "bg-red-200 text-red-800"
@@ -103,7 +103,7 @@ const uploadFile = async (file) => {
 
   
   return (
-    // <div className="fixed inset-y-0 right-0 z-40 w-full sm:w-[460px] bg-white shadow-xl overflow-hidden">
+    
 <div className="fixed insect-y-0 sm:inset-y-0 sm:right-0 z-40 
   w-full sm:w-[460px] 
   bg-white shadow-xl 
@@ -333,15 +333,13 @@ const uploadFile = async (file) => {
     </label>
 
     {/* FILE LIST — SCROLL */}
-    
-        <div className="flex-1 overflow-y-auto space-y-4 pr-2">
-
-      {task.files?.length === 0 && (
+          <div className="flex-1 overflow-y-auto space-y-4 pr-2">
+         {task.files?.length === 0 && (
         <p className="text-sm text-gray-400">No files uploaded</p>
       )}
 
     
-{task.files?.map((f) => (
+  {task.files?.map((f) => (
   <div key={f.id} className="flex items-center justify-between gap-3">
 
     {/* ICON */}
@@ -354,20 +352,14 @@ const uploadFile = async (file) => {
       {f.type?.startsWith("image") ? (
         <img
          src={`${API_URL}/${f.path}`}
-              
-
           alt={f.name}
           className="w-20 h-20 object-cover rounded border"
         />
       ) : (
         <a
            href={`${API_URL}/${f.path}`}
-            
-
-          target="_blank"
-            
-
-          className="text-sm text-blue-600 hover:underline"
+            target="_blank"
+            className="text-sm text-blue-600 hover:underline"
         >
           {f.name}
         </a>
@@ -379,12 +371,11 @@ const uploadFile = async (file) => {
       {new Date(f.createdAt).toLocaleDateString()}
     </div>
   </div>
-))}
-</div>
-</div>
-)}
-
-    </div>
+   ))}
+  </div>
+ </div>
+ )}
+   </div>
     </div>
   );
 }

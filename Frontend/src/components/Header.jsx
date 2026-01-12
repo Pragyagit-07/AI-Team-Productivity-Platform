@@ -29,10 +29,9 @@ export default function Header({
          Welcome, {username}
         </h1>
         <div className="flex items-center gap-2 text-sm text-gray-600">
-  <span className="w-2 h-2 bg-green-500 rounded-full"></span>
-  <span>{onlineCount} online</span>
-</div>
-
+        <span className="w-2 h-2 bg-green-500 rounded-full"></span>
+         <span>{onlineCount} online</span>
+      </div>
       </div>
 
       <div className="flex items-center gap-4 relative">

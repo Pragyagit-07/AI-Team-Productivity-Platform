@@ -16,7 +16,6 @@ export default function TaskForm({ projectId, onTaskSaved }) {
     dueDate: "",
     assigneeId: "", 
   });
-
   const [members, setMembers] = useState([]); 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -26,10 +25,8 @@ export default function TaskForm({ projectId, onTaskSaved }) {
   // Fetch project members for assignee select
   useEffect(() => {
   if (!projectIdState) return;
-
   const fetchMembers = async () => {
     try {
-      
       const res = await API.get(`/projects/${projectIdState}/members`);
       setMembers(res.data);
     } catch {

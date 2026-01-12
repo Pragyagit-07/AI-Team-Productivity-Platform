@@ -6,13 +6,11 @@ import {
   Pencil,
   Trash2,
   Calendar,
-  User,
-  Flag,
+   Flag,
   Layers,
   Clock,
   Users
 } from "lucide-react";
-
 export default function TaskView() {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -49,7 +47,6 @@ export default function TaskView() {
 
   const formatDate = (date) =>
     date ? new Date(date).toLocaleDateString("en-IN") : "-";
-
   const statusColor = (s) =>
     s === "done"
       ? "bg-green-100 text-green-700"
@@ -85,13 +82,13 @@ export default function TaskView() {
             onClick={() => navigate(`/dashboard/tasks/edit/${task.id}`)}
             className="flex items-center gap-2 px-4 py-2 bg-yellow-500 text-white rounded-lg"
           >
-            <Pencil size={16} /> Edit
+            <Pencil size={16} /> 
           </button>
           <button
             onClick={handleDelete}
             className="flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-lg"
           >
-            <Trash2 size={16} /> Delete
+            <Trash2 size={16} /> 
           </button>
         </div>
       </div>
@@ -125,9 +122,7 @@ export default function TaskView() {
           <p className="mb-3">
             <b>Description:</b><br />
             <span className="text-gray-600">
-                            
-
-              {task.Project?.description || "No description"}
+            {task.Project?.description || "No description"}
             </span>
           </p>
 
@@ -162,17 +157,14 @@ export default function TaskView() {
           </h2>
 
           <p className="mb-2"><b>Title:</b> {task.title}</p>
-
           <p className="mb-2">
             <b>Start Date:</b>{" "}
             {formatDate(task.startDate || task.createdAt)}
           </p>
-
           <p className="mb-2">
-            <b>Due Date:</b> {formatDate(task.dueDate)}
+          <b>Due Date:</b> {formatDate(task.dueDate)}
           </p>
-
-          <p className="mb-2">
+           <p className="mb-2">
             <b>Status:</b>{" "}
             <span className={`px-2 py-1 rounded ${statusColor(task.status)}`}>
               {task.status}
