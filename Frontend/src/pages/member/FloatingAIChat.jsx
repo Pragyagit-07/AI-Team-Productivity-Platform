@@ -62,7 +62,7 @@ export default function FloatingAIChat() {
       {/* Chat Window */}
       {open && (
         <div className="fixed bottom-24 right-6 z-50 w-[360px] max-w-[90vw]
-        bg-white rounded-3xl shadow-2xl border overflow-hidden">
+        bg-white rounded-3xl shadow-2xl  overflow-hidden">
 
           {/* Header */}
           <div className="flex items-center justify-between p-4
@@ -101,13 +101,13 @@ export default function FloatingAIChat() {
           </div>
 
           {/* Input */}
-          <div className="p-3 border-t flex gap-2">
+          <div className="p-3  flex gap-2">
             <input
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && sendMessage()}
               placeholder="Ask something..."
-              className="flex-1 px-4 py-2 rounded-full border outline-none
+              className="flex-1 px-4 py-2 rounded-full  outline-none
               focus:ring-2 focus:ring-purple-500"
             />
             <button
