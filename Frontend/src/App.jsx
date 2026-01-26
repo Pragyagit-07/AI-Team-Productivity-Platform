@@ -25,6 +25,10 @@ import OrgUserTable from "./pages/admin/OrgUsers/OrgUserTable";
 import OrgUserEdit from "./pages/admin/OrgUsers/OrgUserEdit";
 import OrgUserView from "./pages/admin/OrgUsers/OrgUserView";
 
+// import OrgUserLogin from "./pages/org-auth/Login";
+
+
+
 // Member Pages
 import MemberLogin from "./pages/member/Login";
 import MemberRegister from "./pages/member/Register";
@@ -80,6 +84,7 @@ function App() {
       {/* ADMIN DASHBOARD WRAPPER  */}
       <Route path="/admin/dashboard/*" element={<AdminDashboard />}>
 
+
         {/* Dashboard Home  */}
         <Route index element={<DashboardHome />} />
         {/* ORGANIZATION ROUTES*/}
@@ -87,6 +92,8 @@ function App() {
         <Route path="organization/add" element={<OrganizationForm />} />
         <Route path="organization/edit/:id" element={<OrganizationEdit />} />
         <Route path="organization/view/:id" element={<OrganizationView />} />
+        
+
 
         {/*  BRANCH ROUTES */}
         <Route path="branches" element={<BranchTable />} />
@@ -100,6 +107,12 @@ function App() {
         <Route path="org-users/edit/:id" element={<OrgUserEdit />} />
         <Route path="org-users/view/:id" element={<OrgUserView />} />
        </Route>
+
+       {/* ORG USER */}
+{/* <Route path="/org/login" element={<OrgUserLogin />} /> */}
+
+
+
 
       {/* Member */}
 

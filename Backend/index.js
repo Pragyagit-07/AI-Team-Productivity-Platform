@@ -78,7 +78,8 @@ const orgUserRoutes = require('./routes/orgUserRoutes');
 const dashboardRoutes = require('./routes/dashboardRoutes');
 const projectRequestRoutes = require('./routes/projectRequest');
 const aiAssistantRoutes = require("./routes/aiAssistantRoutes");
-
+// org-user  side
+// const orgAuthRoutes = require("./routes/orgAuth.routes");
 
 // ROUTE MOUNTS 
 // Admin / Org
@@ -86,6 +87,8 @@ app.use('/api/admin', adminRoutes);
 app.use('/api/organizations', organizationRoutes);
 app.use('/api/branches', branchRoutes);
 app.use('/api/org-users', orgUserRoutes);
+// app.use('/org-auth', orgAuthRoutes);
+
 
 // Auth & Core
 app.use('/api/auth', authRoutes);
