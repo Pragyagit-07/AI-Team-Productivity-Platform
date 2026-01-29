@@ -24,10 +24,10 @@ exports.getAllActivities = async (req, res) => {
   try {
     const activities = await ActivityLog.findAll({
       include: [
-        // { model: User, attributes: ['id', 'name'] },
+        
                 { model: User, attributes: ['id', 'name', 'avatar'] },
 
-        { model: Task, attributes: ['id', 'title'] },
+              { model: Task, attributes: ['id', 'title'] },
 
       ],
       order: [['createdAt', 'DESC']],

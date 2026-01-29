@@ -20,7 +20,7 @@ export default function AdminDashboard() {
   };
 
   return (
-    // <div className="flex h-screen">
+    
         <div className="flex min-h-screen w-full overflow-x-auto">
 
       <Sidebar 
@@ -39,7 +39,7 @@ export default function AdminDashboard() {
   showNotifications={false}
 />
 
-        {/* <main className="p-6 bg-gray-100 flex-1 overflow-auto"> */}
+        
                 <main className="p-4 sm:p-6 bg-gray-100 flex-1 overflow-y-auto overflow-x-auto">
 
           <Outlet /> 

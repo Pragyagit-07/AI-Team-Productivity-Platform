@@ -184,23 +184,23 @@ User.hasMany(File, { foreignKey: 'userId' });
 File.belongsTo(User, { foreignKey: 'userId' });
 
 // Task ↔ Activity Logs
-Task.hasMany(ActivityLog, { foreignKey: 'taskId', as: 'activities' , onDelete: 'setNull',  hooks: true});
- ActivityLog.belongsTo(Task, { foreignKey: 'taskId',    onDelete: 'CASCADE'});
+Task.hasMany(ActivityLog, { foreignKey: 'taskId', as: 'activities' , onDelete: 'SET NULL',  hooks: true});
+ ActivityLog.belongsTo(Task, { foreignKey: 'taskId',    onDelete: 'SET NULL'});
  
 
 User.hasMany(ActivityLog, { foreignKey: 'userId' });
 ActivityLog.belongsTo(User, { foreignKey: 'userId' });
 
 // Project ↔ Activity Logs
-Project.hasMany(ActivityLog, {
-  foreignKey: "projectId",
-  as: "activities",
-  onDelete: "CASCADE",
-});
+// Project.hasMany(ActivityLog, {
+//   foreignKey: "projectId",
+//   as: "activities",
+//   onDelete: "CASCADE",
+// });
 
-ActivityLog.belongsTo(Project, {
-  foreignKey: "projectId",
-});
+// ActivityLog.belongsTo(Project, {
+//   foreignKey: "projectId",
+// });
 
 
 /*  START SERVER */
