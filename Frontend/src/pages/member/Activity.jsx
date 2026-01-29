@@ -50,7 +50,9 @@ export default function Activity() {
             )}
 
             {activities.map((a, index) => {
-              const ui = ACTION_UI[a.action] || ACTION_UI.task_updated;
+               const ui = ACTION_UI[a.action] || ACTION_UI.task_updated;
+                
+
               const Icon = ui.icon;
 
               return (
@@ -75,6 +77,7 @@ export default function Activity() {
                       {a.User?.name || "Someone"}{" "}
                       <span className="font-normal">{a.description}</span>
                     </p>
+                    
                     {a.Task && (
                       <p className="text-xs text-gray-500 mt-1">
                         Task: <span className="font-medium">{a.Task.title}</span>

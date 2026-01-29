@@ -186,9 +186,22 @@ File.belongsTo(User, { foreignKey: 'userId' });
 // Task ↔ Activity Logs
 Task.hasMany(ActivityLog, { foreignKey: 'taskId', as: 'activities' , onDelete: 'setNull',  hooks: true});
  ActivityLog.belongsTo(Task, { foreignKey: 'taskId',    onDelete: 'CASCADE'});
+ 
 
 User.hasMany(ActivityLog, { foreignKey: 'userId' });
 ActivityLog.belongsTo(User, { foreignKey: 'userId' });
+
+// Project ↔ Activity Logs
+Project.hasMany(ActivityLog, {
+  foreignKey: "projectId",
+  as: "activities",
+  onDelete: "CASCADE",
+});
+
+ActivityLog.belongsTo(Project, {
+  foreignKey: "projectId",
+});
+
 
 /*  START SERVER */
 sequelize

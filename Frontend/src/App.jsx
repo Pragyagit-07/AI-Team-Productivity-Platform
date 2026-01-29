@@ -25,7 +25,7 @@ import OrgUserTable from "./pages/admin/OrgUsers/OrgUserTable";
 import OrgUserEdit from "./pages/admin/OrgUsers/OrgUserEdit";
 import OrgUserView from "./pages/admin/OrgUsers/OrgUserView";
 
-// import OrgUserLogin from "./pages/org-auth/Login";
+
 
 
 
@@ -108,9 +108,7 @@ function App() {
         <Route path="org-users/view/:id" element={<OrgUserView />} />
        </Route>
 
-       {/* ORG USER */}
-{/* <Route path="/org/login" element={<OrgUserLogin />} /> */}
-
+       
 
 
 

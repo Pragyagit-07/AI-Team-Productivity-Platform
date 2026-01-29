@@ -65,4 +65,50 @@ exports.taskAIHelper = async (req, res) => {
     res.status(500).json({ msg: "AI service error" });
   }
 };
+exports.chatAIHelper = async (req, res) => {
+  try {
+    const { message } = req.body;
+    const user = req.user;
+
+    if (!message) {
+      return res.status(400).json({ msg: "Message is required" });
+    }
+
+    const systemPrompt = `
+You are an AI assistant inside a project management web app.
+
+Features:
+- Organizations, Branches, Projects, Tasks
+- Roles: Admin, Member
+- Activity logs, files, comments, dashboard
+
+Rules:
+- Explain features clearly
+- Give step-by-step guidance
+- Keep answers short and helpful
+`;
+
+    const completion = await openai.chat.completions.create({
+      model: "gpt-4o-mini",
+      messages: [
+        { role: "system", content: systemPrompt },
+        {
+          role: "user",
+          content: `
+User role: ${user.role}
+Question: ${message}
+          `,
+        },
+      ],
+    });
+
+    res.json({
+      reply: completion.choices[0].message.content,
+    });
+  } catch (err) {
+    console.error("AI CHAT ERROR:", err);
+    res.status(500).json({ msg: "AI chat failed" });
+  }
+};
+
 

@@ -1,6 +1,7 @@
 const ActivityLog = require('../models/ActivityLog');
 const User = require('../models/User');
 const Task = require("../models/Task");
+const Project = require("../models/Project");
 
 exports.getTaskActivities = async (req, res) => {
   try {
@@ -23,8 +24,11 @@ exports.getAllActivities = async (req, res) => {
   try {
     const activities = await ActivityLog.findAll({
       include: [
-        { model: User, attributes: ['id', 'name'] },
-        { model: Task, attributes: ['id', 'title'] }
+        // { model: User, attributes: ['id', 'name'] },
+                { model: User, attributes: ['id', 'name', 'avatar'] },
+
+        { model: Task, attributes: ['id', 'title'] },
+
       ],
       order: [['createdAt', 'DESC']],
       limit: 50
