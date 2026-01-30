@@ -12,14 +12,11 @@ exports.register = async (req, res) => {
     if (!name || !email || !password) {
       return res.status(400).json({ msg: "All fields required" });
     }
-
     const exists = await User.findOne({ where: { email } });
     if (exists) {
       return res.status(400).json({ msg: "User already exists" });
     }
-
     const passwordHash = await bcrypt.hash(password, 10);
-
     const user = await User.create({
       name,
       email,
@@ -39,6 +36,7 @@ user.emailVerifyOtpExpires = Date.now() + 10 * 60 * 1000; // 10 min
 await user.save();
 
 // Send verification email
+try{
 await sendEmail({
   to: email,
   subject: "Verify your email",
@@ -49,6 +47,10 @@ await sendEmail({
     <p>This OTP is valid for 10 minutes.</p>
   `,
 });
+  console.log("Verification email sent");
+} catch(err) {
+  console.log("Email failed", err.messege);
+}
 
 
         res.status(201).json({

@@ -9,10 +9,15 @@ const transporter = nodemailer.createTransport({
 });
 
 module.exports = async ({ to, subject, html }) => {
+  try{
   await transporter.sendMail({
     from: `"AI Team Platform" <${process.env.EMAIL_USER}>`,
     to,
     subject,
     html,
   });
+} catch (err){
+  console.error("send email error:", err );
+  throw err;
+}
 };

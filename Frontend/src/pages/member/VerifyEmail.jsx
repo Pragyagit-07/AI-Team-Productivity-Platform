@@ -9,7 +9,10 @@ export default function VerifyEmail() {
 
   const navigate = useNavigate();
   const location = useLocation();
-  const email = location.state?.email;
+  // const email = location.state?.email;
+  const email =
+  location.state?.email || localStorage.getItem("verifyEmail");
+
 
   const handleVerify = async (e) => {
     e.preventDefault();
