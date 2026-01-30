@@ -131,6 +131,8 @@ const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
     try {
       await API.post("/auth/register", { name, email, password });
+      localStorage.setItem("verifyEmail", email);
+
       navigate("/verify-email", { state: { email } });
     } catch (err) {
       setError(err.response?.data?.msg || "Registration failed");
