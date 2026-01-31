@@ -1,0 +1,1 @@
+For production i am using aiven cloud so that's email 2 step verification is not work on  production because i have cloud base sever IP if i use normal  2way step cerification it will not work  because of security purpose.I am using Brevo account for email verification because it help me work with production to verify email. for localhost i will use 2 way security authentication.

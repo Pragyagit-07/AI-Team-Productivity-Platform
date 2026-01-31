@@ -1,3 +1,4 @@
+// For local use
 // const { Sequelize } = require('sequelize');
 // require('dotenv').config();
 
@@ -19,6 +20,7 @@
 
 // module.exports = sequelize;
 
+// for production use
 
 const { Sequelize } = require("sequelize");
 require("dotenv").config();

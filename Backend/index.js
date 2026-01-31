@@ -1,3 +1,4 @@
+// for local
 // require('dotenv').config();
 // const http = require("http");
 // const { Server } = require("socket.io");
@@ -218,7 +219,7 @@
 //     console.error(' Sequelize Sync Error:', err);
 //   });
 
-
+// for production
 
 require("dotenv").config();
 
@@ -411,11 +412,11 @@ ActivityLog.belongsTo(User, { foreignKey: "userId" });
 sequelize
   .sync({ force: false })
   .then(() => {
-    console.log("✅ Database synced successfully");
+    console.log(" Database synced successfully");
 
     const PORT = process.env.PORT || 5000;
     server.listen(PORT, () => {
-      console.log(`🚀 Server running on port ${PORT}`);
+      console.log(` Server running on port ${PORT}`);
     });
   })
   .catch((err) => {
