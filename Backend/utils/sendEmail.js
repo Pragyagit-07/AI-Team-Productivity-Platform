@@ -59,7 +59,7 @@ const SibApiV3Sdk = require("sib-api-v3-sdk");
 const client = SibApiV3Sdk.ApiClient.instance;
 
 // Add API key
-client.authentications["api-key"].apiKey = process.env.Brevo_API_KEY;
+client.authentications["api-key"].apiKey = process.env.BREVO_API_KEY;
 
 // Create API instance
 const tranEmailApi = new SibApiV3Sdk.TransactionalEmailsApi();
