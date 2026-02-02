@@ -53,7 +53,7 @@
 
 
 
-const SibApiV3Sdk = require("sib_api_v3_sdk");
+const SibApiV3Sdk = require("sib-api-v3-sdk");
 
 // Get Brevo client
 const client = SibApiV3Sdk.ApiClient.instance;
