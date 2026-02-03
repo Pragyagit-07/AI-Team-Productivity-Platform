@@ -222,7 +222,6 @@
 // for production
 
 require("dotenv").config();
-
 const http = require("http");
 const express = require("express");
 const cors = require("cors");
@@ -231,9 +230,7 @@ const sequelize = require("./db");
 
 const app = express();
 
-/* ================================
-   ALLOWED ORIGINS (IMPORTANT)
-================================ */
+/*  ALLOWED ORIGINS */
 const allowedOrigins = [
   "http://localhost:5173",
   "http://localhost:3000",
@@ -241,16 +238,14 @@ const allowedOrigins = [
 
 ];
 
-/* ================================
-   MIDDLEWARE
-================================ */
+/* MIDDLEWARE */
 app.use(
   cors({
     origin: (origin, callback) => {
       if (!origin || allowedOrigins.includes(origin)) {
         callback(null, true);
       } else {
-        console.log("❌ Blocked by CORS:", origin);
+        console.log(" Blocked by CORS:", origin);
         callback(new Error("CORS not allowed"));
       }
     },
@@ -259,11 +254,9 @@ app.use(
 );
 
 app.use(express.json());
-app.use("/api/uploads", express.static("uploads"));
+// app.use("/api/uploads", express.static("uploads"));
 
-/* ================================
-   SERVER + SOCKET.IO
-================================ */
+/*  SERVER + SOCKET.IO */
 const server = http.createServer(app);
 
 const io = new Server(server, {
@@ -272,7 +265,7 @@ const io = new Server(server, {
       if (!origin || allowedOrigins.includes(origin)) {
         callback(null, true);
       } else {
-        console.log("❌ Socket blocked by CORS:", origin);
+        console.log(" Socket blocked by CORS:", origin);
         callback(new Error("CORS not allowed"));
       }
     },
@@ -285,17 +278,11 @@ const onlineUsers = new Map();
 // make socket available everywhere
 app.set("io", io);
 app.set("onlineUsers", onlineUsers);
-
-/* ================================
-   HEALTH CHECK (OPTIONAL)
-================================ */
 app.get("/", (req, res) => {
-  res.send("✅ Backend is running");
+  res.send(" Backend is running");
 });
 
-/* ================================
-   LOAD MODELS (ORDER MATTERS)
-================================ */
+/*  LOAD MODELS (ORDER MATTERS) */
 const User = require("./models/User");
 const Project = require("./models/Project");
 const Task = require("./models/Task");
@@ -309,25 +296,19 @@ require("./models/Organization");
 require("./models/Branch");
 require("./models/OrgUser");
 require("./models/ProjectJoinRequest");
-
 require("./socket")(io, onlineUsers);
 
-/* ================================
-   ROUTES
-================================ */
+/*  ROUTES */
 app.use("/api/auth", require("./routes/auth"));
 app.use("/api/profile", require("./routes/profileRoutes"));
 app.use("/api/members", require("./routes/memberRoutes"));
-
 app.use("/api/projects", require("./routes/projects"));
 app.use("/api/project-requests", require("./routes/projectRequest"));
 app.use("/api/dashboard", require("./routes/dashboardRoutes"));
-
 app.use("/api/tasks", require("./routes/tasks"));
 app.use("/api/comments", require("./routes/commentRoutes"));
 app.use("/api/files", require("./routes/fileRoutes"));
 app.use("/api/activity", require("./routes/activityRoutes"));
-
 app.use("/api/subscription", require("./routes/subscription"));
 app.use("/api/chat", require("./routes/chat"));
 app.use("/api/ai-assistant", require("./routes/aiAssistantRoutes"));
@@ -339,9 +320,7 @@ app.use("/api/organizations", require("./routes/organizationRoutes"));
 app.use("/api/branches", require("./routes/branchRoutes"));
 app.use("/api/org-users", require("./routes/orgUserRoutes"));
 
-/* ================================
-   ASSOCIATIONS
-================================ */
+/* ASSOCIATIONS */
 
 // Project creator
 Project.belongsTo(User, { foreignKey: "createdBy", as: "creator" });
@@ -375,7 +354,6 @@ Task.hasMany(Comment, {
   hooks: true,
 });
 Comment.belongsTo(Task, { foreignKey: "taskId", onDelete: "CASCADE" });
-
 User.hasMany(Comment, { foreignKey: "userId" });
 Comment.belongsTo(User, { foreignKey: "userId" });
 
@@ -387,7 +365,6 @@ Task.hasMany(File, {
   hooks: true,
 });
 File.belongsTo(Task, { foreignKey: "taskId", onDelete: "CASCADE" });
-
 User.hasMany(File, { foreignKey: "userId" });
 File.belongsTo(User, { foreignKey: "userId" });
 
@@ -406,9 +383,7 @@ ActivityLog.belongsTo(Task, {
 User.hasMany(ActivityLog, { foreignKey: "userId" });
 ActivityLog.belongsTo(User, { foreignKey: "userId" });
 
-/* ================================
-   START SERVER
-================================ */
+/* START SERVER */
 sequelize
   .sync({ force: false })
   .then(() => {
@@ -420,5 +395,5 @@ sequelize
     });
   })
   .catch((err) => {
-    console.error("❌ Sequelize Sync Error:", err);
+    console.error("Sequelize Sync Error:", err);
   });

@@ -41,6 +41,31 @@ exports.updateProfile = async (req, res) => {
 };
 
 // UPDATE AVATAR 
+// exports.updateAvatar = async (req, res) => {
+//   try {
+//     if (!req.file) {
+//       return res.status(400).json({ msg: "No file uploaded" });
+//     }
+
+//     const user = await User.findByPk(req.user.id);
+//     if (!user) {
+//       return res.status(404).json({ msg: "User not found" });
+//     }
+
+//     user.avatar = `/uploads/${req.file.filename}`;
+//     await user.save();
+
+//     res.json({
+//       msg: "Avatar updated successfully",
+//       avatar: user.avatar,
+//     });
+//   } catch (err) {
+//     console.error("Avatar update error:", err);
+//     res.status(500).json({ msg: "Server error" });
+//   }
+// };
+
+// UPDATE AVATAR (CLOUDINARY)
 exports.updateAvatar = async (req, res) => {
   try {
     if (!req.file) {
@@ -52,7 +77,9 @@ exports.updateAvatar = async (req, res) => {
       return res.status(404).json({ msg: "User not found" });
     }
 
-    user.avatar = `/uploads/${req.file.filename}`;
+    // ✅ Cloudinary gives full URL here
+    user.avatar = req.file.path;
+
     await user.save();
 
     res.json({

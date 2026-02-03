@@ -93,11 +93,13 @@ const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
         <div className="bg-white rounded-xl shadow p-6 flex flex-col items-center">
           <div className="relative group">
             <img
-              src={
-                profile.avatar
-                      ? `${BASE_URL}${profile.avatar}`
-                       : "/default-avatar.png"
-              }
+              // src={
+                // profile.avatar
+                      // ? `${BASE_URL}${profile.avatar}`
+                      //  : "/default-avatar.png"
+              // }
+                src={profile.avatar || "/default-avatar.png"}
+
               alt="avatar"
               className="w-32 h-32 rounded-full object-cover border"
             />

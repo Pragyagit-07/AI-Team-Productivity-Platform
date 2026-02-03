@@ -8,7 +8,7 @@ export default function TaskDetailSidePanel({ taskId, onClose, onTaskUpdated }) 
   const [newComment, setNewComment] = useState("");
   const token = localStorage.getItem("token");
 const [description, setDescription] = useState("");
-const API_URL = import.meta.env.VITE_API_URL;
+// const API_URL = import.meta.env.VITE_API_URL;
 
   /* FETCH */
   const fetchTaskDetails = async () => {
@@ -349,21 +349,38 @@ const uploadFile = async (file) => {
 
     {/* PREVIEW */}
     <div className="flex-1">
-      {f.type?.startsWith("image") ? (
-        <img
-         src={`${API_URL}/${f.path}`}
-          alt={f.name}
-          className="w-20 h-20 object-cover rounded border"
-        />
-      ) : (
-        <a
-           href={`${API_URL}/${f.path}`}
-            target="_blank"
-            className="text-sm text-blue-600 hover:underline"
-        >
-          {f.name}
-        </a>
-      )}
+      {/* {f.type?.startsWith("image") ? ( */}
+        {/* <img */}
+         {/* src={`${API_URL}/${f.path}`} */}
+          {/* alt={f.name} */}
+          {/* className="w-20 h-20 object-cover rounded border" */}
+        {/* /> */}
+      {/* ) : ( */}
+        {/* <a */}
+           {/* href={`${API_URL}/${f.path}`} */}
+            {/* target="_blank" */}
+            {/* className="text-sm text-blue-600 hover:underline" */}
+        {/* > */}
+          {/* {f.name} */}
+        {/* </a> */}
+      {/* )} */}
+      {f.mimeType?.startsWith("image") ? (
+  <img
+    src={f.path}              
+    alt={f.name}
+    className="w-20 h-20 object-cover rounded border"
+  />
+) : (
+  <a
+    href={f.path}             
+    target="_blank"
+    rel="noreferrer"
+    className="text-sm text-blue-600 hover:underline"
+  >
+    {f.name}
+  </a>
+)}
+
     </div>
 
     {/* DATE */}
