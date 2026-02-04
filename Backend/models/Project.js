@@ -17,5 +17,7 @@ const Project = sequelize.define('Project', {
   timestamps: true
 });
 
+
+
 module.exports = Project;
 

@@ -234,7 +234,7 @@ const app = express();
 const allowedOrigins = [
   "http://localhost:5173",
   "http://localhost:3000",
-    "https://ai-team-productivity-platform.vercel.app", 
+  "https://ai-team-productivity-platform.vercel.app", 
 
 ];
 
@@ -289,6 +289,8 @@ const Task = require("./models/Task");
 const Comment = require("./models/Comment");
 const File = require("./models/File");
 const ActivityLog = require("./models/ActivityLog");
+const ProjectJoinRequest = require("./models/ProjectJoinRequest");
+
 
 require("./models/Subscription");
 require("./models/ChatMessage");
@@ -345,6 +347,32 @@ User.belongsToMany(Project, {
   foreignKey: "userId",
   as: "projects",
 });
+
+
+// ProjectJoinRequest → Project
+ProjectJoinRequest.belongsTo(Project, {
+  foreignKey: "projectId",
+  as: "project",
+});
+
+// Project → ProjectJoinRequests
+Project.hasMany(ProjectJoinRequest, {
+  foreignKey: "projectId",
+  as: "joinRequests",
+});
+
+// ProjectJoinRequest → User
+ProjectJoinRequest.belongsTo(User, {
+  foreignKey: "userId",
+  as: "user",
+});
+
+// User → ProjectJoinRequests
+User.hasMany(ProjectJoinRequest, {
+  foreignKey: "userId",
+  as: "joinRequests",
+});
+
 
 // Task ↔ Comments
 Task.hasMany(Comment, {

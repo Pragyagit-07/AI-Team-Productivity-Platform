@@ -31,3 +31,4 @@ const ProjectJoinRequest = sequelize.define("ProjectJoinRequest", {
 });
 
 module.exports = ProjectJoinRequest;
+
