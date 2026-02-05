@@ -7,7 +7,7 @@ import API from "../../api/axios";
 
 export default function MemberDashboard() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [onlineUsers, setOnlineUsers] = useState([]);
+  const [onlineCount, setOnlineCount] = useState(0);
 const [memberName, setMemberName] = useState("");
 
 
@@ -26,20 +26,25 @@ useEffect(() => {
     socket.connect();
   }
 
-  socket.on("user-online", (userId) => {
-    setOnlineUsers((prev) =>
-      prev.includes(userId) ? prev : [...prev, userId]
-    );
-  });
+  // socket.on("user-online", (userId) => {
+    // setOnlineUsers((prev) =>
+      // prev.includes(userId) ? prev : [...prev, userId]
+    // );
+  // });
 
-  socket.on("user-offline", (userId) => {
-    setOnlineUsers((prev) => prev.filter((id) => id !== userId));
-  });
+  // socket.on("user-offline", (userId) => {
+    // setOnlineUsers((prev) => prev.filter((id) => id !== userId));
+  // });
+socket.on("online-count", (count) => {
+  setOnlineCount(count);
+});
 
 
   return () => {
-    socket.off("user-online");
-    socket.off("user-offline");
+    // socket.off("user-online");
+    // socket.off("user-offline");
+      socket.off("online-count");
+
   };
 }, []);
 
@@ -81,7 +86,9 @@ useEffect(() => {
           onLogout={handleLogout}
           onMenuClick={() => setSidebarOpen(!sidebarOpen)}
             showNotifications={true}
-              onlineCount={onlineUsers.length}
+              // onlineCount={onlineUsers.length}
+              onlineCount={onlineCount}
+
 
         />
 

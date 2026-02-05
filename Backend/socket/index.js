@@ -4,7 +4,7 @@ const jwt = require("jsonwebtoken");
 
 // const onlineUsers = new Map();
 
-module.exports = (io) => {
+module.exports = (io, onlineUsers) => {
   io.use((socket, next) => {
     const token = socket.handshake.auth?.token;
 
@@ -26,12 +26,16 @@ module.exports = (io) => {
 
     onlineUsers.set(userId, socket.id);
     console.log(" User online:", userId);
+  io.emit("onlineCount", onlineUsers.size);
 
     socket.on("disconnect", () => {
       onlineUsers.delete(userId);
       console.log(" User offline:", userId);
+      io.emit("onlineCount", onlineUsers.size);
+
     });
   });
+
 
   // return onlineUsers; 
 };
