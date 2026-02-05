@@ -1,4 +1,4 @@
-// For local use
+// For localhost use
 // const { Sequelize } = require('sequelize');
 // require('dotenv').config();
 
@@ -45,7 +45,7 @@ const sequelize = new Sequelize(
 
 // Test connection
 sequelize.authenticate()
-  .then(() => console.log("✅ MySQL Connected (Aiven + Sequelize)"))
-  .catch(err => console.error("❌ MySQL Connection Error:", err));
+  .then(() => console.log(" MySQL Connected (Aiven + Sequelize)"))
+  .catch(err => console.error(" MySQL Connection Error:", err));
 
 module.exports = sequelize;

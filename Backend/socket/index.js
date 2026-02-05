@@ -2,7 +2,7 @@
 
 const jwt = require("jsonwebtoken");
 
-const onlineUsers = new Map();
+// const onlineUsers = new Map();
 
 module.exports = (io) => {
   io.use((socket, next) => {
@@ -33,5 +33,5 @@ module.exports = (io) => {
     });
   });
 
-  return onlineUsers; 
+  // return onlineUsers; 
 };

@@ -1,4 +1,4 @@
-// for local
+// for localhost use 
 // require('dotenv').config();
 // const http = require("http");
 // const { Server } = require("socket.io");
@@ -219,7 +219,7 @@
 //     console.error(' Sequelize Sync Error:', err);
 //   });
 
-// for production
+// for production use
 
 require("dotenv").config();
 const http = require("http");
