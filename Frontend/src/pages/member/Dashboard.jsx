@@ -96,7 +96,8 @@ useEffect(() => {
         <main className="p-4 sm:p-6 bg-gray-100 flex-1 overflow-y-auto overflow-x-auto">
 
           {/* <Outlet />*/}
-           <Outlet context={{ onlineUsers }} />
+           {/* <Outlet context={{ onlineUsers }} /> */}
+           <Outlet />
                    </main>
       </div>
     </div>
