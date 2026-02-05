@@ -1,4 +1,4 @@
-// // for localuse
+// // for localhost use
 // // const nodemailer = require("nodemailer");
 
 // // const transporter = nodemailer.createTransport({
@@ -25,32 +25,6 @@
 // // };
 
 // // For production
-// const nodemailer = require("nodemailer");
-
-// const transporter = nodemailer.createTransport({
-//   host: "smtp-relay.brevo.com",
-//   port: 587,
-//   secure: false, // TLS
-//   auth: {
-//     user: "apikey",
-//     pass: process.env.Brevo_API_KEY,
-//   },
-// });
-
-// module.exports = async ({ to, subject, html }) => {
-//   try {
-//     await transporter.sendMail({
-//       from: `"AI Team Platform" <${process.env.EMAIL_USER}>`,
-//       to,
-//       subject,
-//       html,
-//     });
-//   } catch (error) {
-//     console.error(" Brevo email error:", error);
-//     throw error;
-//   }
-// };
-
 
 
 const SibApiV3Sdk = require("sib-api-v3-sdk");
@@ -80,10 +54,10 @@ module.exports = async ({ to, subject, html }) => {
       htmlContent: html,
     });
 
-    console.log("✅ OTP email sent:", response.messageId);
+    console.log(" OTP email sent:", response.messageId);
     return true;
   } catch (error) {
-    console.error("❌ Brevo API email error:", error);
+    console.error(" Brevo API email error:", error);
     throw error;
   }
 };

@@ -17,7 +17,7 @@ const File = sequelize.define('File', {
   userId: { type: DataTypes.UUID }
 }, { timestamps: true });
 
-// File.belongsTo(Task, { foreignKey: 'taskId' });
+
 File.belongsTo(User, { foreignKey: 'userId' });
 
 module.exports = File;
