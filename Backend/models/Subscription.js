@@ -2,7 +2,7 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../db');
 const User = require('./User');
-// create subscription table   => sequelize.define('Subscription', {  ......})   
+
 // id unique id for subscription             
  
 const Subscription = sequelize.define('Subscription', {                   
@@ -11,7 +11,7 @@ const Subscription = sequelize.define('Subscription', {
     defaultValue: DataTypes.UUIDV4,
     primaryKey: true
   },
-  plan: { type: DataTypes.STRING }, // plan name (pro/team/free)
+  plan: { type: DataTypes.STRING }, // plan name 
   status: { type: DataTypes.ENUM('active','inactive','cancelled') },
   expiryDate: { type: DataTypes.DATE } //  subscription expiry
 }, { tableName: 'subscriptions', timestamps: true });

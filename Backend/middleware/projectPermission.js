@@ -4,7 +4,6 @@ const User = require("../models/User");
 module.exports = async (req, res, next) => {
   try {
     const userId = req.user.id;
-
     const projectId =
       req.params.projectId ||
       req.params.id ||

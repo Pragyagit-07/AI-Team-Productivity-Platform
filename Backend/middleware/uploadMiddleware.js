@@ -54,7 +54,7 @@ const storage = new CloudinaryStorage({
       allowed_formats: ["jpg", "png", "jpeg", "webp", "pdf"],
       transformation: isImage
         ? [{ width: 300, height: 300, crop: "fill" }]
-        : undefined, // 🔥 VERY IMPORTANT
+        : undefined, 
     };
   },
 });

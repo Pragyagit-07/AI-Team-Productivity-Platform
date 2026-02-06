@@ -1,7 +1,6 @@
 // models/ProjectJoinRequest.js
 const { DataTypes } = require("sequelize");
 const sequelize = require("../db");
-
 const ProjectJoinRequest = sequelize.define("ProjectJoinRequest", {
   id: {
     type: DataTypes.UUID,

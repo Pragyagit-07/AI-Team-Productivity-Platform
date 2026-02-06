@@ -10,7 +10,7 @@ module.exports = (req, res, next) => {
   try {
     const token = authHeader.split(" ")[1];
 
-    //  Decode token (contains id + role)
+    //  Decode token (contains id , role)
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
     // attach user to request
@@ -23,10 +23,9 @@ module.exports = (req, res, next) => {
     
 
   } catch (err) {
-      console.error("JWT VERIFY FAILED");
+  console.error("JWT VERIFY FAILED");
   console.error("SECRET:", process.env.JWT_SECRET);
-
-    console.error("Auth middleware error:", err);
-    return res.status(401).json({ msg: "Invalid token" });
+  console.error("Auth middleware error:", err);
+  return res.status(401).json({ msg: "Invalid token" });
   }
 };
