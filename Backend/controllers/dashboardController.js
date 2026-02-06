@@ -6,7 +6,6 @@ const sequelize = require("../db");
 exports.getDashboardStats = async (req, res) => {
   try {
     const userId = req.user.id;
-
     const projects = await Project.findAll({
       attributes: ["id", "name", "createdBy"],
       include: [

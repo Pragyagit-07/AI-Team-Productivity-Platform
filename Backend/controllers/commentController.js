@@ -16,8 +16,6 @@ exports.createComment = async (req, res) => {
     await ActivityLog.create({
       action: 'comment_added',
        description: `${req.user.name} added a comment`,
-            // description: `added a comment`,
-
       taskId,
       projectId: task.projectId,
       userId: req.user.id

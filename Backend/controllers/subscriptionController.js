@@ -5,21 +5,8 @@ const User = require('../models/User'); // user table
 
 const razorpay = new Razorpay({
   key_id: process.env.RAZORPAY_KEY_ID, // Razorpay public key
-  key_secret: process.env.RAZORPAY_SECRET, // Razorpay secret key, backend only
+  key_secret: process.env.RAZORPAY_SECRET, // Razorpay secret key, 
 });
-
-// exports.createOrder = async (req, res) => {
-  // const { planId } = req.body; // frontend sends planId
-  // const plans = { pro: 10000, team: 149900 }; // prices in paise
-
-  // const order = await razorpay.orders.create({
-    // amount: plans[planId], // required by Razorpay, paise
-    // currency: "INR",
-    // receipt: `receipt_${req.user.id}_${Date.now()}`, // unique receipt
-  // });
-
-  // res.json({ orderId: order.id, amount: order.amount, currency: order.currency });
-// };
 exports.createOrder = async (req, res) => {
   try {
     const { planId } = req.body;

@@ -65,7 +65,7 @@ exports.updateProfile = async (req, res) => {
 //   }
 // };
 
-// UPDATE AVATAR (CLOUDINARY)
+// UPDATE AVATAR
 exports.updateAvatar = async (req, res) => {
   try {
     if (!req.file) {
@@ -77,7 +77,7 @@ exports.updateAvatar = async (req, res) => {
       return res.status(404).json({ msg: "User not found" });
     }
 
-    // ✅ Cloudinary gives full URL here
+    
     user.avatar = req.file.path;
 
     await user.save();

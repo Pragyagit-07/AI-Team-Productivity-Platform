@@ -294,9 +294,9 @@ const File = require("../models/File");
 const { Op } = require("sequelize");
 
 
-// ============================
+
 // GET TASKS BY PROJECT
-// ============================
+
 exports.getTasksByProject = async (req, res) => {
   try {
     const tasks = await Task.findAll({
@@ -315,9 +315,9 @@ exports.getTasksByProject = async (req, res) => {
 };
 
 
-// ============================
+
 // GET ALL TASKS (TASK TAB)
-// ============================
+
 exports.getAllTasks = async (req, res) => {
   try {
     const userId = req.user.id;
@@ -333,7 +333,7 @@ exports.getAllTasks = async (req, res) => {
     const limit = parseInt(pageSize);
     const offset = (page - 1) * limit;
 
-    // ✅ get projects where user is MEMBER
+    //  get projects where user is MEMBER
     const user = await User.findByPk(userId, {
       include: [
         {
@@ -388,9 +388,9 @@ exports.getAllTasks = async (req, res) => {
 };
 
 
-// ============================
+
 // CREATE TASK
-// ============================
+
 exports.createTask = async (req, res) => {
   try {
     const { title, description, projectId, assigneeId, status, priority, dueDate } = req.body;
@@ -401,7 +401,7 @@ exports.createTask = async (req, res) => {
 
     if (!project) return res.status(404).json({ msg: "Project not found" });
 
-    // ✅ leader OR project member can create task
+    // leader OR project member can create task
     const isAllowed =
       project.createdBy === req.user.id ||
       project.members.some(m => m.id === req.user.id);
@@ -436,9 +436,8 @@ exports.createTask = async (req, res) => {
 };
 
 
-// ============================
+
 // UPDATE TASK
-// ============================
 exports.updateTask = async (req, res) => {
   try {
     const task = await Task.findByPk(req.params.id);
@@ -447,7 +446,7 @@ exports.updateTask = async (req, res) => {
     const project = await Project.findByPk(task.projectId);
     if (!project) return res.status(404).json({ msg: "Project not found" });
 
-    // ✅ only leader OR assignee
+    // only leader OR assignee
     if (project.createdBy !== req.user.id && task.assigneeId !== req.user.id) {
       return res.status(403).json({
         msg: "Only project leader or assignee can update this task"
@@ -472,9 +471,9 @@ exports.updateTask = async (req, res) => {
 };
 
 
-// ============================
+
 // GET SINGLE TASK
-// ============================
+
 exports.getTaskById = async (req, res) => {
   try {
     const task = await Task.findByPk(req.params.id, {
@@ -526,9 +525,8 @@ exports.getTaskById = async (req, res) => {
 };
 
 
-// ============================
+
 // DELETE TASK
-// ============================
 exports.deleteTask = async (req, res) => {
   try {
     const task = await Task.findByPk(req.params.id);
@@ -537,7 +535,7 @@ exports.deleteTask = async (req, res) => {
     const project = await Project.findByPk(task.projectId);
     if (!project) return res.status(404).json({ msg: "Project not found" });
 
-    // ✅ only leader
+    // only leader
     if (project.createdBy !== req.user.id) {
       return res.status(403).json({
         msg: "Only project leader can delete this task"

@@ -5,7 +5,7 @@ const ActivityLog = require("../models/ActivityLog");
 const ProjectJoinRequest = require('../models/ProjectJoinRequest');
 
 
-// GET ALL PROJECTS (FIXED)
+// GET ALL PROJECTS 
 exports.getAllProjects = async (req, res) => {
   try {
     const page = parseInt(req.query.page) || 1;
@@ -75,7 +75,7 @@ exports.createProject = async (req, res) => {
       createdBy: userId
     });
 
-    // creator always member (team lead)
+    // creator always member team lead
     await project.addMembers(userId);
 
   

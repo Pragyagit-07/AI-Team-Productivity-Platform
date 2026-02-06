@@ -4,7 +4,7 @@ const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
 const sendEmail = require("../utils/sendEmail");
 
-// ================= REGISTER =================
+//  REGISTER 
 exports.register = async (req, res) => {
   try {
     const { name, email, password, role } = req.body;
@@ -25,7 +25,6 @@ exports.register = async (req, res) => {
     });
     //  EMAIL VERIFICATION OTP 
 const otp = Math.floor(100000 + Math.random() * 900000).toString();
-
 const hashedOtp = crypto
   .createHash("sha256")
   .update(otp)
@@ -51,8 +50,6 @@ await sendEmail({
 } catch(err) {
   console.log("Email failed", err.messege);
 }
-
-
         res.status(201).json({
             msg: "Registration successful. Please verify your email. OTP snet to email",
             email,
@@ -84,9 +81,7 @@ if (!user.isVerified) {
     .json({ msg: "Please verify your email first" });
 }
 
-    
-
-    const ok = await bcrypt.compare(password, user.passwordHash);
+        const ok = await bcrypt.compare(password, user.passwordHash);
     if (!ok) {
       return res.status(400).json({ msg: "Invalid credentials" });
     }
@@ -219,7 +214,7 @@ exports.verifyEmail = async (req, res) => {
     res.status(500).json({ msg: "Email verification failed" });
   }
 };
-// ================= GET CURRENT USER =================
+// GET CURRENT USER 
 exports.getMe = async (req, res) => {
   try {
     const user = await User.findByPk(req.user.id, {

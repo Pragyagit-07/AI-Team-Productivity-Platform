@@ -2,7 +2,6 @@ const Project = require("../models/Project");
 const ProjectJoinRequest = require("../models/ProjectJoinRequest");
 const User = require("../models/User");
 const ActivityLog = require("../models/ActivityLog");
-
 const sequelize = require("../db");
 
 
