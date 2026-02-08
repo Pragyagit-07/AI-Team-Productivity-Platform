@@ -3,8 +3,6 @@ const taskController = require("../controllers/taskController");
 const authMiddleware = require("../middleware/authMiddleware");
 const projectPermission = require("../middleware/projectPermission");
 
-
-
 router.get("/", authMiddleware, taskController.getAllTasks);
 router.get("/:id", authMiddleware, taskController.getTaskById);
 router.get("/project/:projectId", authMiddleware,  projectPermission, taskController.getTasksByProject);

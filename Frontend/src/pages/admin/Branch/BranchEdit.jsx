@@ -4,7 +4,6 @@ import { useNavigate, useParams } from "react-router-dom";
 export default function BranchEdit() {
   const navigate = useNavigate();
   const { id } = useParams(); // branch id 
-
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -12,7 +11,6 @@ export default function BranchEdit() {
     address: "",
     organizationId: "",
   });
-
   const [organizations, setOrganizations] = useState([]);
   const [errors, setErrors] = useState({});
   const [message, setMessage] = useState("");
@@ -93,7 +91,6 @@ export default function BranchEdit() {
         {/* Organization  */}
         <div >
           <label className="block font-medium mb-2">Organization</label>
-
           <select
             name="organizationId"
             value={formData.organizationId}

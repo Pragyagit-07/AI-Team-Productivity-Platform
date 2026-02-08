@@ -51,8 +51,6 @@ export default function OrgUserEdit() {
     else if (formData.name.length < 3) newErrors.name = "Name must be at least 3 characters";
     if (!formData.email.trim()) newErrors.email = "Email is required";
     else if (!/^\S+@\S+\.\S+$/.test(formData.email)) newErrors.email = "Invalid email format";
-
-  
     if (formData.password.trim()) {
       if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(formData.password)) {
         newErrors.password = "Password must be 8 chars, include uppercase, lowercase, number & special char";
@@ -199,7 +197,6 @@ export default function OrgUserEdit() {
             Update User
           </button>
         </div>
-
       </form>
     </div>
   );

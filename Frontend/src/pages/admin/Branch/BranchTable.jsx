@@ -116,8 +116,8 @@ export default function BranchTable() {
       </div>
 
      {/* Pagination */}
-<div className="flex justify-end mt-4">
- <div className="flex items-center gap-2">
+  <div className="flex justify-end mt-4">
+  <div className="flex items-center gap-2">
 
     {/* Prev Button */}
     <button
@@ -161,7 +161,6 @@ export default function BranchTable() {
     >
       Next
     </button>
-
   </div>
 </div>
 </div>

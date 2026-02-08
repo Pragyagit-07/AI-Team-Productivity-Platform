@@ -192,7 +192,7 @@ else if (
           )}
         </div>
         {/* Password */}
-<div>
+ <div>
   <label className="block font-medium mb-1">Password</label>
 
   <div className="relative">

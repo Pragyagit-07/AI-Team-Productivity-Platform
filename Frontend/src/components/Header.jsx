@@ -8,8 +8,7 @@ export default function Header({
   onMenuClick ,   
   onlineCount = 0,
   showNotifications = false
-  
-}) 
+  }) 
 {
   const [requests, setRequests] = useState([]);
   const [open, setOpen] = useState(false);

@@ -49,7 +49,7 @@ export default function OrganizationForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!validate()) return; // validation first
+    if (!validate()) return; 
 
     try {
       const res = await 

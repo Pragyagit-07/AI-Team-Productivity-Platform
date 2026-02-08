@@ -12,7 +12,6 @@ export default function OrganizationEdit() {
     createdBy: "",
     address: "",
   });
-
   const [errors, setErrors] = useState({});
   const [message, setMessage] = useState("");
 

@@ -164,9 +164,7 @@ export default function BranchView() {
                   <tr key={u.id} className="hover:bg-gray-50">
                     <td className="p-3">{u.name}</td>
                     <td className="p-3">{u.email}</td>
-                
                     <td className="p-3">{u.role}</td>
-
                     <td className="p-3 flex justify-center gap-3">
                       <FaEye
                         className="text-blue-600 cursor-pointer"
@@ -189,7 +187,6 @@ export default function BranchView() {
           </table>
         </div>
       </div>
-
     </div>
   );
 }
