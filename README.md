@@ -43,10 +43,16 @@
  - Express
  - Sequelize ORM
  - JWT AUTHENTICATION
+ - Brevo
+ - Nodemailer
+ - aiven
+ - cloudinary
+ - Vercel
+ - Render
 
 
  ## Integration
- - Nodemailer(email / forgot paasword), 2 way security authentication  to get OTP.
+ - Nodemailer(email / forgot paasword), 2 way security authentication  to get OTP. Deployment, i used Brevo.
  - Razorpay(payment)
  - OpenAI(AIAssistant)
  
