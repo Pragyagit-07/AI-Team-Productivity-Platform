@@ -147,7 +147,7 @@ export default function MemberForgotPassword() {
 
       setMessage(res.data.msg || "Password reset successful");
 
-      // ✅ Redirect to login after 2 seconds
+      //  Redirect to login after 2 seconds
       setTimeout(() => {
         navigate("/login");
       }, 2000);
@@ -206,7 +206,7 @@ export default function MemberForgotPassword() {
               />
             </div>
 
-            {/* ✅ New Password with Eye Icon */}
+            {/*  New Password with Eye Icon */}
             <div className="relative">
               <label className="block mb-1 font-semibold">
                 New Password

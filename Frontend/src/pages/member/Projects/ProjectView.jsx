@@ -6,7 +6,6 @@ import { ArrowLeft, FolderKanban, Calendar, User, Clipboard } from "lucide-react
 export default function ProjectView() {
   const { id } = useParams(); // projectId
   const navigate = useNavigate();
-
   const [project, setProject] = useState(null);
   const [loading, setLoading] = useState(true);
 

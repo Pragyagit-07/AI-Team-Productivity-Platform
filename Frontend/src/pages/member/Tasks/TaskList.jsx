@@ -6,19 +6,14 @@ import { Plus, Eye, Pencil, Trash2 } from "lucide-react";
 export default function TaskList({ projectId }) {
   const navigate = useNavigate();
   const token = localStorage.getItem("memberToken");
-
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
-
   const [search, setSearch] = useState("");
   const [searchInput, setSearchInput] = useState("");
-
   const [statusFilter, setStatusFilter] = useState("");
   const [priorityFilter, setPriorityFilter] = useState("");
-
   const [total, setTotal] = useState(0);
   const [page, setPage] = useState(1);
-
   const pageSize = 5;
   const totalPages = Math.ceil(total / pageSize);
 

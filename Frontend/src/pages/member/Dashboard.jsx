@@ -8,7 +8,7 @@ import API from "../../api/axios";
 export default function MemberDashboard() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [onlineCount, setOnlineCount] = useState(0);
-const [memberName, setMemberName] = useState("");
+ const [memberName, setMemberName] = useState("");
 
 
   const links = [
@@ -26,23 +26,14 @@ useEffect(() => {
     socket.connect();
   }
 
-  // socket.on("user-online", (userId) => {
-    // setOnlineUsers((prev) =>
-      // prev.includes(userId) ? prev : [...prev, userId]
-    // );
-  // });
 
-  // socket.on("user-offline", (userId) => {
-    // setOnlineUsers((prev) => prev.filter((id) => id !== userId));
-  // });
 socket.on("online-count", (count) => {
   setOnlineCount(count);
 });
 
 
   return () => {
-    // socket.off("user-online");
-    // socket.off("user-offline");
+    
       socket.off("online-count");
 
   };
@@ -79,25 +70,17 @@ useEffect(() => {
       />
       <div className="flex-1 flex flex-col">
         <Header
-          // username="member"
-            username={memberName}
-
-
-          onLogout={handleLogout}
-          onMenuClick={() => setSidebarOpen(!sidebarOpen)}
+        username={memberName}
+         onLogout={handleLogout}
+           onMenuClick={() => setSidebarOpen(!sidebarOpen)}
             showNotifications={true}
-              // onlineCount={onlineUsers.length}
               onlineCount={onlineCount}
+               />
 
-
-        />
-
-       
-        <main className="p-4 sm:p-6 bg-gray-100 flex-1 overflow-y-auto overflow-x-auto">
+       <main className="p-4 sm:p-6 bg-gray-100 flex-1 overflow-y-auto overflow-x-auto">
 
           {/* <Outlet />*/}
-           {/* <Outlet context={{ onlineUsers }} /> */}
-           <Outlet />
+                 <Outlet />
                    </main>
       </div>
     </div>
